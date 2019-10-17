@@ -83,6 +83,8 @@
       <TargetMachine>MachineX86</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <AdditionalDependencies>Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\Lib\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -103,6 +105,7 @@
   <ItemGroup>
     <ClCompile Include="UnAction.cpp" />
     <ClCompile Include="UnActLst.cpp" />
+    <ClCompile Include="UnNullAudio.cpp" />
     <ClCompile Include="UnCache.cpp" />
     <ClCompile Include="UnCamera.cpp" />
     <ClCompile Include="UnCamMgr.cpp" />
