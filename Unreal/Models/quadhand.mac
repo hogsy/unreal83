@@ -1,0 +1,30 @@
+;--------------------------------------------------------------------
+; QuadHand: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=QuadHand ANIVFILE=\UNREAL\MODELS\aniv20.3D DATAFILE=\UNREAL\MODELS\data20.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=QuadHand X=0 Y=0 Z=0 YAW=128
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=QuadHand SEQ=All  STARTFRAME=0  NUMFRAMES=30
+MESH SEQUENCE MESH=QuadHand SEQ=Fire STARTFRAME=0  NUMFRAMES=9
+MESH SEQUENCE MESH=QuadHand SEQ=Reload STARTFRAME=8  NUMFRAMES=21
+;
+;--------------------------------------------------------------------
+; QuadHand: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=QuadHand1 FILE=\UNREAL\MODELS\QUADHAND.PCX FAMILY=Skins PALETTE=QuadHand1 ;FLAGS=2 ; if masked
+;
+MESHMAP NEW   MESHMAP=QuadHand MESH=QuadHand ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=QuadHand X=0.04 Y=0.04 Z=0.08
+;
+MESHMAP SETTEXTURE MESHMAP=QuadHand NUM=4 TEXTURE=QuadHand1 ; Apply textures
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 

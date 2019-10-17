@@ -1,0 +1,28 @@
+;--------------------------------------------------------------------
+; Gun: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=Autom ANIVFILE=\UNREAL\MODELS\autom_a.3D DATAFILE=\UNREAL\MODELS\autom_d.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=Autom X=0 Y=0 Z=0 YAW=64
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=Autom SEQ=All  STARTFRAME=0  NUMFRAMES=1
+;
+;--------------------------------------------------------------------
+; Automag: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=Autom1 FILE=\UNREAL\MODELS\automag.PCX FAMILY=Skins PALETTE=Autom1 ;FLAGS=2 ; if masked
+;
+MESHMAP NEW   MESHMAP=Autom MESH=Autom ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=Autom X=0.04 Y=0.04 Z=0.08
+;
+MESHMAP SETTEXTURE MESHMAP=Autom NUM=0 TEXTURE=Autom1 ; Apply textures
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 

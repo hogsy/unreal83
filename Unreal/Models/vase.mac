@@ -1,0 +1,31 @@
+;--------------------------------------------------------------------
+; vase1: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=vase1 ANIVFILE=\UNREAL\MODELS\aniv32.3D DATAFILE=\UNREAL\MODELS\data32.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=vase1 X=0 Y=100 Z=-250 YAW=0
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=vase1 SEQ=All    STARTFRAME=0  NUMFRAMES=30
+MESH SEQUENCE MESH=vase1 SEQ=Still  STARTFRAME=15 NUMFRAMES=1
+MESH SEQUENCE MESH=vase1 SEQ=Swing  STARTFRAME=0  NUMFRAMES=30
+;
+;--------------------------------------------------------------------
+; vase1: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=Jvase11 FILE=\UNREAL\MODELS\vase1.PCX FAMILY=Skins PALETTE=Jvase11 FLAGS=2
+;
+MESHMAP NEW   MESHMAP=vase1 MESH=vase1 ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=vase1 X=0.05 Y=0.05 Z=0.1
+;
+MESHMAP SETTEXTURE MESHMAP=vase1 NUM=0 TEXTURE=Jvase11 ; Apply textures
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 
+

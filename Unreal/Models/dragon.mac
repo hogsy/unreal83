@@ -1,0 +1,31 @@
+;--------------------------------------------------------------------
+; Dragon: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=Dragon ANIVFILE=\UNREAL\MODELS\ANIV_DRG.3D DATAFILE=\UNREAL\MODELS\DATA_DRG.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=Dragon X=0 Y=100 Z=-250 YAW=0
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=Dragon SEQ=All  STARTFRAME=0  NUMFRAMES=136
+MESH SEQUENCE MESH=Dragon SEQ=Fly  STARTFRAME=40 NUMFRAMES=30
+;
+;--------------------------------------------------------------------
+; RedDragon: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=JDragon1 FILE=\UNREAL\MODELS\JDRAGON1.PCX FAMILY=Skins FLAGS=2 ; Masked
+TEXTURE IMPORT NAME=JDragon2 FILE=\UNREAL\MODELS\JDRAGON2.PCX FAMILY=Skins PALETTE=JDragon1 FLAGS=2
+;
+MESHMAP NEW   MESHMAP=RedDragon MESH=Dragon ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=RedDragon X=0.1 Y=0.1 Z=0.2
+;
+MESHMAP SETTEXTURE MESHMAP=RedDragon NUM=7 TEXTURE=JDragon1 ; Apply textures
+MESHMAP SETTEXTURE MESHMAP=RedDragon NUM=8 TEXTURE=JDragon2 
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 

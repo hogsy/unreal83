@@ -1,0 +1,39 @@
+;--------------------------------------------------------------------
+; Gun: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=AutoHand ANIVFILE=\UNREAL\MODELS\aniv22.3D DATAFILE=\UNREAL\MODELS\data22.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=AutoHand X=0 Y=0 Z=0 YAW=64 PITCH=54
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=AutoHand SEQ=All  STARTFRAME=0  NUMFRAMES=84
+MESH SEQUENCE MESH=AutoHand SEQ=Still STARTFRAME=0  NUMFRAMES=1
+MESH SEQUENCE MESH=AutoHand SEQ=Shoot STARTFRAME=1  NUMFRAMES=14
+MESH SEQUENCE MESH=AutoHand SEQ=Shot2  STARTFRAME=15  NUMFRAMES=15
+MESH SEQUENCE MESH=AutoHand SEQ=Auto  STARTFRAME=30  NUMFRAMES=15
+MESH SEQUENCE MESH=AutoHand SEQ=Drop  STARTFRAME=45  NUMFRAMES=5
+MESH SEQUENCE MESH=AutoHand SEQ=t1    STARTFRAME=50  NUMFRAMES=4
+MESH SEQUENCE MESH=AutoHand SEQ=Twirl STARTFRAME=54  NUMFRAMES=30
+
+;
+;--------------------------------------------------------------------
+; AutoHand: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=AutoHand1 FILE=\UNREAL\MODELS\automag.PCX FAMILY=Skins ;FLAGS=2
+TEXTURE IMPORT NAME=AutoHand2 FILE=\UNREAL\MODELS\autohand.PCX FAMILY=Skins PALETTE=AutoHand1 ;FLAGS=2 ; if masked
+;
+MESHMAP NEW   MESHMAP=AutoHand MESH=AutoHand ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=AutoHand X=0.04 Y=0.04 Z=0.08
+;
+MESHMAP SETTEXTURE MESHMAP=AutoHand NUM=0 TEXTURE=AutoHand1 ; Apply textures
+MESHMAP SETTEXTURE MESHMAP=AutoHand NUM=8 TEXTURE=AutoHand2 ; Apply textures
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+
+ 

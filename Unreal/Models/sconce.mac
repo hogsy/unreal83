@@ -1,0 +1,29 @@
+;--------------------------------------------------------------------
+; sconce: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=sconce ANIVFILE=\UNREAL\MODELS\aniv37.3D DATAFILE=\UNREAL\MODELS\data37.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=sconce X=0 Y=100 Z=350 YAW=0
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=sconce SEQ=All    STARTFRAME=0  NUMFRAMES=1
+;
+;--------------------------------------------------------------------
+; sconce: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=Jsconce1 FILE=\UNREAL\MODELS\clip.PCX FAMILY=Skins PALETTE=Jsconce1 FLAGS=2
+;
+MESHMAP NEW   MESHMAP=sconce MESH=sconce ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=sconce X=0.015 Y=0.015 Z=0.03
+;
+MESHMAP SETTEXTURE MESHMAP=sconce NUM=2 TEXTURE=Jsconce1 ; Apply textures
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 
+

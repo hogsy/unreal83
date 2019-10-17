@@ -1,0 +1,22 @@
+;
+; Play all macros to import all Unreal Meshes and MeshMaps:
+;
+MACRO PLAY FILE=\Unreal\Models\BigMan.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\Woman.mac    NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\Dragon.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\Skaarj.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\Quad.mac     NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\Quadhand.mac NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\Autom.mac    NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\Manta.mac    NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\Gasbag.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\light1.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\vase.mac     NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\autohand.mac NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\armor.mac    NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\shells.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\clip.mac     NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\sconce.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\health.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\branch.mac   NAME=TempMac
+MACRO PLAY FILE=\Unreal\Models\firehand.mac NAME=TempMac

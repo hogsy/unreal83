@@ -1,0 +1,43 @@
+;--------------------------------------------------------------------
+; Gasbag: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=Gasbag ANIVFILE=\UNREAL\MODELS\ANIV28.3D DATAFILE=\UNREAL\MODELS\DATA28.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=Gasbag X=0 Y=0 Z=0 YAW=64
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=Gasbag SEQ=All      STARTFRAME=0  NUMFRAMES=226
+MESH SEQUENCE MESH=Gasbag SEQ=2Punch   STARTFRAME=0  NUMFRAMES=24
+MESH SEQUENCE MESH=Gasbag SEQ=Belch    STARTFRAME=24 NUMFRAMES=29
+MESH SEQUENCE MESH=Gasbag SEQ=Deflate  STARTFRAME=53 NUMFRAMES=31
+MESH SEQUENCE MESH=Gasbag SEQ=Fiddle   STARTFRAME=84 NUMFRAMES=30
+MESH SEQUENCE MESH=Gasbag SEQ=Fighter  STARTFRAME=114 NUMFRAMES=1
+MESH SEQUENCE MESH=Gasbag SEQ=Float    STARTFRAME=115 NUMFRAMES=25
+MESH SEQUENCE MESH=Gasbag SEQ=Grab     STARTFRAME=140 NUMFRAMES=40
+MESH SEQUENCE MESH=Gasbag SEQ=Pound    STARTFRAME=180 NUMFRAMES=24
+MESH SEQUENCE MESH=Gasbag SEQ=T1       STARTFRAME=204 NUMFRAMES=5
+MESH SEQUENCE MESH=Gasbag SEQ=T2       STARTFRAME=209 NUMFRAMES=9
+MESH SEQUENCE MESH=Gasbag SEQ=T3       STARTFRAME=218 NUMFRAMES=4
+MESH SEQUENCE MESH=Gasbag SEQ=T4       STARTFRAME=222 NUMFRAMES=4
+;
+;--------------------------------------------------------------------
+; Gasbag1: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=Gasbag2 FILE=\UNREAL\MODELS\Texture7.PCX FAMILY=Skins FLAGS=2
+TEXTURE IMPORT NAME=Gasbag1 FILE=\UNREAL\MODELS\Texture6.PCX FAMILY=Skins PALETTE=Gasbag1 FLAGS=2
+;
+MESHMAP NEW   MESHMAP=Gasbag1 MESH=Gasbag ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=Gasbag1 X=0.05 Y=0.05 Z=0.1
+;
+MESHMAP SETTEXTURE MESHMAP=Gasbag1 NUM=5 TEXTURE=Gasbag1 ; Apply textures
+MESHMAP SETTEXTURE MESHMAP=Gasbag1 NUM=6 TEXTURE=Gasbag2
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 
+

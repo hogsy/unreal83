@@ -1,0 +1,29 @@
+;--------------------------------------------------------------------
+; branch: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=branch ANIVFILE=\UNREAL\MODELS\aniv39.3D DATAFILE=\UNREAL\MODELS\data39.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=branch X=0 Y=100 Z=200 YAW=0
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=branch SEQ=All    STARTFRAME=0  NUMFRAMES=1
+;
+;--------------------------------------------------------------------
+; branch: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=Jbranch1 FILE=\UNREAL\MODELS\health.PCX FAMILY=Skins PALETTE=Jbranch1 FLAGS=2
+;
+MESHMAP NEW   MESHMAP=branch MESH=branch ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=branch X=0.04 Y=0.04 Z=0.08
+;
+MESHMAP SETTEXTURE MESHMAP=branch NUM=0 TEXTURE=Jbranch1 ; Apply textures
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 
+

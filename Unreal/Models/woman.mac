@@ -1,0 +1,34 @@
+;--------------------------------------------------------------------
+; Woman: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=Woman ANIVFILE=\UNREAL\MODELS\ANIV_WOM.3D DATAFILE=\UNREAL\MODELS\DATA_WOM.3D
+MESH ORIGIN MESH=Woman X=-176 Y=250 Z=80 YAW=64
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=Woman SEQ=All  STARTFRAME=0  NUMFRAMES=109
+MESH SEQUENCE MESH=Woman SEQ=Walk STARTFRAME=0  NUMFRAMES=30
+;
+;--------------------------------------------------------------------
+; WOMAN: Import MeshMap
+;--------------------------------------------------------------------
+;
+; Player
+; ======
+;
+TEXTURE IMPORT NAME=JWoman1 FILE=\UNREAL\MODELS\JWOMAN1.PCX FAMILY=Skins FLAGS=2 ; Masked
+TEXTURE IMPORT NAME=JWoman2 FILE=\UNREAL\MODELS\JWOMAN2.PCX FAMILY=Skins FLAGS=2 PALETTE=JWoman1
+;
+MESHMAP NEW   MESHMAP=PWoman MESH=Woman ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=PWoman X=0.035 Y=0.035 Z=0.070
+;
+MESHMAP SETTEXTURE MESHMAP=PWoman NUM=5 TEXTURE=JWoman1 ; Apply textures
+MESHMAP SETTEXTURE MESHMAP=PWoman NUM=8 TEXTURE=JWoman2 
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 

@@ -1,0 +1,52 @@
+;--------------------------------------------------------------------
+; Skaarj: Import Mesh
+;--------------------------------------------------------------------
+;
+; Import the animation file and data files:
+;
+MESH IMPORT MESH=Skaarj ANIVFILE=\UNREAL\MODELS\ANIV17.3D DATAFILE=\UNREAL\MODELS\DATA17.3D X=0 Y=0 Z=0
+MESH ORIGIN MESH=Skaarj X=0 Y=0 Z=50 YAW=64
+;
+; Assign names to all animation sequences:
+;
+MESH SEQUENCE MESH=Skaarj SEQ=All  STARTFRAME=0  NUMFRAMES=335
+
+MESH SEQUENCE MESH=Skaarj SEQ=Squat        STARTFRAME=0   NUMFRAMES=40
+MESH SEQUENCE MESH=Skaarj SEQ=Blade        STARTFRAME=39  NUMFRAMES=35
+MESH SEQUENCE MESH=Skaarj SEQ=2Claw        STARTFRAME=74  NUMFRAMES=19
+MESH SEQUENCE MESH=Skaarj SEQ=Death        STARTFRAME=93  NUMFRAMES=45
+MESH SEQUENCE MESH=Skaarj SEQ=Fighter      STARTFRAME=137 NUMFRAMES=1
+MESH SEQUENCE MESH=Skaarj SEQ=Headup       STARTFRAME=138 NUMFRAMES=20
+MESH SEQUENCE MESH=Skaarj SEQ=Firing       STARTFRAME=159 NUMFRAMES=19
+MESH SEQUENCE MESH=Skaarj SEQ=Looking      STARTFRAME=179 NUMFRAMES=44
+MESH SEQUENCE MESH=Skaarj SEQ=Jog          STARTFRAME=223 NUMFRAMES=20
+MESH SEQUENCE MESH=Skaarj SEQ=Lunge        STARTFRAME=243 NUMFRAMES=34
+MESH SEQUENCE MESH=Skaarj SEQ=Spin         STARTFRAME=277 NUMFRAMES=19
+MESH SEQUENCE MESH=Skaarj SEQ=T1           STARTFRAME=296 NUMFRAMES=4
+MESH SEQUENCE MESH=Skaarj SEQ=T2           STARTFRAME=300 NUMFRAMES=9
+MESH SEQUENCE MESH=Skaarj SEQ=T3           STARTFRAME=309 NUMFRAMES=4
+MESH SEQUENCE MESH=Skaarj SEQ=T4           STARTFRAME=313 NUMFRAMES=4
+MESH SEQUENCE MESH=Skaarj SEQ=T5           STARTFRAME=317 NUMFRAMES=14
+MESH SEQUENCE MESH=Skaarj SEQ=T6           STARTFRAME=331 NUMFRAMES=4
+;
+;
+;--------------------------------------------------------------------
+; Skaarj1: Import MeshMap
+;--------------------------------------------------------------------
+;
+TEXTURE IMPORT NAME=Skaarj1 FILE=\UNREAL\MODELS\Texture2.PCX FAMILY=Skins FLAGS=2
+TEXTURE IMPORT NAME=Skaarj2 FILE=\UNREAL\MODELS\Texture4.PCX FAMILY=Skins PALETTE=Skaarj1 FLAGS=2
+;
+MESHMAP NEW   MESHMAP=Skaarj1 MESH=Skaarj ; Assign name and mesh to new sprite
+MESHMAP SCALE MESHMAP=Skaarj1 X=0.1 Y=0.1 Z=0.2
+;
+MESHMAP SETTEXTURE MESHMAP=Skaarj1 NUM=1 TEXTURE=Skaarj1 ; Apply textures
+MESHMAP SETTEXTURE MESHMAP=Skaarj1 NUM=3 TEXTURE=Skaarj2
+;
+;--------------------------------------------------------------------
+; The end
+;--------------------------------------------------------------------
+ 
+
+
+
