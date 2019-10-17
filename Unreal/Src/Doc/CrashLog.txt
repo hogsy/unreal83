@@ -1,0 +1,574 @@
+/*-----------------------------------------------------------------------------
+	Crash logs
+-----------------------------------------------------------------------------*/
+
+///////////////////////////////////////////////////////////////////////////////
+
+!!	Danc@citcom.net
+###############################################
+# Unreal, Copyright 1996 Epic MegaGames, Inc. #
+###############################################
+Info: Log file open, Friday, July 19, 1996 00:01:30
+Info: Starting Unreal 0.76
+Info: Using Unreal Engine 0.76
+Info: Compiled with Visual C++ 4.0, Jul 19 1996 14:17:27
+Init: Detected: Coprocessor,  Projective Near 64-bit
+Init: Detected: Microsoft Windows 95 4.0 (Build: 67109814)
+Init: Detected: Pentium-class processor no MMX support (GenuineIntel)
+Init: Detected: FPU TimeStamp 
+Info: CmdLine is  -EDITOR AUDIO=OFF
+Init: UnrealServer spawned for editing
+Audio: Uambient::Register(Type)
+Info: Actor classes initialized, size=1645
+Server: Level TestLev is now up for play
+Init: Server initialized
+Task: Created task: UnrealServer
+Init: DirectDraw initialized successfully
+Critical: appError triggered:
+Critical: DirectDraw GetCaps failed: DDERR_INVALIDPARAMS
+Critical: FWindowsCameraManager::ddInit
+Critical: FWindowsCameraManager::Init
+Critical: FUnrealEngine::Init
+Critical: CUnrealWnApp::InitializeUnreal
+Critical: CUnrealWnDlg::OnPaint
+Critical: CUnrealWnApp::InitInstance
+Win: CUnrealTimer::Disable: Timer already disabled
+Exit: Timer shut down
+Info: Shutting down Unreal engine
+Info: Exiting due to error
+Info: Log file closed, Friday, July 19, 1996 00:01:31
+
+Suspect a video driver bug in passing a DDCAPS structure with dwSize from DX2 not DX1.
+Sent recompiled version using DDraw1 headers.  See if that works.
+
+///////////////////////////////////////////////////////////////////////////////
++	deang@holobyte.com 510-814-6366
+
+Try 1
+
+###############################################
+# Unreal, Copyright 1996 Epic MegaGames, Inc. #
+###############################################
+
+Info: Log file open, Friday, July 19, 1996 20:08:01
+Info: Starting Unreal 0.76
+Info: Using Unreal Engine 0.76
+Info: Compiled with Visual C++ 4.0, Jul 19 1996 07:32:42
+Init: Detected: Coprocessor,  Projective Near 64-bit
+Init: Detected: Microsoft Windows 95 4.0 (Build: 67109814)
+Init: Detected: Pentium-class processor no MMX support (GenuineIntel)
+Init: Detected: FPU TimeStamp 
+Init: UnrealServer spawned for gameplay
+Audio: Uambient::Register(Type)
+Info: Actor classes initialized, size=1645
+Server: Level TestLev is now up for play
+Init: Server initialized
+Task: Created task: UnrealServer
+Init: DirectDraw initialized successfully
+Init: DirectDraw caps: CERTIFIED MEM=2828800
+Win: DirectDraw drivers:
+Win:    display (Primary Display Driver)
+Init: Camera manager initialized
+Task: Created task: CameraManager
+Init: Graphics initialized
+Info: Adding file Unreal.gfx...
+Info: Adding file Unreal.tab...
+Init: Rendering initialized
+Init: Rasterizer initialized
+Audio: FGlobalAudio::Init()
+Init: Audio:  Initializing game audio (not for editor).
+Init: Audio:  Initializing Galaxy.
+Init: Audio:  Galaxy initialized ok.
+Audio: SOUND SYSTEM INFORMATION:
+Audio: GALAXY Music System v3.00b1, Copyright (C) 1993-96 Carlo Vogelsang
+Audio:   Number of effects channels:  8
+Audio:   First effect channel:  1
+Audio:   Sampling rate:  22050
+Audio:   Using DirectSound:  Yes
+Init: UnGame.dll initialized
+Info: Adding file ..\Classes\Root.ucx...
+Info: Adding file ..\Maps\Unreal.unr...
+Info: Making changed scripts.
+Info: Success: Everything is up to date
+Server: Level TestLev is now up for play
+Info: sizeof(AI)=272
+Bsp: Initialized moving brush tracker for TestLev
+Audio: FGlobalAudio::InitLevel()
+Audio:   Starting Galaxy output.
+Audio:   Galaxy output started.
+Info: Opened camera
+Init: UnrealServer 0.76 launched for gameplay!
+Win: Closed camera
+Exit: Tick: Requesting exit
+Exit: Timer shut down
+Bsp: Shut down moving brush tracker for TestLev
+Audio: FGlobalAudio::ExitLevel()
+Audio: Stopping Galaxy.
+Audio: Galaxy stopped.
+Exit: UnGame.dll shut down
+Audio: FGlobalAudio::Exit()
+Exit: Audio:  Killing Galaxy.
+Exit: Audio:  Galaxy killed.
+Exit: MMX exit
+Exit: Rasterizer closed
+Exit: Rendering closed
+Exit: Graphics closed
+Win: DirectDraw End Mode
+Exit: DirectDraw released
+Exit: Camera manager shut down
+Task: Destroyed task: UnrealServer
+Exit: Server shut down, 0 player(s) logged off
+Task: Task is still running: CameraManager
+Exit: FGlobalResourceManager::Exit
+Exit: Unkilled Model TestLev
+Exit: Unkilled BspNodes TestLev
+Exit: Unkilled BspSurfs TestLev
+Exit: Unkilled VertPool TestLev
+Exit: Unkilled Polys TestLev
+Exit: Unkilled Terrain TestLev
+Exit: Unkilled Bound TestLev
+Exit: Unkilled Vectors VTestLev
+Exit: Unkilled Vectors PTestLev
+Exit: Unkilled ActorList TestLev
+Exit: Unkilled Array TestLev
+Exit: Unkilled Model Brush
+Exit: Unkilled BspNodes Brush
+Exit: Unkilled BspSurfs Brush
+Exit: Unkilled VertPool Brush
+Exit: Unkilled Polys Brush
+Exit: Unkilled Terrain Brush
+Exit: Unkilled Bound Brush
+Exit: Unkilled Vectors VBrush
+Exit: Unkilled Vectors PBrush
+Exit: Unkilled Array Cameras
+Exit: Unkilled Array Graphics
+Exit: Unkilled Palette Gamma
+Exit: Unkilled Array GfxTables
+Exit: Unkilled Palette Palette
+Exit: Unkilled Texture Default
+Exit: Unkilled Texture Bad
+Exit: Unkilled Texture Bkgnd
+Exit: Unkilled Texture Logo
+Exit: Unkilled Palette Logo
+Exit: Unkilled Texture Backdrop
+Exit: Unkilled Palette Backdrop
+Exit: Unkilled Texture StatusBar
+Exit: Unkilled Palette StatusBar
+Exit: Unkilled Texture ExtraBar
+Exit: Unkilled Palette ExtraBar
+Exit: Unkilled Texture ConBackground
+Exit: Unkilled Palette ConBackground
+Exit: Unkilled Texture Border
+Exit: Unkilled Palette Border
+Exit: Unkilled Texture f_huge
+Exit: Unkilled Texture f_large
+Exit: Unkilled Texture f_tech
+Exit: Unkilled Texture f_small
+Exit: Unkilled Font f_huge
+Exit: Unkilled Font f_large
+Exit: Unkilled Font f_tech
+Exit: Unkilled Font f_small
+Exit: Unkilled Texture s_camera
+Exit: Unkilled Texture s_actor
+Exit: Unkilled Texture s_light
+Exit: Unkilled Texture s_pickup
+Exit: Unkilled Texture s_player
+Exit: Unkilled Texture b_menudn
+Exit: Unkilled Texture b_menuup
+Exit: Unkilled Texture b_collon
+Exit: Unkilled Texture b_colloff
+Exit: Unkilled Texture b_plyron
+Exit: Unkilled Texture b_plyroff
+Exit: Unkilled Texture b_liteon
+Exit: Unkilled Texture b_liteoff
+Exit: Unkilled Model Arrow
+Exit: Unkilled Polys Arrow
+Exit: Unkilled Palette Greyscale
+Exit: Unkilled Palette Fire
+Exit: Unkilled Palette Blue
+Exit: Unkilled Palette RedWave
+Exit: Unkilled Palette Green
+Exit: Unkilled Palette TruePal
+Exit: Unkilled Array GfxLuts
+Exit: Unkilled Buffer Shade
+Exit: Unkilled Buffer Blend
+Exit: Unkilled Buffer Ghost
+Exit: Unkilled Buffer Glow
+Exit: Unkilled Buffer Average
+Exit: Unkilled Buffer Hue
+Exit: Unkilled Buffer Sinc
+Exit: Unkilled Mesh Bigman
+Exit: Unkilled Texture Bigman1
+Exit: Unkilled Palette Bigman1
+Exit: Unkilled Texture Bigman2
+Exit: Unkilled MeshMap Bigman
+Exit: Unkilled Mesh Woman
+Exit: Unkilled Texture JWoman1
+Exit: Unkilled Palette JWoman1
+Exit: Unkilled Texture JWoman2
+Exit: Unkilled MeshMap PWoman
+Exit: Unkilled Mesh Dragon
+Exit: Unkilled Texture JDragon1
+Exit: Unkilled Palette JDragon1
+Exit: Unkilled Texture JDragon2
+Exit: Unkilled MeshMap RedDragon
+Exit: Unkilled Mesh Skaarj
+Exit: Unkilled Texture Skaarj1
+Exit: Unkilled Palette Skaarj1
+Exit: Unkilled Texture Skaarj2
+Exit: Unkilled MeshMap Skaarj1
+Exit: Unkilled Mesh QuadHand
+Exit: Unkilled Texture QuadHand1
+Exit: Unkilled Palette QuadHand1
+Exit: Unkilled MeshMap QuadHand
+Exit: Unkilled Mesh Autom
+Exit: Unkilled Texture Autom1
+Exit: Unkilled Palette Autom1
+Exit: Unkilled MeshMap Autom
+Exit: Unkilled Mesh Manta
+Exit: Unkilled Texture JManta1
+Exit: Unkilled Palette JManta1
+Exit: Unkilled MeshMap Manta
+Exit: Unkilled Mesh Gasbag
+Exit: Unkilled Texture Gasbag2
+Exit: Unkilled Palette Gasbag2
+Exit: Unkilled Texture Gasbag1
+Exit: Unkilled Palette Gasbag1
+Exit: Unkilled MeshMap Gasbag1
+Exit: Unkilled Mesh light1
+Exit: Unkilled Texture Jlight11
+Exit: Unkilled Palette Jlight11
+Exit: Unkilled MeshMap light1
+Exit: Unkilled Mesh vase1
+Exit: Unkilled Texture Jvase11
+Exit: Unkilled Palette Jvase11
+Exit: Unkilled MeshMap vase1
+Exit: Unkilled Mesh AutoHand
+Exit: Unkilled Texture AutoHand1
+Exit: Unkilled Palette AutoHand1
+Exit: Unkilled Texture AutoHand2
+Exit: Unkilled MeshMap AutoHand
+Exit: Unkilled Mesh armor
+Exit: Unkilled Texture Jarmor1
+Exit: Unkilled Palette Jarmor1
+Exit: Unkilled MeshMap armor
+Exit: Unkilled Mesh shells
+Exit: Unkilled Texture Jshells1
+Exit: Unkilled Palette Jshells1
+Exit: Unkilled MeshMap shells
+Exit: Unkilled Mesh clip
+Exit: Unkilled Texture Jclip1
+Exit: Unkilled Palette Jclip1
+Exit: Unkilled MeshMap clip
+Exit: Unkilled Mesh health
+Exit: Unkilled Texture Jhealth1
+Exit: Unkilled Palette Jhealth1
+Exit: Unkilled MeshMap health
+Exit: Unkilled Mesh Fireball
+Exit: Unkilled MeshMap Fireball
+Exit: Unkilled Class Root
+Exit: Unkilled Class Camera
+Exit: Unkilled Class Projectile
+Exit: Unkilled Class Fireball
+Exit: Unkilled Class Pawn
+Exit: Unkilled Class Woman
+Exit: Unkilled Class Dragon
+Exit: Unkilled Class Skaarj
+Exit: Unkilled Class BigMan
+Exit: Unkilled Class Gasbag
+Exit: Unkilled Class Manta
+Exit: Unkilled Class Light
+Exit: Unkilled Class Keypoint
+Exit: Unkilled Class PlayerStart
+Exit: Unkilled Class Teleporter
+Exit: Unkilled Class ZoneDescriptor
+Exit: Unkilled Class Mover
+Exit: Unkilled Class Inventory
+Exit: Unkilled Class Weapon
+Exit: Unkilled Class AutoMag
+Exit: Unkilled Class QuadShot
+Exit: Unkilled Class Pickup
+Exit: Unkilled Class Armor
+Exit: Unkilled Class Ammo
+Exit: Unkilled Class Health
+Exit: Unkilled Class Trigger
+Exit: Unkilled Class Decorations
+Exit: Unkilled Class Vase
+Exit: Unkilled Class Chandelier
+Exit: Unkilled Class Hammok
+Exit: Unkilled Class Pyrotechnics
+Exit: Unkilled Class PlayerRespawn
+Exit: Unkilled Class TeleportIn
+Exit: Unkilled Class TeleportOut
+Exit: Unkilled Class WallHit
+Exit: Unkilled Class PawnHit
+Exit: Unkilled Class BlockMonsters
+Exit: Unkilled Class BlockAll
+Exit: Unkilled Class MuzzleFlash
+Exit: Unkilled Class FlameGun
+Exit: Unkilled Class Clip
+Exit: Unkilled Class Shells
+Exit: Unkilled Class PowerUp
+Exit: Unkilled TextBuffer Root
+Exit: Unkilled Script Root
+Exit: Unkilled Enum EDrawType
+Exit: Unkilled Enum EBlitType
+Exit: Unkilled Enum EParticleType
+Exit: Unkilled Enum ELightType
+Exit: Unkilled Enum ELightEffect
+Exit: Unkilled Enum EAmmoType
+Exit: Unkilled Enum EDamageType
+Exit: Unkilled TextBuffer Projectile
+Exit: Unkilled Script Projectile
+Exit: Unkilled TextBuffer Fireball
+Exit: Unkilled Script Fireball
+Exit: Unkilled TextBuffer Pawn
+Exit: Unkilled Script Pawn
+Exit: Unkilled Enum ELifeState
+Exit: Unkilled TextBuffer Camera
+Exit: Unkilled Script Camera
+Exit: Unkilled TextBuffer Woman
+Exit: Unkilled Script Woman
+Exit: Unkilled TextBuffer Dragon
+Exit: Unkilled Script Dragon
+Exit: Unkilled TextBuffer Skaarj
+Exit: Unkilled Script Skaarj
+Exit: Unkilled TextBuffer BigMan
+Exit: Unkilled Script BigMan
+Exit: Unkilled TextBuffer Gasbag
+Exit: Unkilled Script Gasbag
+Exit: Unkilled TextBuffer Manta
+Exit: Unkilled Script Manta
+Exit: Unkilled TextBuffer Light
+Exit: Unkilled Script Light
+Exit: Unkilled TextBuffer Keypoint
+Exit: Unkilled Script Keypoint
+Exit: Unkilled TextBuffer PlayerStart
+Exit: Unkilled Script PlayerStart
+Exit: Unkilled TextBuffer Teleporter
+Exit: Unkilled Script Teleporter
+Exit: Unkilled TextBuffer ZoneDescriptor
+Exit: Unkilled Script ZoneDescriptor
+Exit: Unkilled TextBuffer BlockMonsters
+Exit: Unkilled Script BlockMonsters
+Exit: Unkilled TextBuffer BlockAll
+Exit: Unkilled Script BlockAll
+Exit: Unkilled TextBuffer Mover
+Exit: Unkilled Script Mover
+Exit: Unkilled Enum EMoverBumpType
+Exit: Unkilled Enum EMoverTriggerType
+Exit: Unkilled Enum EMoverGlideType
+Exit: Unkilled Model MoverDefaultBrush
+Exit: Unkilled Polys MoverDefaultBrush
+Exit: Unkilled TextBuffer Inventory
+Exit: Unkilled Script Inventory
+Exit: Unkilled Enum EInvState
+Exit: Unkilled TextBuffer Weapon
+Exit: Unkilled Script Weapon
+Exit: Unkilled Enum EWeaponType
+Exit: Unkilled TextBuffer AutoMag
+Exit: Unkilled Script AutoMag
+Exit: Unkilled TextBuffer QuadShot
+Exit: Unkilled Script QuadShot
+Exit: Unkilled TextBuffer FlameGun
+Exit: Unkilled Script FlameGun
+Exit: Unkilled TextBuffer Pickup
+Exit: Unkilled Script Pickup
+Exit: Unkilled TextBuffer Ammo
+Exit: Unkilled Script Ammo
+Exit: Unkilled TextBuffer Clip
+Exit: Unkilled Script Clip
+Exit: Unkilled TextBuffer Shells
+Exit: Unkilled Script Shells
+Exit: Unkilled TextBuffer PowerUp
+Exit: Unkilled Script PowerUp
+Exit: Unkilled TextBuffer Armor
+Exit: Unkilled Script Armor
+Exit: Unkilled TextBuffer Health
+Exit: Unkilled Script Health
+Exit: Unkilled TextBuffer Trigger
+Exit: Unkilled Script Trigger
+Exit: Unkilled TextBuffer Decorations
+Exit: Unkilled Script Decorations
+Exit: Unkilled TextBuffer Vase
+Exit: Unkilled Script Vase
+Exit: Unkilled TextBuffer Chandelier
+Exit: Unkilled Script Chandelier
+Exit: Unkilled TextBuffer Hammok
+Exit: Unkilled Script Hammok
+Exit: Unkilled TextBuffer Pyrotechnics
+Exit: Unkilled Script Pyrotechnics
+Exit: Unkilled TextBuffer PlayerRespawn
+Exit: Unkilled Script PlayerRespawn
+Exit: Unkilled TextBuffer TeleportIn
+Exit: Unkilled Script TeleportIn
+Exit: Unkilled TextBuffer TeleportOut
+Exit: Unkilled Script TeleportOut
+Exit: Unkilled TextBuffer WallHit
+Exit: Unkilled Script WallHit
+Exit: Unkilled TextBuffer PawnHit
+Exit: Unkilled Script PawnHit
+Exit: Unkilled TextBuffer MuzzleFlash
+Exit: Unkilled Script MuzzleFlash
+Exit: Unkilled Texture c_beam10
+Exit: Unkilled Palette c_beam10
+Exit: Unkilled Texture c_beam11
+Exit: Unkilled Palette c_beam11
+Exit: Unkilled Texture c_wal19a
+Exit: Unkilled Palette c_wal19a
+Exit: Unkilled Texture c_wall1c
+Exit: Unkilled Palette c_wall1c
+Exit: Unkilled Texture c_wood1
+Exit: Unkilled Palette c_wood1
+Exit: Unkilled Texture lava2
+Exit: Unkilled Palette lava2
+Exit: Unkilled Texture hiwall1
+Exit: Unkilled Palette hiwall1
+Exit: Unkilled Texture iron_f_1
+Exit: Unkilled Palette iron_f_1
+Exit: Unkilled Texture iron_f_2
+Exit: Unkilled Palette iron_f_2
+Exit: Unkilled Texture iron_f_3
+Exit: Unkilled Palette iron_f_3
+Exit: Unkilled Texture iron_w_1
+Exit: Unkilled Palette iron_w_1
+Exit: Unkilled Texture iron_w_y
+Exit: Unkilled Palette iron_w_y
+Exit: Unkilled Texture sdwall10
+Exit: Unkilled Palette sdwall10
+Exit: Unkilled Texture sdwall14
+Exit: Unkilled Palette sdwall14
+Exit: Unkilled Texture sdwall3
+Exit: Unkilled Palette sdwall3
+Exit: Unkilled Texture sdwallx
+Exit: Unkilled Palette sdwallx
+Exit: Unkilled Texture uswall4
+Exit: Unkilled Palette uswall4
+Exit: Unkilled Texture uswall7
+Exit: Unkilled Palette uswall7
+Exit: Unkilled Texture b4win9
+Exit: Unkilled Palette b4win9
+Exit: Unkilled Texture mflrb5b
+Exit: Unkilled Palette mflrb5b
+Exit: Unkilled Texture mflrb5c
+Exit: Unkilled Palette mflrb5c
+Exit: Unkilled Texture mflrb6b
+Exit: Unkilled Palette mflrb6b
+Exit: Unkilled Texture mflrb6c
+Exit: Unkilled Palette mflrb6c
+Exit: Unkilled Texture mflrb7
+Exit: Unkilled Palette mflrb7
+Exit: Unkilled Texture mwalb4a
+Exit: Unkilled Palette mwalb4a
+Exit: Unkilled Model TestLev_S0
+Exit: Unkilled Polys TestLev_S0
+Exit: Unkilled Model TestLev_S1
+Exit: Unkilled Polys TestLev_S1
+Exit: Unkilled Model TestLev_S2
+Exit: Unkilled Polys TestLev_S2
+Exit: Unkilled Model TestLev_S3
+Exit: Unkilled Polys TestLev_S3
+Exit: Unkilled Model TestLev_S4
+Exit: Unkilled Polys TestLev_S4
+Exit: Unkilled Model TestLev_S525
+Exit: Unkilled Polys TestLev_S525
+Exit: Unkilled Model TestLev_S624
+Exit: Unkilled Polys TestLev_S624
+Exit: Unkilled Model TestLev_S7
+Exit: Unkilled Polys TestLev_S7
+Exit: Unkilled Model TestLev_S8
+Exit: Unkilled Polys TestLev_S8
+Exit: Unkilled Model TestLev_S9
+Exit: Unkilled Polys TestLev_S9
+Exit: Unkilled Model TestLev_S10
+Exit: Unkilled Polys TestLev_S10
+Exit: Unkilled Model TestLev_S1128
+Exit: Unkilled Polys TestLev_S1128
+Exit: Unkilled Model TestLev_S12
+Exit: Unkilled Polys TestLev_S12
+Exit: Unkilled Model TestLev_S13
+Exit: Unkilled Polys TestLev_S13
+Exit: Unkilled Model TestLev_S14
+Exit: Unkilled Polys TestLev_S14
+Exit: Unkilled Model TestLev_S1526
+Exit: Unkilled Polys TestLev_S1526
+Exit: Unkilled Model TestLev_S16
+Exit: Unkilled Polys TestLev_S16
+Exit: Unkilled Model TestLev_S17
+Exit: Unkilled Polys TestLev_S17
+Exit: Unkilled Model TestLev_S18
+Exit: Unkilled Polys TestLev_S18
+Exit: Unkilled Model TestLev_S19
+Exit: Unkilled Polys TestLev_S19
+Exit: Unkilled Model TestLev_S20
+Exit: Unkilled Polys TestLev_S20
+Exit: Unkilled Model TestLev_S21
+Exit: Unkilled Polys TestLev_S21
+Exit: Unkilled Model TestLev_S22
+Exit: Unkilled Polys TestLev_S22
+Exit: Unkilled Model TestLev_S2327
+Exit: Unkilled Polys TestLev_S2327
+Exit: Unkilled Model TestLev_S122
+Exit: Unkilled Polys TestLev_S122
+Exit: Unkilled Model TestLev_S131
+Exit: Unkilled Polys TestLev_S131
+Exit: Unkilled Model TestLev_S136
+Exit: Unkilled Polys TestLev_S136
+Exit: Unkilled Model TestLev_S138
+Exit: Unkilled Polys TestLev_S138
+Exit: Unkilled Model TestLev_S139
+Exit: Unkilled Polys TestLev_S139
+Exit: Unkilled Model TestLev_S6
+Exit: Unkilled Polys TestLev_S6
+Exit: Unkilled Model TestLev_S5
+Exit: Unkilled Polys TestLev_S5
+Exit: Unkilled Model TestLev_S15
+Exit: Unkilled Polys TestLev_S15
+Exit: Unkilled Model TestLev_S23
+Exit: Unkilled Polys TestLev_S23
+Exit: Unkilled Model TestLev_S11
+Exit: Unkilled Polys TestLev_S11
+Exit: Unkilled Model TestLev_S26
+Exit: Unkilled Polys TestLev_S26
+Exit: Unkilled Model TestLev_S27
+Exit: Unkilled Polys TestLev_S27
+Exit: Unkilled Model TestLev_S28
+Exit: Unkilled Polys TestLev_S28
+Exit: Unkilled Model TestLev_S29
+Exit: Unkilled Polys TestLev_S29
+Exit: Unkilled TextBuffer TestLev_T6
+Exit: Unkilled LightMesh TestLev
+Exit: Unkilled TextBuffer ScriptError
+Exit: Resource subsystem successfully closed.
+Exit: Unreal engine shut down
+Exit: FGlobalPlatform CheckAllocations
+Exit: Unfreed: LogicalPalette
+Info: Log file closed, Friday, July 19, 1996 20:08:08
+
+Try 2
+
+Audio: FGlobalAudio::InitLevel()
+Audio:   Running without sound.
+Info: Opened camera
+Init: UnrealServer 0.76 launched for gameplay!
+Info: Setting 640x480 16
+Win: DirectDraw: Tripple buffer, 640x480, Stride=0
+Win: DirectDraw: Rate=0
+Critical: FWindowsCameraManager::ddSetCamera
+Critical: FWindowsCameraManager::CameraWndProc
+Critical: CameraWndProc
+Critical: CUnrealWnApp::RouteMessage
+Critical: CUnrealWnApp::MessageLoop
+Critical: CUnrealWnApp::InitInstance
+Exit: Timer shut down
+Info: Shutting down Unreal engine
+Exit: FGlobalPlatform::ShutdownAfterError
+Critical: FWindowsCameraManager::EndFullscreen
+Win: Double fault in FWindowsCameraManager::ShutdownAfterError
+Info: Exiting due to error
+Info: Log file closed, Friday, July 19, 1996 20:16:54
+
+Fixed bug (Tried to get menu status for deleted item)
+
+///////////////////////////////////////////////////////////////////////////////
+

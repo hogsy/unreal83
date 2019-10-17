@@ -1,0 +1,121 @@
+'
+' Triggers
+'
+DeclareClass Name=Triggers
+DeclareClass Name=Trigger
+DeclareClass Name=Counter
+DeclareClass Name=Dispatcher
+
+Begin Class Name=Triggers
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is the parent class of all triggers and built-in event generators.
+' This is a built-in Unreal class and it shouldn't be modified.
+'
+Class Triggers Expands Root Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Triggers
+      CollisionRadius=+0040.000000
+      CollisionHeight=+0040.000000
+	  bEventSource=True
+      bHidden=True
+      bCollideActors=True
+      bTemplateClass=True
+	  DefaultEdCategory=Trigger
+   End DefaultProperties
+End Class
+
+Begin Class Name=Trigger
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' A Trigger senses things happening in its proximity and generates 
+' sends Trigger/UnTrigger to actors whose names match 'EventName'.
+'
+' This is a built-in Unreal class and it shouldn't be modified.
+'
+Class Trigger Expands Triggers Intrinsic
+
+EnumDef ETriggerType = TT_Proximity,TT_Use,TT_Shoot
+
+Dim TriggerType as ETriggerType
+Dim ClassesToDetect as Editable Class
+Dim Message as Editable String(80)
+Dim bShowMessage as Editable Boolean
+Dim bTriggerOnceOnly as Editable Boolean
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Trigger
+      CollisionRadius=+0040.000000
+      CollisionHeight=+0040.000000
+	  bEventSource=True
+      bHidden=True
+      bCollideActors=True
+      bTemplateClass=False
+	  bTriggerOnceOnly=False
+   End DefaultProperties
+End Class
+
+Begin Class Name=Counter
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' A Counter waits until it has been triggered 'NumToCount' times, and then
+' it sends Trigger/UnTrigger events to actors whose names match 'EventName'.
+'
+' This is a built-in Unreal class and it shouldn't be modified.
+'
+Class Counter Expands Triggers Intrinsic
+
+Dim NumToCount as Editable Byte ' Number to count down from, minimum=1
+Dim CountMessage as Editable String(80)
+Dim CompleteMessage as Editable String(80)
+Dim bShowMessage as Editable Boolean
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Counter
+      CollisionRadius=+0040.000000
+      CollisionHeight=+0040.000000
+	  bEventSource=True
+      bHidden=True
+      bCollideActors=True
+      bTemplateClass=False
+	  NumToCount=2
+	  DefaultEdCategory=Counter
+   End DefaultProperties
+End Class
+
+Begin Class Name=Dispatcher
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' A Dispatcher receives one trigger (corresponding to its name) as input, 
+' then triggers a set of specifid events with optional delays.
+'
+' This is a built-in Unreal class and it shouldn't be modified.
+'
+Class Dispatcher Expands Triggers Intrinsic
+
+Dim OutEvents(8) as Editable Name    ' Events to generate
+Dim OutDelays(8) as Editable Integer ' Delays before generating events
+
+Dim bActive as Boolean
+Dim Count as Integer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Dispatcher
+      CollisionRadius=+0040.000000
+      CollisionHeight=+0040.000000
+	  bEventSource=True
+      bHidden=True
+      bCollideActors=True
+      bTemplateClass=False
+	  DefaultEdCategory=Dispatcher
+   End DefaultProperties
+End Class

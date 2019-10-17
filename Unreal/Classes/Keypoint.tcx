@@ -1,0 +1,189 @@
+'
+' UnrealEd class and child classes for class: KeyPoint
+'
+
+DeclareClass Name=Keypoint
+DeclareClass Name=PlayerStart
+DeclareClass Name=Teleporter
+DeclareClass Name=ZoneDescriptor
+DeclareClass Name=BlockMonsters
+DeclareClass Name=BlockAll
+DeclareClass Name=LevelDescriptor
+
+DeclareClass Name=Woman
+
+Begin Class Name=Keypoint
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Base class of invisible-during-play actors which are used to
+' mark places.
+'
+Class Keypoint Expands Root Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Keypoint
+      CollisionRadius=+00010.000000
+      CollisionHeight=+00010.000000
+      bHidden=True
+      bTemplateClass=False
+	  DefaultEdCategory=General
+   End DefaultProperties
+End Class
+
+Begin Class Name=AmbientSound
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Sits there and plays its ambient sound.  This class is no
+' different than placing any other actor in a level and setting its ambient
+' sound; it only exists for clarity.
+'
+Class AmbientSound Expands Keypoint
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=AmbientSound
+      bTemplateClass=False
+	  DefaultEdCategory=Display
+   End DefaultProperties
+End Class
+
+Begin Class Name=PlayerStart
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Marks where player actors should be spawned
+' when players enter a level.
+'
+Class PlayerStart Expands Keypoint
+
+Dim TeamName as Editable Name ' Team the playerstart is used for in network play
+Dim PlayerSpawnClass as Editable Class ' Type of player to spawn
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=PlayerStart
+      Texture=s_player
+      bDirectional=True
+	  PlayerSpawnClass=Woman
+	  DefaultEdCategory=PlayerStart
+   End DefaultProperties
+End Class
+
+Begin Class Name=Teleporter
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Teleports actors either between different teleporters within a level
+' or to matching teleporters on other levels.
+'
+Class Teleporter Expands Keypoint Intrinsic
+
+Dim TeleportURL as Editable String(64)    ' actorname or levelname/actorname
+Dim bChangesVelocity As Editable Boolean ' TRUE if teleportation sets velocity to TargetVelocity.
+Dim bChangesYaw      As Editable Boolean ' TRUE if teleportation sets yaw to TargetYaw.
+Dim bReversesX       As Editable Boolean ' TRUE if teleportation reverses X-component of velocity
+Dim bReversesY       As Editable Boolean ' TRUE if teleportation reverses Y-component of velocity
+Dim bReversesZ       As Editable Boolean ' TRUE if teleportation reverses Z-component of velocity
+Dim ProductRequired  As Editable Name    ' Product that must be installed for teleporter to be entered
+Dim TargetYaw        As Editable Integer ' If bChangesYaw, set target's yaw to this.
+Dim TargetVelocity   As Editable Vector  ' If bChangesVelocity, set target's velocity to this.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Teleporter
+      Texture=s_player
+      CollisionRadius=+00020.000000
+      CollisionHeight=+00020.000000
+      bCollideActors=True
+      bChangesVelocity=False
+      bChangesYaw=False
+      bReversesX=False
+      bReversesY=False
+      bReversesZ=False
+      TargetYaw=0
+      TargetVelocity=(X=+00000.000000,Y=+00000.000000,Z=+00000.000000)
+	  DefaultEdCategory=Teleporter
+   End DefaultProperties
+End Class
+
+Begin Class Name=BlockMonsters
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Prevents monsters from passing, but allows players to cross.
+'
+Class BlockMonsters Expands Keypoint
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=BlockMonsters
+      bCollideActors=True
+      bBlocksActors=True
+	  DefaultEdCategory=Collision
+   End DefaultProperties
+End Class
+
+Begin Class Name=BlockAll
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Blocks all actors from passing.
+'
+Class BlockAll Expands Keypoint
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=BlockAll
+      bCollideActors=True
+      bBlocksActors=True
+	  DefaultEdCategory=Collision
+   End DefaultProperties
+End Class
+
+Begin Class Name=TextMessage
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Displays a text message when triggered or touched.
+'
+Class TextMessage Expands Keypoint
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      bCollideActors=1
+      Class=TextMessage
+	  DefaultEdCategory=TextMessage
+   End DefaultProperties
+End Class
+
+Begin Class Name=LevelDescriptor
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Contains information about the current level. There should be one per 
+' level and it should be actor 0. UnrealEd creates each level's 
+' LevelDescriptor automatically so you should never have to place one
+' manually.
+'
+Class LevelDescriptor Expands Keypoint
+
+Dim LevelGravity   as Editable Vector     ' Gravity acceleration in level
+
+Dim LevelTitle     as Editable String(64) ' Human-readable name of zone
+Dim LevelAuthor    as Editable String(64) ' Dude who built it
+Dim LevelMusic     as Editable String(64) ' Currently a filename, will become a resource name
+
+Dim Lightning      as Editable Real       ' Added to all lighting in level
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=LevelDescriptor
+	  bTemplateClass=1
+	  DefaultEdCategory=LevelDescriptor
+	  Lightning=0.0
+   End DefaultProperties
+End Class

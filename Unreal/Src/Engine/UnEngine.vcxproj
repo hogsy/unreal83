@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{34A6AA1A-3FAB-46F1-BEA0-0BB26551DCBD}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\System</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;COMPILING_ENGINE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\Inc\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="UnAction.cpp" />
+    <ClCompile Include="UnActLst.cpp" />
+    <ClCompile Include="UnCache.cpp" />
+    <ClCompile Include="UnCamera.cpp" />
+    <ClCompile Include="UnCamMgr.cpp" />
+    <ClCompile Include="UnCheat.cpp" />
+    <ClCompile Include="UnChecks.cpp" />
+    <ClCompile Include="UnClass.cpp" />
+    <ClCompile Include="UnClsPrp.cpp" />
+    <ClCompile Include="UnConfig.cpp" />
+    <ClCompile Include="UnDeflts.cpp" />
+    <ClCompile Include="UnDynBsp.cpp" />
+    <ClCompile Include="UnEngine.cpp" />
+    <ClCompile Include="UnFGAud.cpp" />
+    <ClCompile Include="UnFile.cpp" />
+    <ClCompile Include="UnFPoly.cpp" />
+    <ClCompile Include="UnGfx.cpp" />
+    <ClCompile Include="UnInput.cpp" />
+    <ClCompile Include="UnInputP.cpp" />
+    <ClCompile Include="UnKeyVal.cpp" />
+    <ClCompile Include="UnLevAct.cpp" />
+    <ClCompile Include="UnLevel.cpp" />
+    <ClCompile Include="UnLevTic.cpp" />
+    <ClCompile Include="UnMath.cpp" />
+    <ClCompile Include="UnMem.cpp" />
+    <ClCompile Include="UnMesh.cpp" />
+    <ClCompile Include="UnModel.cpp" />
+    <ClCompile Include="UnOutDev.cpp" />
+    <ClCompile Include="UnParams.cpp" />
+    <ClCompile Include="UnParse.cpp" />
+    <ClCompile Include="UnPhys.cpp" />
+    <ClCompile Include="UnPrefer.cpp" />
+    <ClCompile Include="UnRes.cpp" />
+    <ClCompile Include="UnScript.cpp" />
+    <ClCompile Include="UnScrRtl.cpp" />
+    <ClCompile Include="UnServer.cpp" />
+    <ClCompile Include="UnSound.cpp" />
+    <ClCompile Include="UnTex.cpp" />
+    <ClCompile Include="UnTopics.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\inc\AiAnimat.h" />
+    <ClInclude Include="..\inc\AiMotion.h" />
+    <ClInclude Include="..\inc\D3d.h" />
+    <ClInclude Include="..\inc\D3dCaps.h" />
+    <ClInclude Include="..\inc\D3dRM.h" />
+    <ClInclude Include="..\inc\D3dRMdef.h" />
+    <ClInclude Include="..\inc\D3dRMobj.h" />
+    <ClInclude Include="..\inc\D3dRMwin.h" />
+    <ClInclude Include="..\inc\D3dTypes.h" />
+    <ClInclude Include="..\inc\DDraw1.h" />
+    <ClInclude Include="..\inc\DDraw2.h" />
+    <ClInclude Include="..\inc\DMouse.h" />
+    <ClInclude Include="..\inc\DSetup.h" />
+    <ClInclude Include="..\inc\DSound.h" />
+    <ClInclude Include="..\inc\Net.h" />
+    <ClInclude Include="..\inc\Root.h" />
+    <ClInclude Include="..\inc\SoundEng.h" />
+    <ClInclude Include="..\inc\UnAction.h" />
+    <ClInclude Include="..\inc\UnActor.h" />
+    <ClInclude Include="..\inc\UnArray.h" />
+    <ClInclude Include="..\inc\UnBuild.h" />
+    <ClInclude Include="..\inc\UnCache.h" />
+    <ClInclude Include="..\inc\UnCamera.h" />
+    <ClInclude Include="..\inc\UnCheat.h" />
+    <ClInclude Include="..\inc\UnChecks.h" />
+    <ClInclude Include="..\inc\UnConfig.h" />
+    <ClInclude Include="..\inc\UnDeflts.h" />
+    <ClInclude Include="..\inc\UnDynBsp.h" />
+    <ClInclude Include="..\inc\UnEditor.h" />
+    <ClInclude Include="..\inc\UnEdTran.h" />
+    <ClInclude Include="..\inc\UnEngine.h" />
+    <ClInclude Include="..\inc\UnFGaud.h" />
+    <ClInclude Include="..\inc\UnFile.h" />
+    <ClInclude Include="..\inc\UnGfx.h" />
+    <ClInclude Include="..\inc\UnInput.h" />
+    <ClInclude Include="..\inc\UnInputP.h" />
+    <ClInclude Include="..\inc\UnKeyVal.h" />
+    <ClInclude Include="..\inc\UnLevel.h" />
+    <ClInclude Include="..\inc\UnMath.h" />
+    <ClInclude Include="..\inc\UnMem.h" />
+    <ClInclude Include="..\inc\UnMsgs.h" />
+    <ClInclude Include="..\inc\UnParams.h" />
+    <ClInclude Include="..\inc\UnParse.h" />
+    <ClInclude Include="..\inc\UnPlatfm.h" />
+    <ClInclude Include="..\inc\UnPort.h" />
+    <ClInclude Include="..\inc\UnPrefer.h" />
+    <ClInclude Include="..\inc\UnRandom.h" />
+    <ClInclude Include="..\inc\UnRaster.h" />
+    <ClInclude Include="..\inc\Unreal.h" />
+    <ClInclude Include="..\inc\UnRender.h" />
+    <ClInclude Include="..\inc\UnRenDev.h" />
+    <ClInclude Include="..\inc\UnRes.h" />
+    <ClInclude Include="..\inc\UnResTyp.h" />
+    <ClInclude Include="..\inc\UnScript.h" />
+    <ClInclude Include="..\inc\UnServer.h" />
+    <ClInclude Include="..\inc\UnSound.h" />
+    <ClInclude Include="..\inc\UnSpan.h" />
+    <ClInclude Include="..\inc\UnTopics.h" />
+    <ClInclude Include="..\inc\UnVGame.h" />
+    <ClInclude Include="..\inc\WinINet.h" />
+    <ClInclude Include="RESOURCE.H" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ENGINE.RC" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="UnEngine.rc2" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

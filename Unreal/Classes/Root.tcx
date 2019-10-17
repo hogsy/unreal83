@@ -1,0 +1,305 @@
+'
+' Actor classes exported from UnrealEd
+'
+DeclareClass Name=Root
+
+Begin Class Name=Root
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified.
+' To do:
+'  - Delete unneeded things
+'  - Move nondisplay properties together
+'  - Group by function
+'
+Class Root Intrinsic
+
+EnumDef EDrawType = DT_None, DT_Sprite, DT_MeshMap, DT_Brush, _
+   DT_ParticleSystem
+
+EnumDef EBlitType = BT_None, BT_Normal, BT_Transparent, BT_Ghost, _
+   BT_Glow, BT_Fuzzy
+
+EnumDef EParticleType = PT_None
+
+EnumDef ELightType = LT_None, LT_Steady, LT_Pulse, LT_Blink, _
+   LT_Flicker, LT_Strobe, LT_Explode2, LT_Explode3, _
+   LT_DayLight, LT_NightLight
+
+EnumDef ELightEffect = LE_None, LE_TorchWaver, LE_FireWaver, _
+   LE_WateryShimmer, LE_Searchlight, LE_SlowWave, LE_FastWave, _
+   LE_CloudCast, LE_StormCast, LE_Shock, LE_Disco, LE_Warp, _
+   LE_NotImplemented, LE_StolenQuakeWater, LE_ChurningWater, _
+   LE_NegativeLight, LE_Interference, LE_Cylinder, LE_Rotor
+
+EnumDef ETextMsgType = LOG_None
+
+EnumDef EAmmoType = _
+    AmmoType_Bullets       _  ' Bullets                              
+,   AmmoType_Shells        _  ' Shells                               
+,   AmmoType_StingerAmmo   _  ' Stinger ammo
+,   AmmoType_FlameGunAmmo  _  ' Ammo for flame gun
+,   AmmoType_Reserved2     _  ' To be defined (change the name when defined)  
+,   AmmoType_Reserved3     _  ' To be defined (change the name when defined)  
+,   AmmoType_Reserved4     _  ' To be defined (change the name when defined)  
+,   AmmoType_Reserved5     _  ' To be defined (change the name when defined)  
+,   AmmoType_Reserved6     _  ' To be defined (change the name when defined)  
+,   AmmoType_Reserved7     _  ' To be defined (change the name when defined)  
+,   AmmoType_Count         _  ' Count of ammo types
+,   AmmoType_None             ' No ammo.
+
+EnumDef EDamageType = _
+    DMT_Basic         _  ' Basic physical damage (blunt force, projectile)
+,   DMT_Water         _  ' Damage due to water
+,   DMT_Fire          _  ' Damage due to fire
+,   DMT_Electric      _  ' Damage to to electricity
+,   DMT_Count         _  ' Count of different kinds of damage
+,   DMT_None             ' Special value to indicate no damage
+
+EnumDef EAI_Task =         _ ' The main AI task is...
+    EAI_TaskNone               _ ' ... to do nothing.
+,   EAI_TaskMove               _ ' ... to move (towards a spot, in a direction, ...)
+,   EAI_TaskSearch             _ ' ... to search the area.
+,   EAI_TaskWait               _ ' ... to wait for something.
+,   EAI_TaskAttack               ' ... to attack a target.
+
+Dim Class			as Editable(Main) Class
+Dim Location		as Editable(Main) Vector
+Dim Velocity		as Editable(Main) Vector
+Dim DrawRot			as Editable(Main) Rotation
+Dim ViewRot			as Editable(Main) Rotation
+
+Dim Parent			as Editable(Main) Actor
+Dim Weapon			as Editable(Main) Actor
+
+Dim Texture			as Editable(Display) Texture
+Dim MeshMap			as Editable(Display) MeshMap
+Dim Brush			as Editable(Display) ExportResource Const Model
+Dim AmbientSound	as Editable(Display) Sound
+Dim DrawScale		as Editable(Display) Real
+
+Dim AnimSeq			as Editable(Display) Byte    ' Mesh sequence number, or non-zero value to indicate texture animation.
+Dim AnimRate		as Editable(Display) Real    ' Added to AnimBase each tick
+Dim AnimBase		as Editable(Display) Real    ' Integer part identifies current frame number to draw with.
+Dim AnimCount		as Editable(Display) Byte    ' Number of times to do animation. 1=finish current, 0=do forever
+Dim AnimFirst		as Editable(Display) Byte    ' Index (from 0) of first frame.
+Dim AnimLast		as Editable(Display) Byte    ' Index (from 0) of last frame.
+Dim AnimMessage     As Integer          ' Parameterless message sent at end of animation.
+
+Dim CollisionRadius as Editable(Collision) Real
+Dim CollisionHeight as Editable(Collision) Real
+
+Dim DrawType		as Editable(Display) EDrawType
+Dim BlitType		as Editable(Display) EBlitType
+Dim ParticleType	as Editable(Display) EParticleType
+Dim ParticleCount	as Editable(Display) Byte
+Dim ParticleRate	as Editable(Display) Byte
+Dim SoundRadius		as Editable(Display) Byte
+Dim LightType		as Editable(Lighting) ELightType
+Dim LightEffect		as Editable(Lighting) ELightEffect
+Dim LightBrightness as Editable(Lighting) Byte
+Dim LightHue		as Editable(Lighting) Byte
+Dim LightSaturation as Editable(Lighting) Byte
+Dim LightRadius		as Editable(Lighting) Byte
+Dim LightPeriod		as Editable(Lighting) Byte
+Dim LightPhase		as Editable(Lighting) Byte
+Dim LightCone		as Editable(Lighting) Byte
+Dim InherentBrightness as Editable(Display) Byte
+
+Dim bAnimate 		as Editable(Display) Boolean
+Dim bMeshWet		as Boolean ' Unused
+Dim bMeshShadowCast as Boolean ' Unused
+Dim bMeshEnviroMap	as Boolean ' Unused
+Dim bSpriteRotates	as Boolean ' Unused
+Dim bUnused0		as Boolean ' Unused
+Dim bActorShadows	as Boolean ' Unused
+Dim bShinyReflect	as Boolean ' Unused
+Dim bSpecialLight	as Editable(Lighting) Boolean
+Dim bStaticActor	as Editable(Advanced) Boolean
+Dim bHidden			as Editable(Advanced) Boolean
+Dim bHiddenEd		as Boolean
+Dim bDirectional	as Editable(Advanced) Boolean
+Dim bCollideActors	as Editable(Collision) Boolean
+Dim bCollideWorld	as Editable(Collision) Boolean
+Dim bBlocksActors	as Editable(Collision) Boolean
+Dim bBehindView		as Boolean
+Dim bSelected		as Boolean
+Dim bTempDynamicLight as Boolean
+Dim bDrawOnHorizon	as Editable(Display) Boolean
+Dim bTemplateClass	as Editable(Advanced) Boolean
+Dim bTempLightChanged as Boolean
+Dim bUnlit			as Editable(Display) Boolean
+Dim bNoSmooth		as Boolean
+Dim bUnused4		as Boolean
+Dim bUnused5		as Boolean
+Dim bUnused6		as Boolean
+Dim bUnused7        as Boolean
+Dim bUnused8        as Boolean
+
+Dim User			as NoSave Camera
+Dim Name			as Editable(Main) Name
+Dim EventName		as Editable(Main) Name
+Dim Target			as Actor
+Dim Inventory		as Actor
+Dim Floor			as Actor
+
+Dim Mass			as Editable(Main) Real
+Dim bInactive		as Editable(Advanced) Boolean ' !!Used?
+Dim bPegged			as Editable(Advanced) Boolean ' !!Used?
+Dim bGravity		as Editable(Main) Boolean
+Dim bMomentum		as Editable(Main) Boolean
+Dim bProjTarget		as Editable(Advanced) Boolean
+Dim bCanPossess		as Editable(Advanced) Boolean ' !!MOVE TO PAWN
+Dim bDifficulty1	as Editable(Main) Boolean
+Dim bDifficulty2	as Editable(Main) Boolean
+Dim bDifficulty3	as Editable(Main) Boolean
+Dim bDifficulty4	as Editable(Main) Boolean
+Dim bNetCooperative as Editable(Main) Boolean
+Dim bNetDeathMatch	as Editable(Main) Boolean
+Dim bNetPersistent	as Editable(Main) Boolean
+Dim bNetNoMonsters	as Editable(Main) Boolean
+Dim bTempEditor		as Boolean
+Dim bJustDeleted	as Boolean
+Dim bCanBeTeleported    as Editable(Main) Boolean
+Dim bUnused12		as Boolean
+Dim bUnused13		as Boolean
+Dim bUnused14		as Boolean
+Dim bUnused15		as Boolean
+Dim Me				as Actor
+Dim Zone			as Byte
+Dim ChanceOfExistence As Editable Byte  ' Probability (1-100%) that actor should be created. 0 means 100%
+
+Dim LifeSpan        As Editable Integer ' How old the object lives before dying. 0 means undying. 
+Dim Age             As Integer          ' Age of object, in ticks.
+Dim Era             As Integer          ' Age of class-specific state, usually in ticks.
+
+' Definitions of animation trigger events.
+' We have 3 parallel arrays:
+'   TriggerSequences(): Identifies the animation sequence (1...) or the texture sequence (1...)
+'                If Sequences is not full, the last entry used should be followed by 0.
+'                The sequence numbers must be sorted in non-decreasing order.
+'   TriggerFrames(): Identifies a frame (1..) which has a trigger.
+'   TriggerValues(): Identifies the trigger value
+Dim TriggerSequences(10) As Editable(Advanced) Byte
+Dim TriggerFrames(10) As Editable(Advanced) Byte
+Dim TriggerValues(10) As Editable(Advanced) Byte
+Dim WhichTriggers     As Byte                      ' Which trigger sequence (1..) is currently in use. Index+1 into TriggerSequence. 0 for none.
+
+Dim TextureList  As Integer                   ' Is really a pointer to a list of Textures
+Dim TextureCount As Editable(Advanced) Byte   ' Number of textures in TextureList
+
+Dim ScriptCountdown   as Byte    ' Counter for low-priority script execution
+Dim TimerCountdown    as Integer ' User timer event (ACTOR_Timer)
+Dim TimerMessage      As Integer ' Parameterless Actor message to send when timer expires.
+
+Dim WaterSinkRate     As Editable Real  ' Fraction of normal gravity. <0 means the object floats.
+Dim AITask            As          EAI_Task ' AI task
+Dim PendingTeleporter As Actor    ' Teleporter which actor has touched and is waiting to teleport (if bCanBeTeleported)
+Dim TeleportDelay     As BYTE     ' Countdown to next allowed teleportation
+
+Dim DefaultEdCategory as Editable(Advanced) Name ' Default category to edit in UnrealEd
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Root
+      Location=(X=+00000.000000,Y=+00000.000000,Z=+00000.000000)
+      Velocity=(X=+00000.000000,Y=+00000.000000,Z=+00000.000000)
+      DrawRot=(PITCH=0,YAW=0,ROLL=0)
+      ViewRot=(PITCH=0,YAW=0,ROLL=0)
+      Parent=None
+      Weapon=None
+      Texture=s_actor
+      MeshMap=None
+      Brush=None
+      AmbientSound=None
+      DrawScale=+00001.000000
+      AnimRate=+00000.000000
+      AnimBase=+00000.000000
+      CollisionRadius=+00022.000000
+      CollisionHeight=+00022.000000
+      AnimSeq=0
+      DrawType=1
+      BlitType=1
+      ParticleType=0
+      ParticleCount=0
+      ParticleRate=0
+	  SoundRadius=32
+      LightType=0
+      LightEffect=0
+      LightBrightness=0
+      LightHue=0
+      LightSaturation=0
+      LightRadius=0
+      LightPeriod=0
+      LightPhase=0
+      LightCone=0
+      AmbientBrightness=0
+      bAnimate=False
+      bMeshSmooth=True
+      bMeshWet=False
+      bMeshShadowCast=False
+      bMeshEnviroMap=False
+      bEventSource=False
+      bSpriteRotates=False
+      bActorShadows=False
+      bShinyReflect=False
+      bSpecialLight=False
+      bStaticActor=False
+      bHidden=False
+      bHiddenEd=False
+      bDirectional=False
+      bCollideActors=False
+      bCollideWorld=False
+      bBlocksActors=False
+      bBehindView=False
+      bSelected=False
+      bTempDynamicLight=False
+      bDrawOnHorizon=False
+      bTemplateClass=True
+      bUnused1=False
+      bUnused2=False
+      bUnused3=False
+      bUnused4=False
+      bUnused5=False
+      bUnused6=False
+      bLightIsNegative=False
+      bLightIsAmbient=False
+      User=None
+      Name=None
+      EventName=None
+      Target=None
+      Inventory=None
+      Mass=+00100.000000
+      bInactive=False
+      bPegged=False
+      bGravity=False
+      bMomentum=False
+      bProjTarget=False
+      bCanPossess=False
+      bDifficulty1=True
+      bDifficulty2=True
+      bDifficulty3=True
+      bDifficulty4=True
+      bNetCooperative=True
+      bNetDeathMatch=True
+      bNetPersistent=True
+      bNetNoMonsters=True
+      bTempEditor=False
+      bJustDeleted=False
+      bUnused11=False
+      bUnused12=False
+      bUnused13=False
+      bUnused14=False
+      bUnused15=False
+      TriggerSequences(0)=0
+      TextureCount=0
+      Zone=0
+      ChanceOfExistence=0
+      WaterSinkRate=+00000.500000
+      AITask=0
+      bCanBeTeleported=False
+	  DefaultEdCategory=General
+   End DefaultProperties
+End Class

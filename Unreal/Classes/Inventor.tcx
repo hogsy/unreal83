@@ -1,0 +1,565 @@
+'
+' UnrealEd class and child classes for class: Inventory
+'
+
+DeclareClass Name=Clip
+DeclareClass Name=Shells
+DeclareClass Name=StingerAmmo
+DeclareClass Name=PowerUp
+DeclareClass Name=Inventory
+DeclareClass Name=Weapon
+DeclareClass Name=AutoMag
+DeclareClass Name=QuadShot
+DeclareClass Name=FlameGun
+DeclareClass Name=Stinger
+DeclareClass Name=Pickup
+DeclareClass Name=Armor
+DeclareClass Name=Ammo
+DeclareClass Name=Health
+
+DeclareClass Name=Fireball
+DeclareClass Name=Fireball2
+DeclareClass Name=BulletProjectile
+DeclareClass Name=ShellProjectile
+DeclareClass Name=StingerProjectile
+DeclareClass Name=ClipExplosion
+DeclareClass Name=ShellExplosion
+DeclareClass Name=TarydiumExplosion
+
+Begin Class Name=Inventory
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+' Parent class of all items that players can hold onto and
+' use, such as weapons.
+'
+Class Inventory Expands Root Intrinsic
+
+EnumDef EInvState = INV_None, INV_Active, INV_Activating, INV_DeActivating, INV_Using1, INV_Using2, INV_UsingCloseUp, INV_Reloading, INV_Playing
+EnumDef EInventorySet = _
+    INV_NoSet         _
+,   INV_WeaponSet1    _
+,   INV_WeaponSet2    _
+,   INV_WeaponSet3    _
+,   INV_WeaponSet4    _
+,   INV_WeaponSet5    _
+,   INV_WeaponSet6    _
+,   INV_WeaponSet7    _
+,   INV_WeaponSet8    _
+,   INV_WeaponSet9    _
+,   INV_WeaponSet10
+Dim InvState as EInvState
+Dim NextActive as Actor
+
+Dim bInPickupState as Boolean ' Weapon is a pickup, not in inventory
+Dim bActiveInSet     As Boolean ' Inventory item is the active one for a particular set.
+Dim bNeedsReloading  As Boolean ' True when the inventory item (weapon) needs to be reloaded
+
+'
+' Information valid while in pickup state:
+'
+Dim PickupSound as Editable Sound
+Dim RespawnSound as Editable Sound
+Dim bRespawnNetOnly as Editable Boolean
+Dim RespawnTime as Editable Integer     ' Respawn after this time, or 0 for no respawn.
+Dim PickupMessage as Editable String(64)
+Dim bTakesDamage        As Editable Boolean ' True if the pickup takes damage
+Dim EffectWhenDestroyed As Editable Class ' If non-0, the pyrotechnic or explosion when pick-up is shot. Only when bTakesDamage==True.
+
+'
+' Information valid while in inventory:
+'
+Dim OwningSet as Editable EInventorySet
+Dim AutoSwitchPriority as Editable Byte
+Dim DrawForward as Editable Real
+Dim DrawDown as Editable Real
+Dim DrawPitch   As Editable Integer ' Additional pitch for drawing purposes (should not affect projectile direction)
+Dim DrawRoll    As Integer ' Additional roll for drawing purposes (should not affect projectile direction)
+Dim DrawYaw     As Integer ' Additional yaw for drawing purposes (should not affect projectile direction)
+Dim PlayerViewMesh as Editable MeshMap
+Dim PlayerViewScale as Editable Real 
+Dim PickupMesh as Editable MeshMap
+Dim PickupScale as Editable Real 
+
+'
+' Information about icons to be shown in status bar
+'
+Dim AmmoStatusIcon      As Editable Texture ' Icon used with ammo/charge/power count.
+
+Dim YawSpeed as Editable Integer
+Dim PitchSpeed as Editable Integer  ' Unused? (delete)
+Dim RollSpeed as Editable Integer
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Inventory
+      CollisionRadius=+00030.000000
+      CollisionHeight=+00030.000000
+      DrawType=2
+      bCollideActors=True
+      bTemplateClass=False
+      NextActive=None
+      bInPickupState=True
+      PickupMessage="Snagged an item"
+      InventoryStatusIcon=None
+      AmmoStatusIcon=None
+      PickupScale=1.0
+      PlayerViewScale=1.0
+      EffectWhenDestroyed=None
+      bTakesDamage=False
+	  DefaultEdCategory=Display
+   End DefaultProperties
+End Class
+
+Begin Class Name=Weapon
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Weapon Expands Inventory Intrinsic
+
+EnumDef EWeaponType = WEAP_Projectile, WEAP_InstantHit, WEAP_Custom
+
+' Weapon aiming and rendering:
+Dim bAutoVTarget as Editable Boolean     ' Auto-seek targets vertically?
+Dim bAutoHTarget as Editable Boolean     ' Auto-seek targets horizontally?
+Dim bWasReleased As          Boolean     ' Was the weapon firing control "released"?
+Dim MaxTargetRange as Editable Real      ' Maximum distance to target
+Dim SeekDamping as Editable Real         ' Determines auto-seek speed
+
+' Weapon ammo/firing information:
+' Notes:
+'   1. Two-element arrays here are defined for normal shot (element 0) and
+'      secondary shot (element 1).
+Dim AmmoType             As Editable EAmmoType    ' Type of ammo used.
+Dim AmmoUsed(2)          As Editable Integer      ' Count of ammo used for each discharge.
+Dim Discharges(2)        As Editable Byte         ' Number of discharges.
+Dim ReloadCount          As Editable Byte         ' Amount of ammo depletion before reloading. 0 if no reloading is done.
+Dim Noise(2)             As Editable(Sound) Real  ' Amount of noise per discharge
+Dim ReusePeriod(2)       As Editable Byte         ' Minimum ticks between uses of weapon. 0 means no minimum.
+Dim RecoilForce(2)       As Editable Real         ' Recoil force per discharge.
+Dim RecoilPitch(2)       As Editable Byte         ' Recoil pitch (in 1/2 degrees) per discharge.
+Dim MuzzleEffectClass(2) As Editable Class        ' Muzzle effect.
+Dim DischargeSounds(2)   As Editable Sound        ' Sound used at discharge.
+Dim bRepeatSounds(2)     As Editable Byte         ' True to repeat sound for each discharge.
+Dim ReloadSound          As Editable Sound        ' Sound used during reload.
+Dim CloseUpSound         As Editable Sound        ' Sound of close-up attack.
+Dim PickupAmmoCount      As Editable Integer      ' Amount of ammo initially in pick-up item.
+
+Dim CloseUpDamage        As Editable Byte         ' Basic damage caused by close-up attack.
+Dim CloseUpStrengthFactor As Editable Real        ' Factors CloseUpDamage based on strength of holding actor.
+               ' Close-up damage is decreased by CloseUpStrengthFactor*(100.0-Strength).
+
+Dim UseTime      As Integer   ' How many ticks has the weapon been in continuous use.
+Dim LastUseTime  As Integer   ' The time the weapon was last used.
+
+Dim ProjectileClass(2)   As Editable Class        ' Projectile class to spawn for normal use (0) or special use (1)
+Dim ProjStartDist        As Editable Real         ' Starting distance away from weapon
+Dim Dispersion(2)        As Editable Real         ' Dispersion amount, 0=none, 1.0=45 degrees (instant-hit only)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Weapon
+      PickupMessage="You got a weapon"
+      OwningSet=0
+      AutoSwitchPriority=1
+      DrawForward=+00030.000000
+      DrawDown=+00005.000000
+      DrawPitch=0
+      bAnimate=True
+      bAutoVTarget=True
+      MaxTargetRange=+04096.000000
+      SeekDamping=+00000.960000
+      AmmoType=11
+      bNeedsReloading=False
+      ReusePeriod(0)=0
+      ReusePeriod(1)=0
+      CloseUpDamage=15
+   End DefaultProperties
+End Class
+
+Begin Class Name=AutoMag
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class AutoMag Expands Weapon Intrinsic
+EnumDef EAutoMagAnimationTriggers = _
+        AutoMagAT_None       _
+    ,   AutoMagAT_Fire1      _
+    ,   AutoMagAT_Fire2
+EnumDef EAutoMagAnimations = _
+        EAMA_None            _
+    ,   EAMA_Still           _
+    ,   EAMA_Shoot           _
+    ,   EAMA_Shoot2          _
+    ,   EAMA_Twirl           _
+    ,   EAMA_Whip            _
+    ,   EAMA_T1              _
+    ,   EAMA_T2
+Dim Hack1 As EAutoMagAnimations       ' Hack so EnumDef doesn't disappear in root.h
+Dim Hack2 As EAutoMagAnimationTriggers ' Hack so EnumDef doesn't disappear in root.h
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=AutoMag
+      MeshMap=AutoMagPickup
+      AmbientBrightness=43
+      PlayerViewScale=2.1
+      Mass=+00000.000000
+      PickupMessage="You got the AutoMag"
+      DrawForward=+00030.800000
+      DrawDown=+00021.750000
+      DrawPitch=-860
+      OwningSet=1
+      DrawScale=+00000.25
+      PickupScale=+00000.25
+      PlayerViewMesh=AutoMag
+      PickupMesh=AutoMagPickup
+      ProjStartDist=+00060.000000
+      AmmoType=0
+      PickupAmmoCount=20
+      AmmoUsed(0)=1
+      AmmoUsed(1)=1
+      Discharges(0)=1
+      Discharges(1)=1
+      Noise(0)=5.0
+      Noise(1)=5.0
+      ReloadCount=0
+      ProjectileClass(0)=BulletProjectile
+      ProjectileClass(1)=BulletProjectile
+      AmmoStatusIcon=StatClip
+      ReusePeriod(0)=15
+      ReusePeriod(1)=10
+      Dispersion(0)=+00000.000000
+      Dispersion(1)=+00000.060000
+      TriggerSequences(0)=2
+      TriggerSequences(1)=3
+      TriggerSequences(2)=3
+      TriggerFrames(0)=1
+      TriggerFrames(1)=1
+      TriggerFrames(2)=8
+      TriggerValues(0)=1
+      TriggerValues(1)=1
+      TriggerValues(2)=2
+      DischargeSounds(0)=automag
+      DischargeSounds(1)=automag
+      ReloadSound=0
+   End DefaultProperties
+End Class
+
+Begin Class Name=QuadShot
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class QuadShot Expands Weapon Intrinsic
+
+EnumDef EQuadShotAnimationTriggers = _
+        QuadShotAT_None       _
+    ,   QuadShotAT_Fire
+EnumDef EQuadShotAnimations = _
+        EQSA_None             _
+    ,   EQSA_Fire             _
+    ,   EQSA_Reload
+Dim Hack1 As EQuadShotAnimations      ' Hack so EnumDef doesn't disappear in root.h
+Dim Hack2 As EQuadShotAnimationTriggers ' Hack so EnumDef doesn't disappear in root.h
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=QuadShot
+      MeshMap=QuadShotPickup
+      Mass=+00000.000000
+      PickupMessage="Grabbed the QuadShot"
+      PlayerViewScale=1.59
+      OwningSet=2
+      AutoSwitchPriority=2
+      DrawForward=+00052.000000
+      DrawDown=+00027.000000
+      DrawPitch=-740
+      PlayerViewMesh=QuadShot
+      PickupMesh=QuadShotPickup
+      AmmoType=1
+      PickupAmmoCount=20
+      AmmoUsed(0)=1
+      AmmoUsed(1)=1
+      Discharges(0)=1
+      Discharges(1)=4
+      Noise(0)=10.0
+      Noise(1)=10.0
+      ReloadCount=4
+      RecoilPitch(0)=4
+      RecoilPitch(1)=1
+      RecoilForce(0)=+0050.00
+      RecoilForce(1)=+0050.00
+      ProjectileClass(0)=ShellProjectile
+      ProjectileClass(1)=ShellProjectile
+      Dispersion(0)=+00000.040000
+      Dispersion(1)=+00000.080000
+      AmmoStatusIcon=StatShel
+      TriggerSequences(0)=1
+      TriggerFrames(0)=2
+      TriggerValues(0)=1
+      DischargeSounds(0)=newquad
+      DischargeSounds(1)=newquad
+      ReloadSound=quadrln
+   End DefaultProperties
+End Class
+
+Begin Class Name=Stinger
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Stinger Expands Weapon Intrinsic
+
+EnumDef EStingerAnimationTriggers = _
+        StingerAT_None       _
+    ,   StingerAT_Fire1      _
+    ,   StingerAT_Fire2      _
+    ,   StingerAT_Fire3
+EnumDef EStingerAnimations = _
+        EStingA_None         _
+    ,   EStingA_Still        _
+    ,   EStingA_Fire1        _
+    ,   EStingA_Fire3
+Dim Hack1 As EStingerAnimations      ' Hack so EnumDef doesn't disappear in root.h
+Dim Hack2 As EStingerAnimationTriggers ' Hack so EnumDef doesn't disappear in root.h
+Dim PendingShots(5) As Byte ' Array indicating which directions are pending (see code for details)  
+Dim PendingShotCount As Byte ' Count of shots pending in PendingShots
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Stinger
+      MeshMap=StingerPickup
+      AmbientBrightness=43
+      PickupMessage="You picked up a Stinger"
+      OwningSet=3
+      AutoSwitchPriority=3
+      DrawForward=+00027.500000
+      DrawDown=+00029.000000
+      PlayerViewScale=1.70
+      DrawPitch=-60
+      PlayerViewMesh=Stinger
+      PickupMesh=StingerPickup
+      ProjectileClass(0)=StingerProjectile
+      ProjectileClass(1)=StingerProjectile
+      ProjStartDist=+00050.000000
+      AmmoType=2
+      PickupAmmoCount=30
+      ReusePeriod(0)=10
+      ReusePeriod(1)=25
+      AmmoUsed(0)=1
+      AmmoUsed(1)=1
+      Discharges(0)=1
+      Discharges(1)=1
+      Noise(0)=10.0
+      Noise(1)=10.0
+      ReloadCount=0
+      RecoilPitch(0)=1
+      RecoilPitch(1)=2
+      RecoilForce(0)=+00015.00
+      RecoilForce(1)=+00015.00
+      AmmoStatusIcon=StatTary
+      TriggerSequences(0)=2
+      TriggerSequences(1)=3
+      TriggerSequences(2)=3
+      TriggerSequences(3)=3
+      TriggerFrames(0)=2
+      TriggerFrames(1)=2
+      TriggerFrames(2)=4
+      TriggerFrames(3)=8
+      TriggerValues(0)=1
+      TriggerValues(1)=1
+      TriggerValues(2)=2
+      TriggerValues(3)=3
+      DischargeSounds(0)=nailgun
+      DischargeSounds(1)=nailgun
+      ReloadSound=0
+   End DefaultProperties
+End Class
+
+Begin Class Name=FlameGun
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class FlameGun Expands Weapon Intrinsic
+
+EnumDef EFlameGunAnimations = _
+        EFGA_None             _
+    ,   EFGA_Still            _
+    ,   EFGA_Drop             _
+    ,   EFGA_Fire 
+Dim Hack1 As EFlameGunAnimations      ' Hack so EnumDef doesn't disappear in root.h
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=FlameGun
+      MeshMap=Fireball
+      AmbientBrightness=43
+      PickupMessage="You picked up a Flame Gun"
+      OwningSet=0
+      AutoSwitchPriority=4
+      DrawForward=+00040.000000
+      DrawDown=+00028.000000
+      PlayerViewMesh=Fireball
+      PickupMesh=Fireball
+      ProjectileClass(0)=Fireball
+      ProjectileClass(1)=Fireball2
+      ProjStartDist=+00050.000000
+      PickupAmmoCount=100
+      AmmoType=3
+      AmmoUsed(0)=10
+      AmmoUsed(1)=20
+      Discharges(0)=1
+      Discharges(1)=1
+      Noise(0)=10.0
+      Noise(1)=10.0
+      ReloadCount=0
+      RecoilPitch(0)=7
+      RecoilPitch(1)=15
+      RecoilForce(0)=+00200.00
+      RecoilForce(1)=+00400.00
+   End DefaultProperties
+End Class
+
+Begin Class Name=Pickup
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Pickup Expands Inventory Intrinsic
+Dim Unused as Byte
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Pickup
+   End DefaultProperties
+End Class
+
+Begin Class Name=Ammo
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Ammo Expands Pickup Intrinsic
+Dim AmmoCount(10) As Editable Integer ' Indexed by EAmmoType
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Ammo
+      bTakesDamage=True
+      PickupMessage="You picked up some ammo."
+   End DefaultProperties
+End Class
+
+Begin Class Name=Clip
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Clip Expands Ammo Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Clip
+      DrawScale=3.0
+      PickupScale=3.0
+      MeshMap=Clip
+      Mass=+00000.000000
+      PickupMessage="You picked up 20 bullets"
+      PickupMesh=Clip
+      AmmoCount(0)=20
+      EffectWhenDestroyed=ClipExplosion
+   End DefaultProperties
+End Class
+
+Begin Class Name=Shells
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Shells Expands Ammo Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Shells
+      MeshMap=Shells
+      DrawScale=2.0
+      PickupScale=2.0
+      Mass=+00000.000000
+      PickupMessage="You picked up 15 shells"
+      PickupMesh=Shells
+      AmmoCount(1)=15
+      EffectWhenDestroyed=ShellExplosion
+   End DefaultProperties
+End Class
+
+Begin Class Name=StingerAmmo
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class StingerAmmo Expands Ammo Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=StingerAmmo
+      DrawScale=3.0
+      PickupScale=3.0
+      MeshMap=TarydiumPickup
+      PickupMesh=TarydiumPickup
+      Mass=+00000.000000
+      PickupMessage="You picked up 40 Stinger shots"
+      AmmoCount(2)=40
+      EffectWhenDestroyed=TarydiumExplosion
+   End DefaultProperties
+End Class
+
+Begin Class Name=PowerUp
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class PowerUp Expands Pickup Intrinsic
+Dim Strength     As Editable Real    ' Strength increase.
+Dim Stamina      As Editable Real    ' Stamina increase.
+Dim Health       As Editable Real    ' Health increase.
+Dim Armor(4)     As Editable Real    ' Indexed by EDamageType. Armor added to external armor.
+Dim TimeLimit    As Editable Integer ' Time limit for temporary powers.
+' Temporary powers:
+Dim bInvisibility   As Editable Boolean ' The power of invisibility.
+Dim bSilence        As Editable Boolean ' The power of silence.
+Dim bInvincibility  As Editable Boolean ' The power of invincibility.
+Dim bSuperStrength  As Editable Boolean ' The power of super strength.
+Dim bSuperStamina   As Editable Boolean ' The power of super stamina.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=PowerUp
+      PickupMessage="You picked up a PowerUp"
+   End DefaultProperties
+End Class
+
+Begin Class Name=Armor
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Armor Expands PowerUp Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Armor
+      MeshMap=Armor
+      PickupMessage="Armour: +40"
+      PickupMesh=Armor
+      DrawScale=+00002.000000
+      PickupScale=+00002.000000
+      Armor(0)=+00040.000000
+      Armor(1)=+00040.000000
+      Armor(2)=+00040.000000
+      Armor(3)=+00040.000000
+   End DefaultProperties
+End Class
+
+Begin Class Name=Health
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Health Expands PowerUp Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Health
+      DrawScale=1.5
+      PickupScale=1.5
+      MeshMap=Health
+      Mass=+00000.000000
+      PickupMessage="You picked up 30 health"
+      PickupMesh=Health
+      Health=+00030.000000
+   End DefaultProperties
+End Class
+

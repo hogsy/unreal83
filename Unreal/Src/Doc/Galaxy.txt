@@ -1,0 +1,653 @@
+/*=============================================================================
+  Galaxy sound sytem documentation
+  By: Carlo Vogelsang, Independent developer
+=============================================================================*/
+
+  ÄÄ- Internal revision no. 3.00á -ÄÄÄ Last revision at 19:29 on 14-11-1995 -ÄÄ
+
+                ÛÛÛßßÛÛÛ ÛÛÛßÛÛÛ ÛÛÛ    ÛÛÛßÛÛÛ ÛÛÛ  ÛÛÛ ÛÛÛ ÛÛÛ
+                ÛÛÛ  ßßß ÛÛÛ ÛÛÛ ÛÛÛ    ÛÛÛ ÛÛÛ  ßÛÛÛÛß  ÛÛÛ ÛÛÛ
+                ÛÛÛ ÜÜÜÜ ÛÛÛÜÛÛÛ ÛÛÛ    ÛÛÛÜÛÛÛ    ÛÛ     ßÛÛÛß
+                ÛÛÛ  ÛÛÛ ÛÛÛ ÛÛÛ ÛÛÛ    ÛÛÛ ÛÛÛ  ÜÛÛÛÛÜ    ÛÛÛ
+                ÛÛÛÜÜÛÛÛ ÛÛÛ ÛÛÛ ÛÛÛÜÜÜ ÛÛÛ ÛÛÛ ÛÛÛ  ÛÛÛ   ÛÛÛ
+
+                                MUSIC SYSTEM 
+ 			    DEVELOPER  DOCUMENTATION
+                     Copyright (c) 1993-95 Carlo Vogelsang
+
+
+  ÚÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ¿
+  ³Û²± COPYRIGHT NOTICE ±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±±²Û³
+  ÃÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ´
+  ³ This doc. file, GALAXY.DOC is Copyright (C) 1993-95 by Carlo Vogelsang.   ³
+  ³ You may not copy, distribute,  duplicate or clone this file  in any form, ³
+  ³ modified or non-modified without permission of the author.By unauthorized ³
+  ³ copying this file you are violating laws and will be punished. So don't   ³
+  ³ do that and let us all live in peace..                                    ³
+  ³                                                                     Carlo ³
+  ÀÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÙ
+
+
+                                Legal disclaimer
+                                ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+  Carlo Vogelsang makes no warranty of any kind, either express or implied about
+  this software or accompanied files/products. Carlo Vogelsang is not respon-
+  sible for any personal, financial or positional losses or profits resulting
+  from the use, posession or any other association with this product. Carlo
+  Vogelsang can not be liable for any damages or profits resulting from the use
+  of this software including damages for loss of business profits, loss of
+  information, damages to any type of being, financial loss or inability to use
+  this software. All trademarks used in this documentation are property of
+  their respective owners.
+
+
+                                  Introduction
+                                  ÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+  First of all thank you for using TùRùIùAùL's Galaxy Music System v3.00á
+  It's a brand new rewrite of the old Galaxy Music Library used in the Galaxy
+  Music player upto version 2.14. This is a complete NEW rewrite which means
+  totally different replay routines, software mixing routines, higher mixing
+  resolution, better sound. Now based on all state of the art principles known
+  by the author after experimenting for over two years now. So by using the
+  Galaxy Music System you will benefit from the experience and experimenting
+  of the author. This includes a wide range of supported audio hardware, which
+  has been tested and found working on numerous different systems.
+
+
+                              Features and support
+                              ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+  As usual everybody wants to know about its key features, options, support
+  and prestations :
+
+    - Supports 32 bit protected mode DOS as well as 32 bit Win32.
+    - Supports up to 32 sound channels, either thru software or hardware mixing
+    - Supports music and/or simultaneous soundeffects, up to 32 channels max.
+    - Supports soundeffects only, for playing big samples only.
+    - Supports simultaneous use of CD-Audio playing AND digital output.
+    - Supports full and partial auto detection, user setup also possible.
+    - Supports 16 and 32 bit mixing resolution, for better dynamic resolution
+    - Supports 8 or 16 bit output, 16 bit output needs appropriate hardware.
+    - Supports up to 8 octaves, for maximum music composing/replaying quality.
+    - Supports multi-sample instruments, for maxmium music quality.
+    - Supports volume and panning envelopes, for professional composing.
+    - Supports samples sizes up to as much (gus/awe) memory you might have.
+    - Supports up to 48 Khz mixing-rates, depends on the hardware ofcoz.
+    - Supports many different file formats including .S3M/.STM/.MTM/.MOD/.XM/.AM
+    - Supports wide range of audio hardware, includes mixing type/rates :
+
+      - SoundBlaster 1.0/1.5/2.0 and compatibles :
+
+        + 8 bit mono output is supported, software mixing.
+        + 4000 - 22050 Hz for SoundBlaster 1.0/1.5/2.00
+        + 4000 - 44100 Hz for SoundBlaster 2.01+
+
+      - SoundBlaster Pro 1.0/2.0 and compatibles :
+
+        + 8 bit mono/stereo output are supported, software mixing.
+        + 4000 - 22050 Hz for SoundBlaster Pro 1.0/2.0
+        + 4000 - 44100 Hz for SoundBlaster Pro 3.01+
+
+      - SoundBlaster 16/16ASP and compatibles :
+
+        + 8/16 bit mono/stereo output are supported, software mixing.
+        + 4000 - 44100 Hz for SoundBlaster 16/16ASP
+
+      - SoundBlaster AWE32 and compatibles :
+
+        + 16 bit stereo output is supported, hardware mixing.
+        + 44100 Hz for SoundBlaster AWE32
+
+      - Gravis UltraSound MAX/ACE and compatibles :
+
+        + 16 bit stereo output is supported, hardware mixing.
+        + Samplingrate depends on number of active channels.
+
+      - Windows Sound System and compatibles :
+
+        + 8/16 bit mono/stereo output are supported, software mixing.
+        + 5000 - 48000 Hz for Windows Sound System.
+
+      - Pro Audio Spectrum +/16 and compatibles :
+
+        + 8/16 bit mono/stereo output are supported, software mixing.
+        + 4000 - 44100 Hz for Pro Audio Spectrum +/16
+
+      - AdLib Gold 1000/2000 :
+
+        + 8/16 bit stereo is supported, software mixing.
+        + 7000 - 44100 Hz for AdLib Gold 1000/2000
+
+        The following output methods ARE supported but are very slow because
+        those "cards" do NOT allow DMA transfers and thus the CPU must used
+        with a highspeed timer to transfer all sample data :
+
+      - Covox DAC at LPT1 :
+
+        + 8 bit mono output is supported, software mixing.
+        + 4000 - 48000 Hz for Covox DAC
+
+      - AdLib and clones :
+
+        + 5 bit mono output is supported thru FM-Chip, software mixing.
+        + 4000 - 48000 Hz for AdLib
+
+      - PC Internal speaker :
+
+        + 5 bit mono output is supported, software mixing.
+        + 4000 - 48000 Hz for PC Internal speaker
+
+      Features that go without speaking :
+
+      - Excellent clear, well optimized, speedy and compatible code.
+      - Demands as little memory as possible by storing all note data packed.
+      - Easy implementation in your 32 bit flat protected mode C/C++ programs.
+
+
+                                   Interrupts
+                                   ÄÄÄÄÄÄÄÄÄÄ
+
+
+  A music system has to calculate, update and send musical information to the
+  audio hardware at specified/constant time intervals. The Galaxy Music System
+  uses, whenever possible, an IRQ generated by the audio hardware. This allows
+  Galaxy to be called at a constant rate, whenever it needs to be called.
+  Because Galaxy uses the IRQ generated by the audio hardware, which usually
+  means an IRQ other than zero, the system timer (IRQ 0) is free for use in
+  your program do to for example, vertical retrace timings, to get to run your
+  program as smooth as possible. Please note that this does NOT go for
+  SoundBlaster AWE32, Covox DAC, AdLib and PC-SPEAKER because these cards
+  cannot generate an IRQ Galaxy will have to use the system timer (IRQ 0)
+  for outputting sample data.
+
+
+                                 Autodetecting
+                                 ÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+  Because there are so many different soundcards and clones available, most of
+  the time the owner doesn't even know what kind of soundcard is installed and
+  most people REALLY don't know what IRQ (what is an IRQ¨) or DMA their piece
+  of computer equipment is working at. Because to overcome this problem those
+  nice environment strings were introduced, unfortunately most of the time
+  they are either wrong or contain invalid information (SoundBlasters at XXXh!)
+  To get rid of all this, Galaxy v3.00á features full and partial auto-detection
+  of the supported audio hardware. Full autodetection simply means something
+  like : "Find the BEST soundcard installed in this system and get all
+  information you'll need to know including BASE, IRQ and DMA.". Partial auto-
+  detect means :"Check if the specified soundcard is present, at the specified
+  base address, if so get all remaining information you'll need to know
+  including IRQ and DMA.". Most of the time the full autodetect works fine, but
+  sometimes people may want to use another (e.g. not the BEST) soundcard
+  installed, so partial auto-detect can be used to override, the default best
+  choice. You might want to know in what order the auto-detection routine looks
+  for the audio hardware well here's the list :
+
+    1. Gravis UltraSound MAX/ACE and clones
+    2. SoundBlaster AWE32 and clones
+    3. AdLib Gold 1000/2000 and clones
+    4. Pro Audio Spectrum +/16 and clones
+    5. SoundBlaster 16/16ASP and clones
+    6. SoundBlaster Pro and clones
+    7. SoundBlaster and clones
+    8. Windows Sound System and clones
+    9. AdLib and clones
+   10. PC Internal speaker and clones ?
+
+  The audio hardware auto detection is handled by the C/C++ callable function
+  DetectSound(char, unsigned short int). Where the first parameter is one of
+  the soundcard definitions (see GALAXY.H) and the second parameter is the base
+  address. This function is, ofcourse, only available in the DOS-Version of the
+  Galaxy Music System.
+
+
+                              Implementation in C
+                              ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+  The Galaxy Music System is available either for use in a 32 bit flat
+  protected-mode DOS-Program using WATCOM C/C++ or for use in a 32 bit flat
+  model Win32 Windows-Program using either WATCOM C/C++ or Microsoft VISUAL
+  C/C++. In the developer archive (GALAXY.ZIP) three kinds of GALAXY.LIB files
+  are included a WATCOM C/C++ DOS-Version and two Windows-versions. When using
+  the Windows-version of the Galaxy Music System don't forget to add GALAXY.LIB
+  and WINMM.LIB to your linker command, when using the DOS-Version you'll only
+  need to add GALAXY.LIB to your linker command. Furthermore you'll also
+  need the GALAXY.H definition headerfile which defines all external functions
+  and variables made available to your program by the Galaxy Music System. Now
+  a short description of the calling interface will be given, for more details
+  see TEST.C an example C file showing an easy implementation including sound-
+  effects. Please note that the calling interface will remain the same both for
+  a DOS and Windows program.
+
+
+  int GetSoundInfo(char **Version,char **Driver)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Returns two zero-terminated strings (char *) which contain the following
+  information. The first string will contain the Galaxy Music System version,
+  the compilation date and the type of license. The second string will contain
+  the type of digital output driver currently used. Can't fail unless NULL
+  pointers are supplied.
+
+  In:     char **Version=ASCIIZ Version information
+          char **Driver=ASCIIZ Output driver information
+  Out:    If successful:
+           Returned value zero
+           Pointers updated
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int InitSound(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Allocates needed memory and output buffers. Clears important internal
+  structures and sets up the Galaxy Music System for use. Needs to be called
+  only once upon startup. Mostly fails if not enough memory is available. If
+  this function fails the Music System can NOT be used.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           Galaxy Music System initialzed
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int DetectSound(char SoundcardType,unsigned short int Base)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Autodetects the best hardware device present in the system and gathers all
+  information needed by the soundsystem. It's also possible to detect a
+  specified hardware device on a given base. See the chapter on autodetection
+  for more information on this subject. Fails if the player is already running
+  or if the specified hardware device is not present, this in order to avoid
+  crashing the system. This function has no effect in the Win32 version of the
+  Galaxy Music System and will always return successful.
+
+  In:     char SoundcardType=Type of soundcard (see GALAXY.H for typedefs)
+          char Base=Base address of soundcard (see GALAXY.H for typedef)
+  Out:    If successful:
+           Returned value zero
+           SoundCard structure initialized
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int ResetSound(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Resets all internal structures, except those concerning the hardware device
+  information, the volume tables and the output buffers. Always call before
+  loading a new piece of music. Fails if the player is already running this
+  in order to avoid crashing the system.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           Galaxy Music System data structures (re)initialized
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int LoadMusic(void *Data,char mode)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Loads and converts the following music-formats to the Galaxy Music System
+  internally used format (.AM). Supported formats are .AM/.XM/.S3M/.STM/.MOD
+  .MTM/.FAR and .669. An utility (M2AM.EXE) is provided to convert supported
+  formats into .AM, the source code is available as M2AM.C. Fails if the player
+  is already running or if there's not enough memory available for pattern and
+  sample data. Loading from libraries is very easy when using memory mapped
+  files you can supply a memory pointer. If you're using a normal library file
+  without memory mapping you can seek to the right position and pass the Stream
+  pointer.
+
+  In:     void *Data=(FILE *) Stream or (char *) Memory containing music-data
+          char mode=Data type (Stream or memory) (see GALAXY.H for typedefs)
+  Out:    If successful:
+           Returned value zero
+           Music loaded (and converted) into memory
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int SetSamplingrate(unsigned short int Samplingrate)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Sets new Samplingrate (also known as Mixingrate) to use for digital output.
+  Valid values for the Samplingrate are between 4000 and 48000 Hz, you are
+  allowed to changed the Samplingrate in steps of one Hz. But please be aware
+  that depending on the output device not all Samplingrates can be used, however
+  the Galaxy Music System will internally adjust and/or limit the Samplingrate
+  to mach the hardware specifications. When using the DOS-Version of the Galaxy
+  Music System and a Gravis Ultrasound for output the actual Samplingrate only
+  depends on the number of used sound channels, thus this function has no
+  effect when using a Gravis Ultrasound or SoundBlaster AWE32 with the DOS
+  Library. This because the DOS-Version will use the hardware mixing
+  capabilities of those cards. Fails if the player is already running or if
+  an invalid value is passed.
+
+  In:     unsigned short int Samplingrate=Mixingrate in Hz (Default 22050 Hz)
+  Out:    If successful:
+           Returned value zero
+           New samplingrate set
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int StartOutput(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Initializes and starts digital output, if no soundcard is specified in the
+  SoundCard structure a full autodetect will be run and the output will be
+  started. Please note that the music processing has to be started separately
+  this allows for soundeffects only mode. Fails if the player is already
+  running, no Music and/or Effect channels are allocated OR if the soundcard
+  information specified in the structure is invalid. This in order to avoid
+  crashing the system. Please do NOT modify the SoundCard structure while
+  digital output is running, uncontrolled things may happen, can even result
+  in a system crash.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           Digital output running
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int StartMusic(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Enables music processing, maybe called anytime AFTER LoadMusic. Please note
+  that by default after ResetSound() the music processing will be disabled,
+  this allows for soundeffects only mode. Fails if no music-channels are
+  allocated, e.g. no music is loaded previously.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           Music processing running
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int LoadSoundeffect(void *Data,char mode)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Loads and converts the following sample-formats to the Galaxy Music System
+  internally used format). Supported formats are .WAV and .ST3. Fails if the
+  player is already running or if there's not enough memory available for the
+  sample data. Loading from libraries is very easy when using memory mapped
+  files you can supply a memory pointer. If you're using a normal library file
+  without memory mapping you can seek to the right position and pass the Stream
+  pointer.
+
+  In:     void *Data=(FILE *) Stream or (char *) Memory containing sample-data
+          char mode=Data type (Stream or memory) (see GALAXY.H for typedefs)
+  Out:    If successful:
+           Returned value nonzero, number to use for StartSoundeffect
+           Sample loaded (and converted) into memory
+          If unsuccessful:
+           Returned value zero
+
+
+  int StartSoundeffect(char Effect,unsigned long int Speed,char Vol,char Pan)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Starts playing a soundeffect with the given parameters and returns a handle
+  which can be used for UpdateSoundeffect and StopSoundeffect. Fails if no
+  effect-channels are allocated or if no effect-channels are available, e.g.
+  all effect-channels are currently in use.
+
+  In:     char Effect=Number of soundeffect returned by LoadSoundeffect
+          unsigned long int Speed=Replayspeed in Hz (See GALAXY.H for typedef)
+          char Vol=Volume level 0..64 (See GALAXY.H for typedef)
+          char Pan=Panning position 0..15 (See GALAXY.H for typedef)
+  Out:    If successful:
+           Returned value nonzero, handle to use for Update and StopSoundeffect
+           Soundeffect playing
+          If unsuccessful:
+           Returned zero
+
+
+  int UpdateSoundeffect(char Handle,unsigned long int Speed,char Vol,char Pan)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Modifies the attributes of a playing soundeffect. Fails if no effect-channels
+  are allocated or if an invalid handle is supplied.
+
+  In:     char Handle=Handle returned by StartSoundeffect
+          unsigned long int Speed=Replayspeed in Hz (See GALAXY.H for typedef)
+          char Vol=Volume level 0..64 (See GALAXY.H for typedef)
+          char Pan=Panning position 0..15 (See GALAXY.H for typedef)
+  Out:    If successful:
+           Returned zero
+           Soundeffect playing using new settings
+          If unsuccessful:
+           Returned nonzero
+
+
+  int StopSoundeffect(char Handle)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Stops a playing soundeffect. Fails if no effect-channels are allocated or
+  if an invalid handle is supplied.
+
+  In:     char Handle=Handle returned by StartSoundeffect
+  Out:    If successful:
+           Returned value zero
+           Soundeffect stopped
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int StartCDTrack(char TrackNo)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Starts playing a CD-Audio (Red Book) track on the first CD-ROM drive in the
+  system. Fails if no CD-ROM Interface is found or if an invalid track number
+  is specified.
+
+  In:     char TrackNo=Number of CD-Audio (Red Book) track to play 1..??
+  Out:    If successful:
+           Returned value zero
+           CD-Audio track is playing
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int StopCDTrack(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Stops playing a CD-Audio (Red Book) track on the first CD-ROM drive in the
+  system. Fails if no CD-ROM Interface was found.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           CD-Audio track replaying is stopped
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int SetMusicVolume(char Volume,char Mode)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Changes the overal music volume, the new volume can either be set directly or
+  be fade to. This allows to fade either in or out to a destination volume.
+  Fails if an invalid value is specified for the music volume. I suggest to use
+  this function to change the music volume rather than to the modify the global
+  variable MusicVolume directly.
+
+  In:     char Volume=New music volume 0..128
+  	  char Mode=Volume change mode (see GALAXY.H for typdefs)
+  Out:    If successful:
+           Returned value zero
+           Music volume changed or changing
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int SetEffectVolume(char Volume,char Mode)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Changes the overal effect volume, the new volume can either be set directly
+  or be fade to. This allows to fade either in or out to a destination volume.
+  Fails if an invalid value is specified for the effect volume. I suggest to
+  use this function to change the effect volume rather than to the modify the
+  global variable EffectVolume directly.
+
+  In:     char Volume=New effect volume 0..128
+  	  char Mode=Volume change mode (see GALAXY.H for typdefs)
+  Out:    If successful:
+           Returned value zero
+           Effect volume changed or changing
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int ControlChannel(char Channel,char Mode)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Changes the operating mode of a given soundchannel. Fails if an invalid
+  channel number is specified.
+
+  In:     char Channel=Channel number 0..32
+  	  char Mode=Channel operation mode (see GALAXY.H for typdefs)
+  Out:    If successful:
+           Returned value zero
+           Channel mode changed
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int StopMusic(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Disables music processing. Please note that it will only disable music
+  processing, digital output keeps running and thus soundeffects can still be
+  played. Fails if no music-channels are allocated, e.g. no music is loaded
+  previously.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           Music processing stopped
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int StopOutput(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Deinitializes and stops digital output, always call this functions before
+  terminating the program. It will reset the sound hardware, dma controllers
+  and hardware interrupts. Fails if player is not running or if the information
+  specified in the SoundCard structure is invalid. This in order to avoid
+  crashing the system.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           Digital output stopped
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int UnloadMusic(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Deallocates all memory allocated by both the music-loader AND the sample-
+  loaders. This means that all memory in use by BOTH music-data AND sound
+  effects is released. After this function is called all music-data AND sound
+  effects have to be reloaded.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           All allocated memory released
+          If unsuccessful:
+           Returned value nonzero
+
+
+  int DeinitSound(void)
+  ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+  Deallocates all memory and output buffers allocated by InitSound(). ALWAYS
+  call this function before exiting, because it will also reset some used
+  system services such as Virtual DMA-Specification (VDS), allocated CD-ROM
+  handles etc. Fails if the player is running. If this function returns
+  successful the Galaxy Music System can NOT be used anymore. If you want to
+  use it again you'll have to call InitSound() again.
+
+  In:     Nothing
+  Out:    If successful:
+           Returned value zero
+           Galaxy Music System deinitialzed
+          If unsuccessful:
+           Returned value nonzero
+
+
+                               Tested soundcards
+                               ÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+  A music system has to be tested on as many soundcards/systems as possible.
+  To keep track of what has been tested with what settings etc. a test record
+  is maintained. The current test record is shown below :
+
+    - Soundcard -           - Tested modes irq,dma etc. -         - Passed -
+
+    SoundBlaster 1.5	      IRQ 7, DMA 1, 8 Bit mono       	     YES!
+    SoundBlaster 2.0	      IRQ 7, DMA 1, 8 Bit mono       	     YES!
+    SoundBlaster Pro 2.0      IRQ 2-10, DMA 0-3, 8 Bit stereo        YES!
+    SoundBlaster 16	      IRQ 2-10, DMA 1-7, 8/16 Bit stereo     YES!
+    			      IRQ 2-10, DMA 1-7, 8/16 Bit mono	     YES!
+    SoundBlaster AWE32 VE     IRQ 0, 16 Bit stereo		     YES!
+    Gravis UltraSound v3.4    IRQ 2-15, DMA 1, 16 Bit stereo	     YES!
+    Gravis UltraSound v3.7    IRQ 2-15, DMA 1, 16 Bit stereo	     YES!
+    Gravis UltraSound MAX     IRQ 2-15, DMA 1, 16 Bit stereo 	     YES!
+    Windows Sound System      IRQ 2-15, DMA 1-7, 8/16 Bit stereo     YES!
+    (Tested using a GUS-MAX)  IRQ 2-15, DMA 1-7, 8/16 Bit mono       YES!
+    AdLib Gold 1000           IRQ 2-7,  DMA 1, 8/16 bit stereo       YES!
+    Logitech Soundman 16      IRQ 2-15, DMA 1-7, 8/16 bit stereo     YES!
+    (PAS 16 Compatible)       IRQ 2-15, DMA 1-7, 8/16 bit mono       YES!
+    Logitech Soundman Games   IRQ 7, DMA 1, 8 Bit stereo             YES!
+    Covox DAC at LPT1         IRQ 0, 8 bit mono                      YES!
+    PC-Speaker		      IRQ 0, 5 bit mono			     YES!
+    AdLib		      IRQ 0, 5 bit mono			     YES!
+
+
+                                 Closing words
+                                 ÄÄÄÄÄÄÄÄÄÄÄÄÄ
+
+
+  Since this version of the Galaxy Music System is still a beta/demonstration
+  version, I hope you can understand when I'm asking NOT to spread this archive
+  to just everybody, please contact the author if distribution is needed for
+  example for internal testing etc. This in order to allow easy contacting when
+  updates are ready for testing. Furthermore I'm always available for any
+  comments, suggestions, bug reports, new hardware (information) etc.
+
+
+                                   Contacting
+                                   ÄÄÄÄÄÄÄÄÄÄ
+
+
+  If you want to contact the author of the Galaxy Music System for suggestions,
+  bug reports etc. You can use one of the ways mentioned below :
+
+  Snail-mail :           Telephone :		InterNet:
+
+  Carlo Vogelsang	 Carlo Vogelsang 	k.c.vogelsang@student.utwente.nl
+  Witbreuksweg 377-309   +31-(0)53-4311187
+  7522 ZA Enschede       Please call between
+  The netherlands        10:00 and 22:00 CET!

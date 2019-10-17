@@ -1,0 +1,2348 @@
+/*-----------------------------------------------------------------------------
+	tim@epicgames.com: Old work notes
+-----------------------------------------------------------------------------*/
+
+///////////////////////////////////////////////////////////////////////////////
+Prior to 5-1-96: Work notes were on paper
+
+///////////////////////////////////////////////////////////////////////////////
+5-1-96
+
++	QuadHand, AutoMagHand properties
++	Use weapon offsets
+X	Move Weapon with its parent (Child actors now ticked after parent, can handle this themselves)
++	DestroyActor destroy all child actors
++	AWeapon implementation
++	Pawn maintain Bob, inventory utilize
+
++	Inventory messages
++		PickupQuery: Root implementation, Pawn implementation
++		PickupNotify
++		AddInventory
++		DeleteInventory
++		PreemptPickupQuery
++		Activate
++		DeActivate
++		Use
++	'0' - '9' switch weapons
++	Autoswitch inventory based on priority
+
++	Multiple weapons sharing number key
++	Arbitrary DestroyActor calls must preserve inventory chain
++	Pickup message strings, simple text messaging
+
++	Weapons
++		Weapon up & weapon down upon activate/deactivate
++		Use 'Fire' anim sequences
++		Instant-hit function via raytracer with optional spawn-explosion-at-wall-minus-delta
++		Dispersion function for random weapons like shotgun
+
+X	Pickup implementation -> save all of this for scripting
+X		PickupSound, RespawnSound stubs
+X		RespawnTime
+X		RespawnNetOnly
+X		Respawn FX
+
++	Root: On PreBeginPlay, server pass play flags and destroy unwanted actors
++	LevelSetState include difficulty and network play flags
+
++	Detect Windows NT and skip DirectMouse
++	Fix sheet brush display order, now draws semisolid coplanars after solids
++	Cloudcast bug?
++	DispDib error mention Win95 requirement
+
+///////////////////////////////////////////////////////////////////////////////
+5-2-96
+
++	Kill unused cameras after load-for-play
++	UnrealEd: Sort mesh viewer list
++	UnrealEd: Strip quotes from strings, reappend during export
++	UnrealEd: F4 cycle through list of result messages (Next Error)
++	UnrealEd: Class browser, no Close button
++	UnrealEd: String properties are acting up
++	UnrealEd: Map save-as + cancel doesn't work.  Other save-as's also? Check it out.
++	Actors have ambient brightness property
++	Set player's starting yaw accoring to PlayerStart
++	Implemented UClass::IsKindOf
++	Test all CPT_String references
+X	InstantHit projectile class - use a function instead
++	Pyrotechnics class with
++		Explosion, TeleportIn, TeleportOut, WallDamage, MonsterDamage, PickupRespawn, PlayerRespawn, PlayerDie
+
++	Property arrays
++		ImportActorProperties
++		Don't allow editable arrays except for strings
++		AActor::QueryReferences
++		AddParentProperties
++		ExportActorProperty
++		ExportMultipleActors - skip arrays except for strings
++		Export headers & actors
++		Import
++		Test ugly stuff, including array of names + array of resources
++		Export class, only fwd declare classes that are necessary
+
+///////////////////////////////////////////////////////////////////////////////
+5-3-96
+
++	Don't use DMouse movement when mouse not captured
++	Auto-activate upon pickup
++	Auto-activate and deactivate upon switch
++	Expand zone list to include name and all other new info
++	Way of specifying particular actor class as a CPT_
+
++	UnrealEd: Preferences/No-checks mode
++	UnrealEd: Treat intrinsic classes as read-only unless no-checks mode is on, note *'s
++	UnrealEd: Is PF_HURT tag visible?
+
++	UnrealScript
++		support classed actor references
+
+X	bWantTextMsgs
++	ILevel::GetZoneZoneDescriptor(iZone)
++	ILevel::GetActorZone(iActor)
++	Zone builder handle ZoneDescriptors
++	Is bClassPureVirtual being copied from parent class?
++	FZoneFilter::MergeAdjacentZones: Invalid back cut
++	Never destroy bStatic actors
++	Export actor: if exported parent, only export non-identical properties
+
++	Zone transitions
++		Actor Zone byte
++		MoveActor,FarMoveActor,SetState: Message ZoneChange, send ZoneChange right after BeginPlay
++		BeginPlay
++	Delete cone tracer stuff, replace with line tracer
++	FClassProperty::Compare
++	Fix 'Bump' message - only send once per call to MoveActor.
++	Spawn send ZoneChange
++	Projectile move with MoveActor
++	MoveActor, etc - validate Class after all SendMessage calls.
+
+X	Const properties which are stored only in class data but not individual actors
+X		Use for advanced pawn properties (stored in class only)
+X		inline FClassProperty::GetData(Class,RawActor) instead of offset for *all* gates
+X		Rename PropertyOffset
+X		Shared properties
+X		This would cause a huge slow mess in accessing stuff from C
+
+X	Ammo system -> Save for scripting
+X		Slurp ammo, deactivate when exausted
+X		When deactivate with no dest weapon, pick highest priority other weapon
+
++	Plan damage system mechanics
++	Plan kill credit mechanics
+
+///////////////////////////////////////////////////////////////////////////////
+5-4-96
+
++	5 armor classes, 5 damage classes
++	PHit message
+
++	Classes
++		KeyPoints: BlockAll, BlockMonsters
++		Pickups class: Shells, Bullets, Health
++		GunFlashSmoke
++		Projectile const brightness
+
+X	PF_MONSTER_NO_GO, implement in sphere/rod routine, use collision hints instead
++	Logo, GGfx.Logo
++	Impart momentum
+
++	Actor->bJustDeleted, SpawnActor prevent recycling of actors during a frame
+
++	2 fire button support with Use, UseExtra Ctrl+Space
+X	CMB Damage = k/Distance? I think not.
++	Root route UseExtra to Use
++	Teleporter = intrinsic
+
++	New light sampler
++		Sample around lattice center for better consistency
+X		Do X-jittered oversampler to hide lightmesh wall aliasing -> Not useful with 4X oversampler
+
+///////////////////////////////////////////////////////////////////////////////
+5-5-96
+
++	Rewrote light mesh supersampler
+
+///////////////////////////////////////////////////////////////////////////////
+5-6-96
+
++	Volumetric lighting works. Very cool.
+
+///////////////////////////////////////////////////////////////////////////////
+5-7-96
+
++	Reimplement diffusion dithering
++	WallHit actor = puff of smoke
++	Caught up on email. Email sucks.
+
+///////////////////////////////////////////////////////////////////////////////
+5-8-96
+
++	BSP cone tracer
++	InstantHit weapons hit walls, spawn smoke
++	InstantHit weapon properties: +Dispersion (0-1.0), +NumShots
++		InstantMomentum
++	InstantHit weapons hit actors
++		transfer momentum according to mass
++		do damage
++	Hit messaging
++	Actor functions to get view coords & get draw coords
++	Math PerturbVector function
+X	Pyrotech needs acceleration vector -> just gravity multiplier
++	Raytracer handle fake backdrops
+X	Optimize diffusion dithering routine -> give to Mark or Ammon
+
++	Added AActor::GetViewCoords for finding an actor's view coordinate system
++	Added AActor::GetLocalVector to transform a vector into the actor's coordinate system
+
++	InstantHit weapons need MeleeDamage,RangeDamage,FireDamage,ElectricDamage
++	No macro save camera open
++	Projectiles need uneditable damage attributes
++	Weapons must set projectile's damage attributes
+
++	UnrealEd minor stuff
++		Zone portals editable
++		Macros use .mac ext, not .MAC
++		Init common dialog directories at start, then leave them alone
+
+///////////////////////////////////////////////////////////////////////////////
+5-9-96
+
++	Monster zone clipping
++	Monster bounding boxes
++	Use per frame bounding box
+
++	Jason Emery help files (cool!)
+
++	Rotations need to be int's for script accessibility? Ugh.
+
+///////////////////////////////////////////////////////////////////////////////
+5-10-96
+
++	Validate function for all actors, reverse-sent like Spawn
+
++	Moving brushes
++		Mover's spawn function: set default keyframe position to location & rotation -> Zeroes
++		KeyCurrent = name
++			Validate name
+X		UnrealEd UI -> Can do all of this with existing property system!
+X			Display keyframer when 1 actor is selected and it's a mover - IsKindOf
+X			'KEY ADD NAME=' 'KEY DELETE NAME=' 'KEY SHOW NAME='
+X			UnrealEd UI for moving keyframes
++		bAdded, MoverInitialKeyPos
++		Utilize saved location/rotation only, no scale no sheer
++		Isn't exporting positions/rotations associated with keyframes?
++		Eval byte, int, float actor properties
++		All PText messages include iSourceActor
++		UnrealScript handle CPF_EditInPlay
++		UnrealEd Vector & Rotation editing dialog
++		Indexed property import
+
+///////////////////////////////////////////////////////////////////////////////
+5-11-96
+
++	Optimize:
++		Shadow cache builder, use bitmask
++		Use 1 simple mipmap decision
++		Build mip-reference list + ptrs to all needed textures in advance
+
++	Updated square root precalc
++	Visible polylites stat
+
+///////////////////////////////////////////////////////////////////////////////
+5-12-96
+
++	Merged sound code
++	Answered 150 waiting emails.  Email still sucks.
+
+///////////////////////////////////////////////////////////////////////////////
+5-13-96
+
++	Actor textures fuzz in distance
++	Actor chunk highlighting weirdness
++	Don't highlight selected stuff during play -> Root deselects all in BeginPlay
++	'Posessed' messages are dead
++	Fixed & optimized box-clipper near-clipped cases -> cool outcode union trick
++	V-fog toggle
+
++	Moving brush prelims
++		Place, move, and set InitialKeyPos in UnrealEd
++		UnrealEd Brush - no '...', use current call Map DupeBrush
++		Copy current brush (make a duplicate)
++		Brush bounding sphere
++		Set location, rotation properly
++		Export, import with actors properly
++		AActor::GetPropertyPtr(iproperty,element)
++		Test multi-select with property array - must ignore
++		CPF_ExportResource for resources, use for single elements and arrays
++		Wire render
+
++	Movers: Sinusoid frequency, phase option
+
+///////////////////////////////////////////////////////////////////////////////
+5-14-96
+
++	E3 prep
+X	To do: -> Denied!
+X		Basic sporadics class with realtime EdPoly CSG (slow):
+X			AddAllBrushes
+X			RemoveAllBrushes
+X			MoveBrush
+X		Merge Mark Randell's code
+X		Import Cliff's maps or give Cliff the new UnrealEd
+
+///////////////////////////////////////////////////////////////////////////////
+5-15-96 through 5-18-96
+
++	At E3
++	Demos went ok but certainly not great
++	We have a hell of a lot of work to do before Unreal is truly impressive
+
+///////////////////////////////////////////////////////////////////////////////
+5-19-96
+
++	E3 recovery
+
+///////////////////////////////////////////////////////////////////////////////
+5-20-96
+
++	Look into box occlusion span merge slowdown -> Code is ok
++	GClasses: TextureRes, SoundRes, AmbientRes, LevelRes, ResourceRes
++	Class startup routine
++	Bump res version
+X	Purely generic actor class needs Class pointer? -> Doesn't matter
++	Check registry
++	VC++ 4.1
+
++	CPUID MMX, +Pentium
+X	Must use DirectDraw display pitch, can't assume == SXR
++	Should lock DirectDraw only during texture mapping, not setup
+X	Parallel Resource class -> Overly complex
+
+X	Angles as integers -> Later
++	UnBuild.h: REQUIRE_MMX, REQUIRE_3D
++	Scrap MipLevel in UnMMX.cpp
+X	Use level gravity vector -> Later
+X	Use Zone gravity override vector -> Later
+
+X	Need a damned password in Unreal (registry) -> Nah
+
+///////////////////////////////////////////////////////////////////////////////
+5-21-96
+
++	DirectDraw, DirectSound & WinDiff crap
+?	Need AnimDef for animating texture animation sequences?
+X	Class flag: includable in actors -> Lame
+
+///////////////////////////////////////////////////////////////////////////////
+5-22-96
+
++	How to pass strings around? String constants? -> Predefined length
++	Must implement property frames for handling of globals, locals, and params -> Reworked
++	FClassProperty: support Init token & error result
++	FClassProperty::IsTrue
+
++	GetToken handle allowable resources
++	Resource(Name)
++	Vector(X,Y,Z), Rotation (P,Y,R)
++	Name(Name)
++	Resource type script-referencable flag
++	hack for dumping class during compile
++	dump support const, etc.
++	True,False are now integer constants
+
++	All vectors & rotations import/export in new format
++	New sound code
++	Fixed can't delete lights bug
++	Reduce memory thrashing
+
+///////////////////////////////////////////////////////////////////////////////
+5-23-96
+
++	GPF's screw up focus somehow when mouse is captured
++	RendSpanOccludeBSP crashes at 168 660
+X	No duplicate VB & C error messages -> This is ok
+	Unload DirectDraw if locked at crash time
+X	Fix UnrealEd startup instability -> This is a Microsoft bug
++	Crash in FGlobalUnreal::Exit keeps task alive
++	Crash doesn't always kill timer?
++	FGlobalUnreal::Init double crash from VB
+	
++	Separate EdSrv from GameSrv
++	WM_CANCELMODE
+X	Run players at 70 fps, AI at 35 fps? -> Revisit later
++	pEnable/pDisable don't work with cams anymore.
+
+///////////////////////////////////////////////////////////////////////////////
+5-24-96
+
++	Add DD 800x600 and 1024x768
++	ILevel::SendMessage added class parameter
++	Malloc gate for *all* Unreal memory, leak check at end
++	Resource leak check and display
++	Texture properties: Ground friction & hit sound & footstep sound
++	UnrealEd: Never ending slow task disables cameras
+
++	_set_new_handler
++	_set_new_mode
+X	Adjust player-control mouse response: faster rotation, slower movement -> Configurable
+
+X	Parameters via: Link topics? Class properties? New system entirely? -> Dumb
+X		Need way of saving defaults like sound/music volume
+X		Need way of running macros
+
+X	Wall damage dynamics
+X	Muchos cheats
+X		All-health, all-ammo, all-weapons, move-z, no collision
+
++	Cleaned up memory leaks
++	Fixed killing UnrealEd doesn't kill UnrealServer if log window is open
+
++	Resource purge function to clean all resources not owned by root
+
++	Actor messages are now enum'd and attached to root
+
+///////////////////////////////////////////////////////////////////////////////
+5-25-96
+
++	Now use PlayerStart's PlayerSpawnClass
+X	Check all FIND_EXISTING, FIND_OPTIONAL -> All is well
++	No resource purge ever in UnrealEd
+
++	Scripting warm-up
++		Accept default values if not editable, require if const
+X		Export const's as C++ enums -> overly complex
+X		Allow const's as array dims -> overly complex
+
++	Functions & Operators
++		Function <name> () [Intrinsic] [Fast]
++		Operator <symbol> () [Intrinsic] [Fast]
++		Parse all comma-separated parameters
++		Prevent bad overrides in parameters
++		Allow defaults in parameters
++		Handle 'as returntype'
+
++	B1umped res version to 7
++	Moved gameInit/gameExit to FGlobalUnreal
+
+X	FGlobalClasses now includes AllClasses and IntrinsicClasses -> Rearranged
++	Added to FGlobalPlatform: LockName, LockPassword, LockEncryption, PasswordDialog
++	Added to FGlobalPlatform: OpenSettings,CloseSettings,GetSetting,SetSetting
++	Uses REGISTRY_KEY_BASE, REGISTRY_KEY_COMPANY, REGISTRY_KEY_PRODUCT
+
+///////////////////////////////////////////////////////////////////////////////
+5-26-96
+
++	Catchup
++	Visual C++ 4.1 = unstable slow ass compiler from hell, reverted back to 4.0
+
+///////////////////////////////////////////////////////////////////////////////
+5-27-96
+
++	Max Z-based subdivision decision -> This rules!
+X	Transparent smoothing is awesome!  May want to cache previous frame's
+X		spans and render in two phases (one blended union, one normal diff).
+X		This looks so damn cool in 320x200. Requires maintaining 2 buffers
+X		for consistent averaging -> Check out later
++	Temporal H&V antialiasing
++	Temporal 2-way mipmap transitions
+
+///////////////////////////////////////////////////////////////////////////////
+5-28-96
+
++	Email, Intel discussion, experimentation with temoral antialiasing
+
+///////////////////////////////////////////////////////////////////////////////
+5-29-96
+
++	FScopeLink
+
+X	Action/EndAction, Repeat <n> -> Messy implementation
+
+X	Generic add-parent-properties that takes an iTree as input -> Overly complex
+
++	Scripting infrastructure (pre code gen)
++		Maintain FStackTree entry 0 (global)
++		PushNest, PopNest be cognizant of FStackTree
++			Parse all stack tree types correctly
++				If-ElseIf-Else-EndIf
++				While/Do-Loop/Until
++				Select/EndSelect
++				Case/Default
++				For/Next
++			Handle local variable dims
++			Resolve length-aware string parameter passing
++		Script disassembler called at end-of-compile:
++			Display stack tree dump
++			Display global variable dims (implemented in FClassProperty, not UClass)
++			Display local variable dims
++			Display var intialization values when nondefault
+
++	Detect end of script with bad nesting level
++	#dumpnest directive
+X	First conditional remake remakes all due to pointer relocation. Avoidable? -> No.
++	Assemble script from +stack tree, +properties, and +data
++	Script->Decompile work (very basic)
++	Decompile local and global variables
++	Prevent states etc. in an intrinsic class, provide useful error messages
++	Proper errpr overloading of parent global variables
++	No whens in intrinsic classes
++	No states in intrinsic classes
+
++	No editable local properties
++	FClassProperty::ExportTCX needs to handle default values!
++	Must use SNODE_ flags
+
++	Parse intrinsic functions
++	Functions in intrinsic classes must be intrinsic and not
++	Stack tree flags, such as intrinsic, auto, editable
++	ALLOW_Return
+
++	Local properties and initialized data.
++		When push nesting level, allocate a data buffer
++		When popping nesting level, copy data buffer over
++		When popping nesting level, release any allocated memory
++		Upon completing the script compile, move all properties to the script and reallocate all offsets
+
+///////////////////////////////////////////////////////////////////////////////
+5-31-96
+
++	Timings:
++	    * Can write 4 cached megs at full speed = 1/2 cycle per dword write
++		* Can write 4 uncached megs in 50 msec = 8 cyc/dword written
++		* Can insert 7 cycles of cached instructions in the loop for free
++		* Time rises to 90 msec if you add one uncached read in the middle (write buffer
++		  and read buffers colliding).
++	    * Can read 4 uncached megs in 112 msec = 18 cyc/dword read
++		* 8 c/p = 17 msec/frame at 166 mhz
++		* Traversing the entire actor list 100 times takes 40 msec, and half of the time
++		  is due to the lack of caching.
+
++	Conclusions:
++		* Drawing 4x4 blocks across the screen, then copying to vid memory will just cost
++		  an additional f-ing 8 cycles per pixel.
++		* There's no point to having a texture mapper that writes faster than one DWORD
++		  or one QWORD per 8 cycles.
++		* Don't write a lot of data - better to compute stuff on the fly.
+
++	Reduced frame setup work by using a better point/vector caching system (no huge memclears)
+
+
+///////////////////////////////////////////////////////////////////////////////
+Unreal 0.75: Testing info
+
+What's in this version:
+	* Unreal installation
+	* Optional DirectX II installation
+	* Support for all 8- and 24-bit color video modes
+	  - In-a-window
+	  - Fullscreen via DirectDraw II
+	* DirectSound support
+	* DirectMouse support
+
+Requested feedback:
+	* For bugs:
+		- Send Unreal\System\Unreal.log to UnTest@epicgames.com
+		- Send beta report describing problems
+	* For game play suggestions (non-bugs):
+		- Post to Unreal@epicgames.com
+
+Known limitations of 0.75:
+	* Begin game, end game, open, save aren't in place
+	* Always playing; no non-game state
+	* Only included 1 level for testing
+	* Creatures are invisible in 24-bit color
+	* DirectInput support is stubbed out in this version due to known major bugs
+	* Configurable input isn't in
+	* Help files are very outdated
+	* Playability needs a whole lot of work
+	* Not tested on Windows NT
+	* Sound pauses when game window loses focus
+	* Audio properties dialog isn't in (volume controls)
+	* Install program doesn't detect or require presence of MMX
+	* Unreal doesn't require presence of MMX
+	* No hardware 3D acceleration
+
+Planned limitations in Unreal OPSD gold:
+	* No network play
+	* US English text only in initial release
+
+Developers to contact on UnTest@epicgames.com:
+	* Unreal engine: Tim Sweeney, tim@epicgames.com
+	* Input system: Mark Randell, randell@computan.on.ca
+	* Audio: Ammon Campbell, ammon@teleport.com
+	* Gameplay & level design: cliffyb@earthlink.net
+
+Minimum requirements
+	* Windows 95
+	* 16 megs of RAM
+	* For decent video performance, you'll really want 2 megs of VRAM
+
+///////////////////////////////////////////////////////////////////////////////
+Unreal 0.75 notes & requests
+
+Mark and Ammon:
+
+	1. New portability info: Please arrange all your code so that all platform
+	specific code (anything that relies on Windows, DirectX, Galaxy, etc) goes into
+	the Windows project, and all platform independent code goes into the Engine project.
+	For modules which rely on both platform-specific and platform-independent code (such
+	as the input system and audio system), please create two global classes - one that
+	is platform independent, and one that is platform specific.  Then, porting will only
+	require rewriting the platform specific code.
+
+	2. Make sure your code doesn't internally refer to any classes that aren't referenced
+	in the global resource tree, i.e. the following will fail:
+
+	    MuzzleEffectClass = new("MuzzleFlash",FIND_EXISTING)UClass;
+
+	3. Once new build is posted, please move all code that's only needed by UnrealEd over 
+	to the new Editor project and make sure that you place sufficient #ifdef EDITOR
+	checks in your source so that everything compiles and works as intended both with and
+	without UnrealEd support.  My code is completely moved over.
+
+	4. Malloc(size,str) now needs a description string parameter which is used by Unreal's 
+	memory allocation tracker.
+
+	5. I moved all of the global functions from UnrealWn.cpp over to the FGlobalPlatform
+	class in the Windows project.  Mark, if you've put hooks into the old UnrealWn.cpp project
+	for keyboard/mouse support, you'll have to put them in again.
+
+	6. I changed the spelling/naming of several resource types in order to improve the
+	consistency.  The best way to find the changed names is to compile your code and see what
+	breaks.
+
+	7. Here's how to hook your platform-specific code in the Windows project to the
+	engine in UnEngine.dll: Encapsulate all of the platform-specific functionality
+	into a class and call it something like FGlobalFruitManager.  Make all of your
+	functions virtual (so that they can be called through their virtual function
+	table -- necessary since the Windows project is not a DLL and it cannot export
+	functions). Then insert it into the FGlobalPlatform class defined in UnPlatfm.h, 
+	after the other hooks, like this:
+		...
+		// ----------------------------
+		// Platform-specific subsystems
+		// ----------------------------
+		//
+		class FGlobalRenderDevice   *RenDev;
+		class FGlobalCameraManager  *CameraManager;
+		class FGlobalFruitManager   *Fruit; // Your class
+		// Other global platform-specific classes go here...
+	Then insert some init code into Windows to set App.Platform.FruitManager to a
+	pointer to your class (a global variable).
+
+	8. Renamed some projects & directories to make them more descriptive.
+		UnrealEd -> Editor
+		UnWn -> Windows
+		UnLaunch -> Launcher
+
+	9. I chaned the AUTOREGISTER_RESOURCE macro; it now needs 4 DWORD parameters
+	comprising an Ole GUID.  Ammon, you can just copy the two updated
+	AUTOREGISTER_RESOURCE macros into your code.
+
+	10. Changed the way resource classes are defined, because the old method
+	confused the VC++ class browser.  A class previously defined as:
+
+		RESOURCE_DB_CLASS(UPalette,FColor,RES_Palette)
+			void Register				(FResourceType *Type);
+			// Other functions...
+		END_RESOURCE_CLASS;
+
+	is now defined as:
+
+		class UNREAL_API UPalette : public UDatabase
+			{
+			RESOURCE_DB_CLASS(UPalette,FColor,RES_Palette)
+			void Register				(FResourceType *Type);
+			// Other functions...
+			};
+
+	Note that resource classes defined with RESOURCE_CLASS should be derived
+	from UResource, and classes defined with RESOURCE_DB_CLASS should be
+	derived from UDatabase.
+
+	This has zero effect on how the resource subsystem works; I just had to
+	move some stuff out of the macro for VC++ to recognize it.
+
+Ammon:
+
+	When GAudio.Init() is called in UnrealEd, the editor crashes when
+	exiting about 50% of the time. When GAudio.Init() and GAudio.Exit()
+	are removed (from Unreal.cpp) the problem goes away.  Please look into
+	this; this kind of bug is scary.
+
+	In USound::Register & UAmbient::Register, add the line:
+
+		Type->TypeFlags = RTF_ScriptReferencable;
+
+	This flag indicates that scripts are allowed to make references to that type of
+	resource.
+
+	I still need you to add a sound and music volume dialog (and any other audio 
+	options you feel are needed in the UI) in the Windows project.  I put a stub dialog
+	there, but it doesn't do anything yet.
+
+	Note that I renamed BrAmbient.frm to BrAmbi (need 8.3 filenames).  If you've updated
+	your file, just copy it over top to the new name.
+
+	Pause and Unpause need a fadeout option so that audio can be paused and unpaused 
+	unharshly.
+
+Mark Randell:
+
+	If you root.tcx is later than mine, make sure the Mover class contains the
+	default property..
+		Begin DefaultProperties
+			DrawType=3
+			...etc
+
+	Config code:
+
+		Please generalize your configuration-file code so that there's a nice
+		general interface for reading and writing config values by
+		topic, key, and value.  This will be handy in a lot of places.
+
+	Note the new "Dim Me as Actor" definition in Root.tcx (and also in AActor).  This is
+	a way for actors to figure out their own index easily (use iMe in C++).  This is the
+	only change I've made to Root.tcx.  I also removed iActor from all AActor::Process 
+	functions since that is now redundent.
+
+	I added a Class property to SendMessage.  Set this to the class you want the
+	message sent to, i.e. AShotgun could call SendMessage with Class=AWeapon
+	to invoke parent processing:
+
+		int	SendMessage(INDEX iActor,FName Message,void *Params,UClass *Class=NULL);
+
+	NULL indicates 'use the actor's regular class'.
+
+	Note vitally important changes to ActorDLLStartup in my code. This new prevents
+	actor message names from being purged by GRes.Purge().
+
+	How this impacts the UnActors.dll code:
+
+		These are all the changes I've made in the actor code.  You should be able to merge
+		our sets of coding by making only the iMe/iActor changes to your code; I didn't have 
+		to make any other modifications to your code other than deleting the 'INDEX iActor' 
+		from all ::Process functions and replacing 'iActor' with 'iMe'.
+
+	How this impacts the engine code:
+
+		You can see all of my iMe changes by searching for 'iMe' in the main Unreal files.  
+		The really important ones are in ILevel::SpawnActor (which initializes iMe) and
+		after all calls to ILevel::ImportActor (which fix iMe in case it was messed up).
+
+	Check monster sizing.  Some monsters seem to be embedded in the floor in the version
+	of Unreal I have (Skaarj especially).  This might not be the case in your version.
+
+	Documentation for input system.  We'll need a text file describing any important 
+	end-user aspects of the input system, including troubleshooting information for
+	all known and anticipated problems, such as bugs in DirectInput.  This will
+	later be laid out by someone else and included in the Unreal 
+	documentation (on-disk or printed). A plain text file is ok.
+
+	When I moved the code from UnrealWn.cpp to the Windows project:
+		* I removed StoredKeys from UCamera - wasn't being used.
+		* I moved the DirectMouse handlers over the FWindowsCameraManager.
+		* Moved StoredMove, StoredPitch etc from UCamera.  These values can now
+		  be obtained and reset from GCameraManager->GetStoredMove.  This is a
+		  lot cleaner internally.
+	I know this going to be a pain for you to update your input code (sorry!), but the
+	UnrealWn code was just too much of a mess to keep as-is.  See the code in my UnInput.cpp
+	for an example of how to use this:
+		//
+		// Local mouse movement
+		//
+		FVector			StoredMove;
+		FFloatRotation	StoredRot;
+		//
+		GCameraManager->GetStoredMove(Camera,&StoedMove,&StoredRot);
+		// etc
+
+///////////////////////////////////////////////////////////////////////////////
+5-30-96
+
++	Texture mapping experimentation
+
+///////////////////////////////////////////////////////////////////////////////
+6-1-96
+
++	Adapt mip transitions based on slope
++	Proper V-clipping
++	As optimized skip-in as possible
+X	Cache lines rather than sides? -> Not useful, performance losses == gains.
+
+///////////////////////////////////////////////////////////////////////////////
+6-2-96
+
++	Functions
++		Use CPF_Initialized throughout
++		Parse 'function' & 'when' parameters as variable properties
++		Parse optional function return value
++		Optional params (params with default initializers), require to be last
++		Display function parameters in decompiler
++		Display optional function return value
++		String initializers either don't work or don't decompile
++		Allow Enums as constants
+X		If function has return type, require Return as the last command -> Don't want to be forced
+X			to decode the execution path to validate this.  If return isn't used, the function
+X			returns the default value of its return type (i.e. zero, "", ZeroVector, etc).
+
+///////////////////////////////////////////////////////////////////////////////
+6-4-96
+
++	Scripting fundamental questions:
++		Can UnrealScript operate without a message queue? -> Yes, a message queue is only
++			needed for SendMessageDelayed and Hold/Unhold, but not for regular script
++			operation.
++		What happens if variable-time code calls a function which changes the state? -> State
++			transitions are made to the actor's FState and marked 'pending' but the permanent
++           thread's instruction pointer isn't updated right away.  Permanent-thread IP update 
++           occurs before each new variable-time command is grabbed in the Tick routine.
++		How is recursion and reentrancy handled? -> Via on-stack execution contexts
+
+X	Rendering method of the day -> Slow
+X		Draw-across with precision masked G continuous update, UV reload
+X		Rect Mip Subdivider and separate drawer, triggered iff #mips > 0
+
+///////////////////////////////////////////////////////////////////////////////
+6-4-96
+
++	Conference calls all day long.  This is pissing me off beyond belief.
++	Got ATI Rage version of Unreal up and running
+
+///////////////////////////////////////////////////////////////////////////////
+6-5-96
+
++	Exit from server console with camera open causes appError
++		Due to Windows reentrancy crap with mouse/keyboard polls
++	appErrors in DirectDraw exit without closing log (Win16Mutex problem?)
+
++	Support 16 bpp 5-5-5 format on hardware
+X	Support 16 bpp software rendering with cached 32K lighting lookup table -> l8r
++	HiColor and TrueColor font remapping right
++	Scrap TEXT_ junk
++	FColor HiColor() member
++	Must use Back-to-front sort order for 3D hardware
+
++	Triangle strips rather than simple triangles
++	Rage texture caching
++	Perfect u,v->s,t,w texture mapping
++	Hardware texture caching with fast 16-bit color remapping
++	Texture cache maintainer
++	Repair regular DirectDraw code
+
+X	Rage mipmaps transitions look like hell without trilerp -> Wait for Rage 2
+
+///////////////////////////////////////////////////////////////////////////////
+6-6-96
+
++	Parse operators, enforce unary/binary relation and return type
++		Can only operate on one data type - all params and return values must be that type
+X	Stack node iParent -> track in FState instead
++	IdentifierToC to handle weird operator chars
++	Figure out string passing to C, how to pass lengths -> Length is function specified
+X	Maintain proper StackNodes in the script itself while compiling? -> Not needed
++	Make sure parent script stack nodes are never screwed with
++	When define a class node, function node, or state node, link in the parent class script's 
++		corresponding child links into its tree so that overrides can be determined with a fast 
++		linear search.
++	Function and event overrides are searched in the current state (for the current
++		script then all parents) and then the next lower state, in a fast linear search.
+
+///////////////////////////////////////////////////////////////////////////////
+6-7-96
+
++	Verify function uniqueness
++	Force overriden functions/when's to be parent/child/self-multi consistent
++	No function overloading
++	Root needs "Dim Me as Actor" (index to self)
+X	NumParamProperties? -> Ditched it
++	When compiling script, error out if parent script is invalid
++	Force script make before play!
++	Make only care about script text crc to prevent linking from foiling make logic
+
++	Prevent function/when/operator clashing
++	No optional params in operators
++	Allow correct operator overloading, overriding, and overloaded overriding (bleh)
++	Compile all Script.txt operator definitions properly
++	Make must check Parent ScriptTextCRC
+
++	Manage code offsets properly everywhere
++	PopNest emit SC_END
++	Bogus instructions TestCmd and TestEval to test compile/decompile
+
+///////////////////////////////////////////////////////////////////////////////
+6-8-96
+
++	iMe, remove from messages
++	Changed FClassProperty.  PropertyType from DWORD to EClassPropertyType
+
++	TestEval expression evaluator: compiler and decompiler
++		All allowable constant types
+X		Resources need to be typed in expr's? -> Not needed at the binary level
++		Global variables
++		Local variables
++		Variables with and without array subscripts
++		Parenthesis
++		Check operator fast requirement
++		Don't allow fasts to be overridden ever
++		Names either directly or as string constants
++		Function calls with exact-match: FToken::GetFunction
++		Regular and prebound fast function calls, get all emits right
++		Function call decompiler: EX_Function, EX_FastFunction
++		Allow overriding fast functions -> if overridden, prebound to nearest function in context
++		Unary operators, FToken::GetOperator
+
+///////////////////////////////////////////////////////////////////////////////
+6-8-96:	 Demo prep
+6-9-96:  Wraparound
+6-10-96: Microsoft
+6-11-96: Interplay
+6-12-96: Xatrix
+6-13-96: Raven
+6-14-96: Catch up, clean up, reinstall, business
+
+///////////////////////////////////////////////////////////////////////////////
+6-15-96
+
++	Added FGlobalPlatform::CheckMachineState
++	Added FGlobalPlatform::DebugBoxf
++	Removed sphere from bound
++   Added bound to brush
++	bspValidateBrush accept number param for level import status
++	Expand UModel to include DWORD flags, bounding sphere
+X	4-align actor properties? -> No, root class definition is already aligned, and
+X       misalignment penalty script properties is insignificant compared to script
+X		execution overhead.
+
++	UnrealEd
+X		Actor props form and results form needs a control box -> No can do with tool wins
+X		Results window open up centered along bottom of screen -> Complex
++		Tex import, no "brighten"
++		Fixed AutoSave "Couldn't open file" error when run via shortcut
++		Fixed truncateing compiler result text when receives 2 blank lines together
++		Must refresh all script editor windows after load/import class/map
++		Opening multiple script editor windows tanks on exit
++		Help is lost from VB but sometimes works from edcam windows (weird)
++		Fixed UnrealEd crashing upon exit (message pump reentrancy bug)
++		Fixed texture panning loss
++		Still have an UnrealEd crashing on exit bug -> Ammon's (*#$&(#*&$#$#$@ bug
++		Does Unreal kill the timer before the server has a chance to exit? -> Yes
++		UnrealEd brush-load shortcut key
++		Smooth grid fading during zoom
++		Somtimes moving mouse with Tab down makes brush vanish
++			Windows bug: Holding Tab then pressing Ctrl generates a Ctrl-I which
++			UnrealEd interprets as the Intersect shortcut. Changed Intersect to Ctrl-N.
+
++	Added ICamera::GetOrthoNormal for getting camera view normal in orthogonal views
++	Added UModel::BuildBound for building brush bounds
++	UCamera::ResetModes() resets all stored movemements; called when player controls
++		are toggled to prevent stored movements from accumulating.
+
+///////////////////////////////////////////////////////////////////////////////
+6-16-96
+
++	UnrealEd
++		Wireframe mode optimizations
++			Don't draw solid FPoly slivers if far
++			Generates untransformed brush bounds in bspValidateBrush
++			Generate transformed bounds when placing/moving brushes
++			Replace rendDrawBrushFPolys bounds hack?
++			Brush bound outcode reject (3D) + ortho reject (2D)
++			Bound = intrinsic property of untransformed brush
++		Wireframe views are now 300% faster on average
++		Draw active brush as semitransparent
++		Fixed player being teleported to random place after pressing 'P' bug
++		Arrow brushes are being rejected unnecessarily
++		Need script editor find
++			Select 'find' text on open
++			Find dialog
++			Find highlight found word
++			Find & Replace
++			Find next
++		Go to error or to src if no error after script compile
++		Place message cursor on last line after compile
+X		Remember camera mode so windows can be totally customized and saved in UnrealEd -> troublesome
++		Temporarily restored old lighting/shadowing code
++		Fix backdrop
++		Do not dither mipmaps
+
+X		Use #ifdef RELEASE -> Only adds extra confusion
++		Check !!'s
++		Hid all unimplemented game options
++		UnrealEd lLight brightnesses back on par with UnrealEd 0.65
+
+///////////////////////////////////////////////////////////////////////////////
+6-17-96
+
++	Intel architects meeting
+
+///////////////////////////////////////////////////////////////////////////////
+6-18-96
+
+X	Assimilate Mark's code -> No Mark's code to assimilate
++	Assimilate Ammon's code
++	Install License.doc viewer?
++		Bad window title
++	DirectDraw/DirectSound upgrade bugs. What a mess.
+
+///////////////////////////////////////////////////////////////////////////////
+6-19-96
+
++		Met with Microprose guys -> quite cool
++		FGlobalTopicTable::Exit wigs out on NT
+X		Damn MMX detection install stub -> Later
++		UnrealEd on Windows NT?
++			Busted NT 3.51 detection
++			Fixed all NT incompatibilities
++		Lost results window in NT
++		Windows NT vs. 95 compatiblilty problems
++		Query available DirectDraw modes and fill menu according to 8/16/32-bit color
++		Hide all DirectDraw modes if unavailable
++		Hide DispDib if NT
+
+///////////////////////////////////////////////////////////////////////////////
+6-20-96
+
++	Intel VX wish list. That thing will truly ROCK!
++	Fast mymemset() function - use this instead of memset() if performance is critical
++	Bilinear chroma/lumina texture mapper - very promising, needs speed
+X	Player tick framerate at 70 fps?
+
+///////////////////////////////////////////////////////////////////////////////
+6-21-96
+
++	Check out BSP rebuild bugs - bounding bug? -> Fixed
++	Cut down 2D map view clutter
++	Duplicate actors add an X&Y offset
++	Mover drawtype default to DT_Brush
++	In UnrealEd, also draw sprite for DT_Brush things
++	Show movable brushes in 2D views
++	UnrealEd XYZ editor, Z is screwed up
++	UnrealEd rotation editor
++	Console->Log
++	Need map load NoRefresh=on
++	First alt keypress screws up
++	Set focus to camera window on startup
++	Fixed DispDib bugs
++	Log doesn't crash if not initialized
++	Way optimized line drawer in map view
++	Implemented FGlobalCameraManager
+
+///////////////////////////////////////////////////////////////////////////////
+6-22-96 + 6-23-96 (Marathon)
+
++	Removed all Windows code from UnEngine to UnWn
++	Unreal resources are now all IUnknown-derived component objects
++	Fixed up RESOURCE_CLASS macros so they don't hose the VC++ class browser
++	Mouse and keyboard responsiveness now rule
+
++	Clean up render class
++		Moved stuff to FGlobalRender
++		Changed BspPoly to BspSurf
++		Stuck CmdLine in FGlobalPlatform
++		Scrap global variables
++		All windows.h dependencies out of Unreal
++		All editor code out of Unreal to GEditor
++		All edcam stuff belongs in GEditor
++		All bsp stuff belongs in GEditor
+
++	Moving brushes
++		Show moving brushes in a special color in edit views
++		Display brushes wireframe
++		Associate brushes with actors properly
+
++	Unreal 0.75 goals
++		All windows code separated into Windows project
++		All windows/hardware support code ready for beta feedback
++			DirectDraw support
++			DirectSound & Galaxy support
++		Resource purge in place
+
+///////////////////////////////////////////////////////////////////////////////
+6-24-96
+
++	Rewrote all DirectDraw support
++	Moved all Windows-specific code over to new classes
++	Windows code is finally clean and easily sharable
++	Cleaned up DirectMouse support
++	Improved mouse responsiveness
++	Updated GRenDev code to be modular
++	Added 'PlayerEntered' message, sent to zone descriptor when player enter
++	DirectDraw palettes
++	Mesh view realtime controls
++	Line Case 2 crash
+
+///////////////////////////////////////////////////////////////////////////////
+6-25-96
+
++	DirectDraw mode recognition and menu update after set truecolor/not
++	DirectDraw crash handler
++	Changed iPoly to iSurf
++	Fixed awry Zone messages
++	Fixed major sidelink bug that showed up in Dark
++	All UnrealEd code is externalized
++	Camera is now a Pawn
++	All configuration goes into
++	Added FGlobalPlatform GetProfile, SetProfile
++	Password check
++	New DirectDraw support seems very stable
+
+///////////////////////////////////////////////////////////////////////////////
+6-26-96
+
++	Completely separated editor from game
++	Added Console.Messagef
++	Unreal now handles APM messages properly, a major breakthrough in gaming...NOT!
++	Game works consistently with NULL GEditor
+
+///////////////////////////////////////////////////////////////////////////////
+6-27-96
+
++	Unreal source 0.75 post and last-minute fixes
+
+///////////////////////////////////////////////////////////////////////////////
+6-28-96
+
++	Created virtual FGame class to enable moving all game-specific stuff to DLL
++	Moved all player console stuff to Actor DLL (UnPCon.cpp)
++	Renamed Unreal.cpp to UnEngine.cpp
++	Renamed Actors project to Game project for clarity
++	Renamed UnActors.dll to UnGame.dll
++	Renamed UnrealEd.dll to UnEditor.dll
++	Now use \Unreal\Src\Lib directory for link libraries
++	Separated game rendering from editor rendering
++	Unreal is now 100% portable; just rewrite the Windows-project code
+
+///////////////////////////////////////////////////////////////////////////////
+6-29-96
+
++	Moved global actor functions like playerTick to GGame::PlayerTick
++	Camera console
++		Bring up, put down - overlapping
++		Pre and post render camera for proper sizing
++		[ ] keys scale screen border
+
+///////////////////////////////////////////////////////////////////////////////
+6-30-96
+
++	Camera console
++		Two-piece status bar
++		Only draws status bar when changed
++		Resizable window with variable stride
++		Implemented FOutputDevice, cool generalization of text output device
++		Merged all CON_xxx messages with LOG_xxx, now they're all LOG_
++		Completed the camera console code
+
+///////////////////////////////////////////////////////////////////////////////
+7-1-96
+
++	Refined console controls
++	Command handlers
+
++	Ole exec handler calls proper exec sequence
++	Command line handlers:
++		FGlobalPlatform::Exec
++		FCameraManager::Exec
++		FGlobalServer::Exec 'levels','players'
++		ULevel::Exec: Must implement up, down
++		FGlobalRender: stats, toggle, gamma, dither modes
++		UCamera::Exec: Implemented possess
++		FEditor::Exec: Return values and response handlers all implemented
++		Moved general purpose stuff out of EdSrv, into proper places
++		GGfx.Printf now clips to screen
++		Added VARARGS define for portability
++		Added GGfx.WrappedPrintf,GGfx.WrappedStrLen
++		All console I/O now word wraps
++		Added in console background texture
+
+///////////////////////////////////////////////////////////////////////////////
+7-2-96
+
++	Viacomm
+
+///////////////////////////////////////////////////////////////////////////////
+7-3-96
+
++	Replaced FDot with operator|
++	Replaced FCross with operator^
++	ATI Rage support rocks once again
++	Polished DirectDraw support for weird resolutions
+
+///////////////////////////////////////////////////////////////////////////////
+7-4-96
+
++	Happy 4th of July
++	Added exec support and status functions to NManager
++	NManager is now polled, and it polls NDrivers
++	Implemented Task manager init and exit
++	Implemented camera manager task
++	Can now telnet into UnrealServer and access server console directly
+
+///////////////////////////////////////////////////////////////////////////////
+7-5-96
+
++	Login & optional password from ini file
++	Prioritizes multi camera updates
++	Standard console spawn message
++	Net game setup
++	UnrealServer task
+
+///////////////////////////////////////////////////////////////////////////////
+7-6-96
+
+X	3D Studio exporter -> No time for this!
+
++	Highlight scaled sprites properly
++	Fix scaled sprite positioning
++	Fixed camera prekill bug exiting UnrealEd
++	No filtering stuff like status bar
++	Use blit type
++	Editor - show moving brushes option in 3D views
++	Renamed bClassPureVirtual to bTemplateClass
++	Fadein glitch
++	Changed actor 'TagName' to 'EventName'
++	Debug version now compiled with asm
++	Scaled sprite drawing bug in TRasterSetup::Generate
++	EdTopicHandler::Get crashed after selecting texture
++	Changed bSpriteRope to bEventSource
++		Actors who often trigger events corresponding to their EventName
++		tag should have their bEventSource flag so that event lines may
++		be drawn between event sources and event sinks in UnrealEd.
++	No 'show grid' thing
++	Hide default brush when in actor modes
++	TRasterSetupT::Generate crash (Start=373, End=3497) -> Fixed! (Interval error)
++	Show event lines in actor modes - better color
++	Texture rotate mode
++	Added 'Diagonalize' option to poly props for rotating 45 degrees while keeping
++		original tiling size (Inoxx request)
++	Scale textures - can now enter expressions in the poly properties thing
++	Added '@' square root operator - enter '@2' for the square root of 2
+
++	Moving brushes continued:
++		Update properties: BaseLocation, BaseRotation, ShadowKeyPos
++		When drawing mover in ed, draw both sprite and brush
++		Added REND BRUSHWIRES command
++		Select brushes by actor or brush
++		Wire render with proper location and rotation
++		Mover has default brush
++		Brush set from current set location & rotation upon draw
++		All wireframe brush movement code + trigger interactions
+
+///////////////////////////////////////////////////////////////////////////////
+7-7-96
+
++	Odd bugs that seem to have disappeared
+?		Log window fills up after a while and doesn't clear itself
+?		Snapscale doesn't snap when scaling down, only up
+?		Actors are disappearing in unzoned texture views for no reason
+?		Unreal.exe sometimes forgets to shut down after UnrealEd exits -> Fixed?
+?		texGetOriginalData 56 Basicw2a, 128x128: Error -> Fixed symptom, why problem??
+
++	Observations
++		High temporal resolution makes up for low screen resolution
++		Nyquist-limit is irrelevant in light of high temporal resolution
++		Computers are still slow
+
++	Fixed actor QueryReferences bug
++	Added Editable(Category) override to UnrealScript
++	Actor properties are now categorized to reduce clutter
+X	Remember actor props to edit between sessions -> Not very useful
+X	Sort actor properties in list? -> Too much work
+X	Duplicate actor - create duplicate brush -> Want brush defs to be shared
+X	Scaled sprites wrap slightly, ugh -> Art problem
+
++	Fixed mesh viewer movement
++	Fix key delay in realtime views
+X	Show moving brushes regardless of 'show actors' setting
++	Fixed can't scroll down to last 1.5 elements in UnrealEd actor props bug
+
++	Fixed switching to camera mode doesn't clear snapscale mode
++	Tex browser trivial Y reject - shouldn't be so damn slow
++	Tex browser sorting optimization, now uses qsort -> *big* speedup
++	24-bit color editor backdrop is only 1/4 drawn
++	Are actor rotations lost on export/import? -> No
+
++	"Use current brush" - make a duplicate with a unique name
++	Reduced bilinear filter aliasing by 50%!
+
+///////////////////////////////////////////////////////////////////////////////
+7-9-96
+
++	Microprose Unreal license discussions
++	These are really cool guys
+
+///////////////////////////////////////////////////////////////////////////////
+7-10-96
+
++	Caught up on sleep. Aaaaaaaaah.
++	Scaled sprites are now just textures
++	No networking 'n stuff in UnrealEd
+X	Task always needs an exec function?
++	Still tries to draw screen when SYR=0, when status thing is down
+
++	Net
++		Fixed telnet tasks aren't killed when they exit bug
+
++	Texture improvement and fixing:
++		Implemented ITexture for locking/unlocking textures
++			Can call GRenDev for hardware-specific locking features
++			This replaces and obsoletes UTexture::GetData
+
++	More moving brush logistics
+
+///////////////////////////////////////////////////////////////////////////////
+7-11-96
+
++	Actors need:
++		AActor->IsBrush()
++		AActor->IsMovingBrush()
++		Added ACTOR_PostEditMove message
+
++	Mo' moving brushes
++		edactMoveSelected be cognizant of moving brushes
++		Moving actor must move the associated brush with grid snapping
++		Fix gridsnapping
++		Moving brush around must update keypos delta from pos 0
++		Select pivot must update actor
++		Mover KeyPos and KeyRot are now uneditable
+
++	Freeform texture rotation
++	Arbitrary angle texture rotation mode + entry thing -> No entry thing
+
+///////////////////////////////////////////////////////////////////////////////
+7-12-96
+
++	Separated rendering code into separate DLL
+
+///////////////////////////////////////////////////////////////////////////////
+7-13-96
+
++	Optimization
+
++	General
+X		Duplicate actor must duplicate brush -> Use same brush
+X		Adding actor of Mover type must duplicate its default brush -> Use same brush
+X		Clicker for nice editing of brush frames? -> Key position selector instead
++		When add mover, its default brush is in siberia
++		Mover actor sprites aren't sorted right in 3D views
++		Mover color should be green!
+
++	UnrealEd
++		Right-click on mover show Keyframe -> 1/2/3/4 popup
++		Add as moving brush icon!
++		Adding actor imm after UnrealEd starts doesn't set class!
+
++	Add as moving brush
++	Map edit copy to/from brush copy everything and update bounds
++	Add as moving brush copy brush rotation to actor
++	Perfect moving brush editing
++	Fixed dynamic lights are immensely brighter than lights with shadow maps
++	Stats to Render project
++	Stat grabbers on
++		Raster setup
++		ASM texture code
++		Lattice setup
++		SpanOccludeBSP
++	Fix stats
+
++	Optimizations
++		mymemeq -> memcmp
++		ftoi
++		timer funcs
+
+///////////////////////////////////////////////////////////////////////////////
+7-14-96
+
++	Rewrote moving brush code
+
++	AddBrush
++		Build transformation coordsys
++		Set surface vectors
++		Perform fpoly filter
++		Add sporadic node
++		VertPool logic
++		Permanent base point logic
++		UniquePlane logic
++		NF_IsNew logic set & cleanup
++		Why is brush being split by nonexistant stuff? -> fixed ftoi bug
+
++	Rover optimization
+
+///////////////////////////////////////////////////////////////////////////////
+Requests
+
+Art crue:	
+	Tweak both status bar graphics in game (need \Unreal\Graphics stuff)
+		Brightness (is too bright as is)
+		Appearance in 320x200 and 640x480
+	Overlay sprites for status bar
+	Number font
+	Border texture for screen
+	Background texture for console
+	Need a great font (see \Unreal\Graphics\Medfont.pcx for format)
+	Need Unreal icon (use VC++'s icon editing tools), needs to be *awesome*
+	Logo???
+	Need moving brush textures
+		Buttons/Switches
+		Doors
+
+Level mappers:
+	Use the 'unlit' tag on all big polygons that the player isn't supposed to
+		see (such as the polys in the big cube you subtract your level from).
+		The shadow maps on these polys are eating up over 200K in some levels.
+	Really, really cut down on the number of lights hitting each polygon; this 
+		is hurting performance dramatically in wide open areas.
+	Use the NoLook tag a lot to prevent crazy view tilting.
+	Use zones and portals! Big big speedup.
+	Set bDirectional to false for all of your lights to get rid of the red arrows.
+	For best performance, divide your levels up into 63 or fewer zones.  The more,
+		the better, up to 63.  After 63, more zones = slower.
+	Please report all crashes...trying to get everything 100% stable now.
+	Moving brushes eat up CPU time whenever they move, so design them to only move
+		when the player sees/affects them.  Moving brushes that are moving all
+		the time are going to slow big levels down.
+	Suggest useful moving brush options to build into Unreal.
+	When dividing levels up into zones, it's a good idea to place portals 
+	    in places where they'll be covered up by moving-brush doorways.
+		This does two things: it improves performance when the doors are closed,
+		and it will later enable sounds to be diminished when they occur behind
+		closed doors (the flow of sound will be computed between zones based on
+		whether the zones are physically connected or blocked off).
+	Comment on Unreal 0.76 lighting brightnesses -- to bright? too dark?
+
+How to place movable brushes: 
+
+	Build a brush, or load one.  Click on the
+	add-movable-brush icon on the top right side of the toolbar.  This adds
+	to movable brush to the level.  Moving brushes consist of two
+	separate things - the actor that controls it, and the brush you see.
+	
+	Now, you need to define its positions. Movable brushes can contain up
+	to four positions, but only positions 0 and 1 are useful until
+	scripting is complete.  Position 0 is "closed" and position 1 is "open".
+	
+	Select the moving brush's actor and select the move-actor icon on the
+	toolbar.  Now place it where you want it to appear in the level in its
+	"closed" position.
+
+	Next, right-click on the moving brush's actor and set its to position
+	1 (the second choice in the popup menu).  Now move the brush into its
+	"open" position.  To see that the brush is placed properly, set it back
+	to position 0 and verify that it moves back to where you originally
+	placed it.
+
+	Now, you need to say how the moving brush should respond to events
+	that occur in the world.  Right-click on the moving brush's actor,
+	select "Mover properties", and navigate to the "Mover" category.
+	The interesting properties are:
+
+	- MoverBumpType: Says what the moving brush should do when it's
+	  moving and it's blocked by an actor.
+
+	- MoverTriggerType: Says what events cause the mover to open and close.
+	  The "proximity" options activate the mover when the player gets near
+	  it (you'll need to go to the "Collision" category and set the mover's
+	  collision radius to specify the exact proximity). The "trigger" options
+	  cause the over to be activated by one or more external "Trigger" actors
+	  with a matching "EventName" property.  For trigger options to work, 
+	  you'll need to place one or more trigger actors in the level and adjust
+	  their collision radius and EventName.
+
+	- MoverGlideType: Says whether the mover should move abruptly, or
+	  smoothly accelerate as it moves.
+
+	- KeyNum: The current keyframe position you're editing.  Changing this
+	  is equivalant to right-clicking on the actor and setting its keyframe.
+	  Only positions 0-3 are valid.
+
+	- MoverTime: The amount of time in ticks (1/35ths of seconds) that the
+	  mover should take to move between its open and closed positions.
+
+	- RemainOpenTime: How long the mover should remain open before
+	  automatically closing.  Only has an effect if MoverTriggerType is
+	  "ProximityOpenTimed" or "TriggerOpenTimed".
+
+	- bCanInterruptMove: Says whether the mover can be interrupted and
+	  ordered to reverse its motion while it's moving.
+
+	- OpenSound: The sound effect that should be played when the mover
+	  is sent to its open position. (No effect yet).
+
+	- CloseSound: The sound effect that should be played when the mover
+	  is sent to its closed position. (No effect yet).
+
+	- MoveAmbient: The ambient sound to play while the mover is in motion.
+
+	- FreeRotation: No effect yet.
+	
+	Position 0 is also the master keyframe; when in position 0, you can move
+	and rotate the brush freely.  All other keyframe positions are relative
+	to position 0.  When you want to place the moving brush somewhere in the
+	level, make sure it's set to position 0.  When you want to set its other
+	keyframes, go to the other positions.
+
+How to easily replace your existing brushes with moving brushes: Go into map
+	edit mode.  Select the static brush that you want to turn into a moving
+	brush and make sure no other brushes are selected.  Click on the
+	"Copy to brush" button, then the "Delete" button.  Now press the
+	add-movable-brush icon on the toolbar.
+
+Mark Randell:
+		I moved a bunch more game-specific code over to the actors DLL:
+			- The camera console (UnPCon.cpp) is now UnCon.cpp.
+
+		The game-specific code now is called by the Unreal engine via several
+		functions defined in FVirtualGame (the generic, virtual base class defined
+		in the engine) and FGame (the specific class defined in the DLL), rather
+		than via the ActorDllStartup routine.
+
+		I renamed UnActDll.cpp and UnActDll.h to UnGame.cpp and UnGame.h for clarity.
+
+		The GGame object (of class FGame) is now accessible throughout the Actors Dll.
+
+		I moved global actor functions like playerTick to GGame::PlayerTick for clarity.
+		This has no effect on their implementation.
+
+	All CON_ enums were changed to LOG_ enums. Use LOG_Play instead of CON_Play.
+
+	Need settable options (similar to keyboard/joystick/mouse options) for:
+	 - Whether the player's view should automatically tilt when the player is
+	   standing near an upward slope (such as stairs).
+
+	For PlayerStart actors, bDirectional should be True.
+
+	Can we have a bunch of useful game cheats?  These would go somewhere in the
+	game DLL.  A few I can think of are...
+
+		Health
+		Gain weapon by name
+		Morph into by name
+		Ammo cheats
+		Health
+		Invincibility
+		No collision
+		Morph <pawn name>, freemove, hideme, showme, trigger, untrigger
+
+	Discuss fractional player view movement.
+
+	Note that I replaced the dot product function FDot with the | operator.
+	So FDot(A,B) becomes (A|B). FCross is now ^.
+
+	I made the following changes to your Root.tcx:
+
+		* Changed EDamageType to:
+
+			EnumDef ETextMsgType = LOG_None
+
+		* Added "property editing categories" to all editable root properties. For
+		  example, I changed
+
+			Dim Class as Editable(Main) Class
+
+		  to
+
+			Dim Class as Editable Class
+
+		  The "Editable(CategoryName)" says which category tab the property should
+		  appear in in UnrealEd.  This affects editing display only and has no effect on
+		  operation.
+
+		* Removed the "editable" override from all properties that don't need to
+		  be edited in UnrealEd, such as AnimBase.
+
+		* Changed unused bSpriteRope to bEventSource to indicate which actors are
+		  sources of events (for UnrealEd's display of event affector lines).
+
+		* Added spaces ad blank lines for readability
+
+		* Changed bClassPureVirtual to bTemplateClass for readability
+
+		* Made numerous changes to Mover
+
+	Changed UNACTOR_API to UNGAME_API
+
+Ammon:
+
+	Need volume controls
+
+	In your sound browser's DoNext(), change "Hide Me" to "Unload Me" - otherwise
+	UnrealEd refuses to unload because a hidden form is still active (that explains
+	why Unreal wasn't unloading for you eh).
+
+///////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
+7-15-96
+
++	Moving brush code cleanup & enhancement
+
+///////////////////////////////////////////////////////////////////////////////
+7-16-96
+
++	Moving brush optimizations
+
++	FlushBrush
++		Remove all sporadic stuff
++		Remove iFront, iBack, iPlane references
++		Debug fully
++	Fast SplitPolyWithPlane
+
++	Fixed nasty massive collision CPU overhead bug in SphereLeafFilter
+
+///////////////////////////////////////////////////////////////////////////////
+7-17-96
+
++	Fixed hairy bug preventing ACTOR_Touch from being recognized
+
++	Added NF_Bounded
++	Fixed flush all
++	Multibrush coordinated move
++	Fixed moving brush coplanar collision bugs
++	Check moving brush BeginPlay for position 0 forcing
++	Fix actor-actor collision near moving brushes
++	Build list of dynamic actor refs removed, then readd those actors
+
++	NF_UniquePlane
++	Scrap dynamic iUniquePlane tracking
++	Fix brush startup errors
+
++	Note: You can't spawn moving brush actors during gameplay. This is as intended.
+
++	Optimize finding actor nodes
++	Fixed opposing coplanars bug
++	NewVertPoolIndex: TopThing inconsistency
++	No max changing
++	Fixed bizarre overflow bugs
++	Precompute filter (standard UnPhys function) 
++	Debug precompute filter problems
++	Optimize precompute filter
++	Faster FPoly/FBspSurf traversal via edpoly refs
+
++	Import map with moving brushes overwrites level brushes with movable actor brushes.
+
+///////////////////////////////////////////////////////////////////////////////
+7-18-96
+
++	Added these actor messages and their root handlers:
++		SetParent			Sets this actors parent to the specified actor
++		GainedChild			Sent to a parent actor when another actor attaches to it
++		LostChild			Sent to a parent actor when another actor detaches from it
++		QueryChildActors	Causes kernel to call QueryActorCallback for all child actors
++		QueryEventActors	Causes kernel to call QueryActorCallback for all actors using an event
++		QueryNameActors		Causes kernel to call QueryActorCallback for all actors using a name
++		QueryCallback		Called by kernel in response to query messages
+
++	Standardized torture test, SLOW_GUARD
++	Handle server slowdown to <35 fps gracefully
++	Fixed console up/down is hosed
++	Mover bounding sphere prefiltering
+
++	Wasted huge amounts of time incorporating code changes
++	Nevermore
+
++	Note: Now using the __cdecl calling convention rather than __fastcall.
+
++	Cleanup directories
++	Cleanup headers
++	Cleanup source
++	CreateDibSection failures show out of memory error
+
++	Fixed mem overwrite in UnActLst.cpp
++	Fixed mem overwrite in UnWnCap.cpp
++	ActorList PostLoad snubs out NoSaveResource entries
++	Get Unreal working in the VC++ debugger again
+
+///////////////////////////////////////////////////////////////////////////////
+7-19-96
+
++	Remove UnRender.dll dependence from Game
++	Fix rendering msec
++	24-bit color status bar (hopefully) or force disable it
++	Player control in UnrealEd shouldn't call moving brush update
++	Running two copies of Unreal causes shared DibSection bug
++	Disable networking
++	Delete netplay menu if no networking!
++	DD install doesn't reboot if it should
++		Worked around the buggy Intel example install code that was meant to
++		work around the buggy Microsoft example install code.
++	Equalize brightnesses with 0.65!
+
++	Cleanup tcx
++	Cleanup log
+
++	Can now reference sounds in actor properties
++	DD choices disappeared - fixed
+
++	Tim Chalmers "Can't find Buffer Sinc" bug
++		Not a bug, was due to installing over top of outdated Unreal.gfx
+
+///////////////////////////////////////////////////////////////////////////////
+7-20-96
+
++	Slept
+
+///////////////////////////////////////////////////////////////////////////////
+7-21-96
+
++	Texture mapping optimizations & experimentation
+
+///////////////////////////////////////////////////////////////////////////////
+7-22-96
+
++	Overwrite (or overread) UBuffer "Shade"
+
++	UnrealEd
++		Polygon properties are now Surface properties
++		If load map and then try to get help, can't find UnrealEd.hlp
++		Rebuild installation
+
++	Consolidate all setup/rel files into one place
+
++	fix odl
+
++	.tcx & actor changes (Search for !!TIM for changes)
++		Added "Dim Floor as actor" to denote the moving-brush floor the player is on.
++		Expanded IModel::ZCollision to find moving brush actors are standing on
++		Added ACTOR_StandMover, ACTOR_UnStandMover for actors on moving brushes.
++		Added ACTOR_SteppedOn, ACTOR_UnSteppedOn for moving brushes.
++		Support MT_StandOpenTimed
+
+///////////////////////////////////////////////////////////////////////////////
+7-23-96
+
++	Lock level should lock moving brush tracker?
++	Crap
+
+///////////////////////////////////////////////////////////////////////////////
+7-24-96
+
++	More crap
+
+///////////////////////////////////////////////////////////////////////////////
+7-25-96
+
++	Note: Texture U and V "vectors" are actually planes, not vectors
+
++	Moving brush raytracing
++		ACTOR_PreRaytrace, ACTOR_PostRaytrace
++		ACTOR_RaytraceBrush, ACTOR_RaytraceWorld
++		If WorldRaytracePos=-1, raytrace world without brush
++		Raytrace world with brushes in their specified places
++		If BrushRaytracePos=-1, treat brush as unlit
++		Generate brush shadow maps
+
++	Need a USE key and USE triggers.
++	"Unreal maps (*.unr) | *.unr; All Files (*.*) | *.* ||"
++	"Unreal maps (*.unr) | *.unr; All Files (*.*) | *.* ||"
++	The semicolons should be vertical bars. Cheers ... Mark
++	FBspSurf: Changed Reserved to iActor
+
+///////////////////////////////////////////////////////////////////////////////
+7-26-96
+
++	Fixed those AScript::Process bugs James found
+
++	Now:
++	   Name = This actor's name
++	   EventName = Name of actors to send Trigger message to when event occurs
+
++	Split UnThings.cpp into UnThings.cpp and UnTrigs.cpp
++	Deleted bEventSource (not needed anymore)
++	bTriggerOnceOnly
++	Trigger messages include original triggering actor as PTouch param
++	Counter messages
+
++	Bigman is full of holes! Obey what meshmap data says.
++	Fixed mesh ambient brightness
+
+X	Mover sounds -> damned sound system is broken again
+
+///////////////////////////////////////////////////////////////////////////////
+7-27-96
+
++	Took a day off and watched the Olympics...Cool stuff!
+
+///////////////////////////////////////////////////////////////////////////////
+7-28-96
+
++	Screwed up dlls, not an Unreal bug:
++		>More often than not Manual Texture Panning locks up.  Only response from
++		>While scrolling texture browser UnrealED crashes with a Run Time error: Ole
++		>Divide Overflow.  Followed by system wide crash.  Only recourse, Hard Boot.
++		>Log posted on FTP.
++	Fixed curved staircase window screwed up
++	Ctrl + left-mouse is brush movement!
++		>"Ctrl + L-Mouse" is camera eye movement.  No crash just annoying.
+
++	Just don't do this, why would you ever want to do this?	
++		>When I export a level from 0.65 into a .t3d file and then import it into 
++		>.76, rebuilding the geometry somehow joins together certain coplanar 
++		>polygons.  This normally wouldn't be a problem, except that these 
++		>polygons have differently oriented texture maps.  When joining them 
++		>together into a single polygons one of the textures become hopelessly 
++		>misaligned.  Since there is now a single polygon instead of two, it is 
++		>impossible to ever realign the polygons without cutting out the 
++		>offending pieces and readding them to the world so that they are 
++		>separate polygons. This error is 100% repeatable.
+
++	I don't see this problem, is it fixed?
++		I sent the original seti.t3d freshly converted from .75 to let you see the
++		original problem.
+
++	Fixed mipmap generation bug visible in IRON_F_1
++	Defuzz shadows
++	Logo misalignment on mode switch (centers?)
++	Fixed shadow alignment bugs on Inoxx levels (panning bug)
+
++	UnrealEd
++		If >1 mover is selected, still allow set keynum
++		Help Web -> Launch Web
+
+///////////////////////////////////////////////////////////////////////////////
+7-29-96
+
++	UnrealEd
+?		Import brush bugs with active brush disappearing?
+?		Eric Reuter saving brush hangs
+X		Deintersect memory leak? -> Definitely not.
++		Ambient brightness overflows
++		Fixed Danc coplanar merging bug
++		Don't merge polys with disoriented textures or flags
++		Fixed UnrealEd not remembering last directories
++		Fixed major import-level memory leak (UActorList::Import)
+
++	Deleted bWorldShadows
+
+///////////////////////////////////////////////////////////////////////////////
+7-30-96
+
++	Optimization
++		Fixed dynamic lighting slowdown bug
++		Test Unreal 0.76 flatshade pipe & stats against 0.65
++		Copied player lighting settings from 0.65
++		Optimize bound rejection
+
++	UnrealEd
++		Light props got Invalid Row Value
+
+///////////////////////////////////////////////////////////////////////////////
+7-31-96
+
++	Don't check touch etc for bStatic things
++	BeginPlay turn off actor collision for all non-colliding movers
++	Fixed new mover box rejection bugs due to bounding boxes not reflecting hulls
+
+///////////////////////////////////////////////////////////////////////////////
+8-1-96
+
++	Optimization
+X		Dynamic lighting per mesh not lattice -> Augh, much too slow!
++		Rasterizer setup
++	Reenergized
+
+///////////////////////////////////////////////////////////////////////////////
+8-2-96
+
++	Import textures merge with existing palettes
++	Check out collision for all classes
++	Stat for counting dynamic lights active
++	Asm lattice setup -> Way faster
++	512-byte mipmap table
+
++	Timing: Thrashing 64K takes approximately 1 msec
+
++	VC++ bug: Allows meaningless declarations like static const X[2]={0.1,0.2};
++	VC++ returns floating point result in st(0) with all other registers cleared
+
+///////////////////////////////////////////////////////////////////////////////
+8-3-96
+
++	Work around retarded C assymetric float rounding
++	Fast ftoi
++	Need /QIfdiv- switch
++	Test without GUARD & Stats
++	Subdivision error threshold - more sensitive to large stuff, less to tiny
++	Look at generated code
+
+///////////////////////////////////////////////////////////////////////////////
+8-4-96
+
++	Lighting optimization
++	First generate subrect span buffer and sublattice span buffer
++	Then generate rect spanbuffer and lattice span buffer from subrect
+
++	Notes
++		Note that fxch is virtual and does not stall even if source or dest are piped
++		FP and int instructions do not pair ever
++		fxch stalls 1 cycle if followed by int
++		Pentium caches are only 2-way associative, 128*2 sets (Pentium), 256*2 (MMX)
++		BTB only changes prediction if it misses two times in a row!
++		The deal with uncached write buffering:
++			Pentium has two write buffers, one for each pipeline.
++			* Therefore it makes sense to do consecutive writes in opposing pipes.
++			* Writes always are written out sequentially.
++			* Uncached reads wait till the write buffers are depleted before occuring.
+
+///////////////////////////////////////////////////////////////////////////////
+8-5-96
+
++	Generate & cache bogus power-of-two floating light meshes for testing
++	Do lattice setup for light mesh
++	Damned fast C descention texture mapper
+
+///////////////////////////////////////////////////////////////////////////////
+8-6-96
+
++	New *perfect* alias-free lighting method works
++	Sinc filter interpolator
+
++	Fixed:
++	>I was trying to figure out why my projectiles bounced oddly: they would
++	>bounce okay when they struck a wall with a particular orientation (normal
++	>along the x-axis) but they would stick to the wall with another
++	>orientation (normal along the y-axis). This behaviour has been in unreal
++	>for a longggg time (I remember when the floating eyeball would get stuck
++	>on walls). I traced the problem to FVector::Mirror, where a local
++	>OutFactor is defined as 2*x*normalx + y*normaly + z*normalz when it should
++	>be 2*(x*normalx y*normaly + z*normalz). Cheers ... Mark
+
+///////////////////////////////////////////////////////////////////////////////
+8-7-96
+
++	Hellish optimization
++	Properly Y-traverse sublattice including top skip-in
++	Update vertical properly as draw-across
++	High level optimize LightGen
++	Bilerp light mesh sampling in rendDrawAcross (C)
++	High-level optimize rendDrawAcross and prepare for asm port
++	Further optimize for clip -> draw many -> clip
+
++	Caveat: VC++ inline assembler assumes that registers aren't modified 
++	unless you explicitly reference them - wreaks havoc when calling masm
++	functions that modify unexpected registers.
+
+///////////////////////////////////////////////////////////////////////////////
+8-8-96
+
++	Asm inner loop
++	Major caveat: shr reg,32 and shl reg,32 don't affect reg (shifters are mod 32)
++	Fixed major bug in shadow smoothing which ridiculously oversmoothed shadows (oops!)
++	Optimized tmapper inner loop
++	Devised new CV clipper rendering scheme with 100% optimal rejection characteristics!
+
+///////////////////////////////////////////////////////////////////////////////
+8-9-96
+
++	Schedule wrap-around
++	Travelled to Waterloo
+
+///////////////////////////////////////////////////////////////////////////////
+8-10-96
+
++	Fixed UnrealEd not recognizing PF_Hurt
++	Reinstated adaptive dithering
++	Added TouchPlayerDamange to mover class - if nonzero, mover radius-damages 
++		player when they touch.
++	Clean up dithering setup
++	Fix Nonasm
+
+///////////////////////////////////////////////////////////////////////////////
+8-11-96
+
++	Statistical trilinear interpolation approximation
++	Properly handle textures >256 wide
++	Reduce trilerp overhead via only transitioning 1/2 of the time
++	Only setup referenced mipmaps
++	Brush origin is now highlighted if the brush is stretched or scaled
++	Use PRoutine for draw-across
++	Fix lighting undergen
++	Light presetup
++	rendDrawAcross skip-in
++	rendDrawAcross post effects via separate buffer
++		Blit
++		Masked
++		Blend
++		Masked blend
++		Fire
+
+///////////////////////////////////////////////////////////////////////////////
+8-12-96
+
++	TMapper optimization
++		Asm span loop
++	John Romero
+
+///////////////////////////////////////////////////////////////////////////////
+8-13-96
+
++	Slept
+
+///////////////////////////////////////////////////////////////////////////////
+8-14-96
+
++	Fixed line bug
++	Typing blank name in ed should change to none
++	Fixed small sprite bug
++	Fixed John/Inoxx FlishActorBrush bug
++	Refixed DirectDraw bugs
++	Added bTriggerOnceOnly to Mover
++	Jeremy War overflow bug
++	Goddamned DirectDraw mess
+
++	Fixed crashes in complex maps
++	Unlit stuff died
++	Asm trilerp
++	Lighting assymmetry?
++	Better smoothing to reduce aliasing
+
+///////////////////////////////////////////////////////////////////////////////
+8-15-96
+
++	Fixed moving brush triggers bTriggerOnce bug (War)
++	Lattice optimization
+
+///////////////////////////////////////////////////////////////////////////////
+8-16-96
+
++	Returned to USA
++	Travelling sucks
+
+///////////////////////////////////////////////////////////////////////////////
+8-17-96
+
++	Set up dual P6, installed new network
+
+///////////////////////////////////////////////////////////////////////////////
+8-18-96 to 9-8-96
+
++	Hardcore optimizing texture mapper, logs disabled.
+
+///////////////////////////////////////////////////////////////////////////////
+9-9-96
+
++	Merge textures to improve L2 cache performance and reduce code cache dumping
++	Investigated Java as an UnrealScript replacement - not commercially worthwhile
+
++	To display a message when compile with _DEBUG only, use debug(LOG_Debug,...) or debugf(LOG_Debug,...);
++		Mark, specifically see that I changed the code in UnPlatfm.cpp to reflect this.
++	Deleted bug() macro (use debug() instead)
+
++	Switched back to __fastcall calling convention (rather than __cdecl) for speed.  It's 2-3% faster.
+
++	Fixed GRend.Toggle bug in editor
+
+X	Only 2 lines not 4, use 4 horizontal ditherbases
++	Optimize selfmod setup
++	PF_LowShadowDetail, PF_Dirty
++	Generate correct static light meshes
+
++	Light mesh alignment problems on large polys -> Stupid programmer!
++	Creature clipping bugs
++	Fix high shadow detail
+
++	Fix >400x300 bug
++	Added Camera->Caps and CC_ enums (CC_Hardware3D, CC_RGB565)
++	RGB 555 and 565 color detection and support with DirectDraw
++	32-bit color support
++	24-bit color support
++	Cut ASM selfmod overhead with 4 routines and minimal writes
++	Fast start and end clipping with conditional byte writes jump-in
+
+X	Doing lighting incs before looking? Aliasing looks as if this is the case -> Looks ok
+
+///////////////////////////////////////////////////////////////////////////////
+9-10-96
+
++	Optimize setup
++	Organize, cleanup & comment, real subsystem init/exit
++	Asm light 4-averaging code (faster)
+
+///////////////////////////////////////////////////////////////////////////////
+9-11-96
+
++	Add special brush "invisible" option for collision-only brushes
++	Registering a new ShellExecute verb as the handler for a particular protocol
++	Cleanup & optimization
+
+///////////////////////////////////////////////////////////////////////////////
+9-12-96
+
++	All tasks are now timed, and stats are available in 'ps' command
++	Server tick time is shown when 'STATS' are on
++	Upgraded angles to DWORD's in anticipation of UnrealScript (typedef ANGLE_TYPE)
++	Posted prelim 0.82 build for MWR.
+
++	Can now select moving brushes by brush in addition to actor
+X	Moving brushes desnapped upon reimport? -> Can't duplicate
+X	All brushes are force aligned to grid when map editing mode is turned on? -> Can't duplicate, but fixed probable cause
++	Transact moving brushes before modifying them to prevent undo lapse
++	Rotation components as dwords
++	Prep for merge
+
+X	Hide tex family names beginning with underscore, and have Mark hide all fx families
++	Parse Unreal.exe URL=...
++	Textures now have lock count
+
++	Import/merging bugs. Fixed split face problem.
++	Added ACTOR_PreEditMove
+
++	Chris Clark bug: Specially aligned textures don't work on moving brushes.
+
+///////////////////////////////////////////////////////////////////////////////
+9-13-96 to 9-15-96
+
++	Meeting in Europe
++	Made a $100,000,000 deal
++	'Nuff distractions, now back to work :)
+
+///////////////////////////////////////////////////////////////////////////////
+9-16-96
+
++	Integrated Robert's 2d editor fixes
++	Fixed UnrealEd help bugs
+
++	Left-clip dither bugs
++	Fix backdrop
++	Jorus mipmap bugs
+
++	Removed DispDib support.  DispDib was a holdover from ancient Unreal under Windows 3.1 and
++	it is made obsolete by DirectDraw.
++	Hide unavailable mode x modes in NT
+
+///////////////////////////////////////////////////////////////////////////////
+9-17-96
+
++	Fixed bizarre SetCooperativeLevel bug with NT 4.0
++	Light map wraparound bugs
++	Resource browser in god mode only
++	Must gen light meshes for polys that aren't hit by any light
+
++	Jorus mipmap bugs
++	Properly handle mipmapless textures
++	Crash upon add bug
+
+///////////////////////////////////////////////////////////////////////////////
+9-18-96
+
++	Fix cdepth change from within DirectDraw (hwnd already set)
++	Fix cdepth change within DirectDraw palette bug
++	Cdepth focus bug
++	Alt-Enter goes into and out of fullscreen (stolen from Age of Wonders)
++	Now force camera window aspect ratio to be in the range of 1.25 to 1.6
++	Fix show log select problems
++	Position camera windows somewhere nice upon startup
++	Tweaked wording of all Windows menus
++	ps msec timings are messed up
+?	2 game camera windows open causes trouble -> Ask Mark if this is input sys problem
+
+///////////////////////////////////////////////////////////////////////////////
+9-19-96
+
++	Fix fonts in rgb555/rgb565
++	Dropped 24-bit color support in favor of 8/16/32
++	My next engine will be 32-bit color only!
++	Fixed tiled texture block code in all color depths	
++	Implemented 32-bit color asm draw-across code
+
+///////////////////////////////////////////////////////////////////////////////
+9-20-96
+
+X	Use screen's color depth on startup, don't offer option when not fullscreen -> Default to 256-color
++	Added vector <-> color conversion routines for easier color manipulation
++	Can press ctrl-enter to switch in/out of fullscreen
++	Fixed flat polys in all cdepths
++	640x400 screen size option in menu
+X	Should I support screen aspect ratios? -> Messy
++	Remember screen size changes and save them
++	Fixed net game detection error
++	Replaced my outdated profile code with MWR's
++	16-bit color line drawing, rect drawing
+X	Delete FPalettePrecalc stuff?
++	Clean up UnGfx.h outdated stuff
+
++	Going into DDraw in UnrealEd 2nd time crashes
++	Totally fix DirectDraw support within UnrealEd!
++	Fixed far parallax is broken
+
++	Force window to have a reasonable aspect ratio range, prevent win size > supported 1024
++	When show/switchto log window, must clear selection
++	Log fills up and doesn't erase top stuff
++	Why does log window show up in task bar when hidden?
+
++	Params like -net shouldn't be case sensitive
+X	Is there a 2X performance difference between game and editor rendering?
+
+///////////////////////////////////////////////////////////////////////////////
+9-22-96
+
++	Stat: Show # actor collision fragments and lots of useful level tick time stats
++	Clean up camera menus
+
++	8/16/32-bit color depth options in menu
++	Show color depth options in editor
+
++	16 & 32-bit color lines are messed up
++	Rect colors are wrong
+
++	Skip scaled sprites in unsupported cdepths
+
++	Fix UnrealEd show-actor modes
+
++	Show radii (collision & light) option in 2D views
+
+X	Numeric "rotater" or values like 30 and 60 -> no time
+
++	C post fx - 256 & 16-bit
+
++	All moving brush view options in UnrealEd views
++	Show moving brushes wire display or hidden
+
+X	Clicking on player controls icon doesn't turn it off -> MWR look into
+X	Fix player control slowdown when not moving
+X	Player controls in map edit mode crashing bug?
+
+X	Use screen's color depth on startup
+
++	Torture test camera window user interface
++	Finalize camera window user interface elements
+
++	Fix mesh viewer disappearance problems
++	Actor properties/Display/Brush/Use Current now works nicely
++	Fixed terrible bug" using "save" option in UnrealEd and pressing escape still saved!
++	Texture browser now hides special textures by default
+
++	Scrapped UnrealEd sphere button in texture viewer, replace with show-all-families thing
++	SelectObject in ::SetPalette fails going out of DirectDraw
+
++	Texture browser gave overflow in 'All' group when tons of textures
+
+///////////////////////////////////////////////////////////////////////////////
+9-23-96
+
++	Learned how to indent code like a real man
+
++	Dynamic lighting
++		Fix dynamic lighting backface problem
++		Properly cache and pool light meshes and intermediaries
++		Work with bTempDynamicLight in editor!
+
++		Global lighting effects support
++		Fixed major light smoothing mipmap bug
++		New lighting looks AWESOME!
+
+///////////////////////////////////////////////////////////////////////////////
+9-24-96
+
++		Only compute global effects once per frame
++		Zero brightness lights cause major slowdown for some reason
++		Implement global lighting effects generically for point and mesh usage
++		Zero-radius light weirdness
++		Lights with large radii sometimes have darker area near them (SqrtOfs problem?)
+
++		Actor->bTempLightChanged force cache rebuild
++		Not all meshes are composited together (Kootch)?
++		Mesh gen stats
+
+///////////////////////////////////////////////////////////////////////////////
+9-25-96
+
++	GT, Cliff & James mtg
+
+///////////////////////////////////////////////////////////////////////////////
+9-26-96
+
++		Finish all hardcoded simple effects.
++		Start spatial effects code.
++		Separate all effects and clean them up.
+
++		Spatial bool.
++		All spatial lighting effects routines.
++		CloudCast effects are now unbelievably smooth!
+
++		Fix bSpecialLit
++		GServer now tracks time/date
+
++		Daylight, nightlight.
++		Make sure nothing crashes.
+
++		Cyllinder lightsources
++		Totally cool searchlight effect!
+
++		Clean up GLightManager external refs!
+
+///////////////////////////////////////////////////////////////////////////////
+9-27-96
+
++		Texture lattice effects: BigWavy, SmallWavy, all light effects
++		Adapt texture lattice to reasonable minimum size
+
++		Fix asm lattice xyz compute
+
++		Write all light-based texture warping routines
+
++		DoDynamicLighting optimization (don't go down nodes with no invisible polys).
++		Optimize SetupRectSampling, ComputeFromActor
+
++		DoDynamicLighting integration
++		Now only process dynamic lights as they apply to visible polys
+
+///////////////////////////////////////////////////////////////////////////////
+9-28-96
+
++	16&32-bit colored lights
+
++	Cached zone palette scalers
+
++	HSV -> RGB functions in palettized and nonpaletized varieties
++	Color scaling and ambient offset functions
+
++	Properly cache palettes in multiple zones in all color depths
++	Fix ambient algorithm; is fogging rather than scaling...
+
++	Double number of ramp entries
++	Fine-tune multicolored lighting
+
+///////////////////////////////////////////////////////////////////////////////
+9-29-96
+
++	Merging bugs
++	Must distribute NF_NoMerge to all affected nodes
+
++	Modify all palette table generators to support new ramps
++	All hicolor modes
++	Time litegen
++	Count meshes gen
+
++	iZone=0 loses lighting
+X	Use zone 0 in textures mode -> looks better as is
+X	Equalize 8-bit brightness -> will hack in later if 8-bit survives
+
++	start out in hicolor when appropriate
++	don't merge polys in different zones
++	ack! Was only using 40% of lighting table??
++	never show selection during gameplay!
+
++	textures mode is now ridiculously bright
++	fix fake backdrop and enviromap in editor
+
+X	slightly dirty shadows always -> creates temporal problems
++	optimized dirty shadows always
+
++	Need hicolor/truecolor gamma correction support
++	totally prepare for assembly optimization
++	rendDrawHighlight crashes in non 8bit color depths
++	Zone ambient lights
+
++	Lattice texture fx
++	Lattice light fx
+
++	Allow light meshes over 256 on a side, as long as less than 64K overall
++	Raytrace extent bug (isn't using brush polys?)
+
++	Zone ambient lighting (R,G,B,White)
+X	Zone portal bEnclosed flag and bound optimization! -> outdated
+
++	Fix broken effects and enforce minimum lattice size per effect (proutine,minx,miny)
++	textures mode is funny when starting new level
+

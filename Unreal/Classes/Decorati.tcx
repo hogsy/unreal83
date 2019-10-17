@@ -1,0 +1,83 @@
+'
+' UnrealEd class and child classes for class: Decorations
+'
+
+DeclareClass Name=Decorations
+DeclareClass Name=Vase
+DeclareClass Name=Chandelier
+DeclareClass Name=Hammok
+
+Begin Class Name=Decorations
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Decorations Expands Root Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Decorations
+      Texture=None
+      bStaticActor=True
+      bTemplateClass=False
+      Mass=+00000.000000
+   End DefaultProperties
+End Class
+
+Begin Class Name=Vase
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Vase Expands Decorations Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Vase
+      MeshMap=Vase1
+      DrawType=2
+	  DefaultEdCategory=Display
+   End DefaultProperties
+End Class
+
+Begin Class Name=Chandelier
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Chandelier Expands Decorations Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Chandelier
+      MeshMap=Light1
+      DrawType=2
+   End DefaultProperties
+End Class
+
+Begin Class Name=Hammok
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Hammok Expands Decorations Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Hammok
+   End DefaultProperties
+End Class
+
+Begin Class Name=Flame
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Flame Expands Decorations Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Flame
+      MeshMap=Flame
+      DrawType=2
+      DrawScale=1.0
+      AnimRate=1.0
+      AnimCount=0
+      AnimSeq=1
+      bAnimate=True
+      LightType=4
+      LightBrightness=90
+      LightRadius=20
+   End DefaultProperties
+End Class
+

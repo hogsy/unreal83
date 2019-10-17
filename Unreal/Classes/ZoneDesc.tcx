@@ -1,0 +1,60 @@
+'
+' UnrealEd class and child classes for class: ZoneDescriptor
+'
+
+DeclareClass Name=ZoneDescriptor
+
+Begin Class Name=ZoneDescriptor
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Built-in Unreal class for defining properties
+' of zones.  If you place one ZoneDescriptor actor in a
+' zone you have partioned, the ZoneDescriptor defines the 
+' properties of the zone.
+'
+Class ZoneDescriptor Expands Root
+
+Dim bWaterZone    as Editable Boolean  ' Zone is water-filled
+Dim bFogZone      as Editable Boolean  ' Zone is fog-filled
+Dim bRainZone     as Editable Boolean  ' Zone is raining
+Dim bKillZone     as Editable Boolean  ' Zone instantly kills those who enter
+Dim bEchoZone     as Editable Boolean  ' Sound echoes in this zone
+Dim bNeutralZone  as Editable Boolean  ' Players can't take damage in this zone
+Dim bGravityZone  as Editable Boolean  ' Use ZoneGravity
+Dim bVelocityZone as Editable Boolean  ' Use ZoneGravity
+
+Dim ZoneGravity   as Editable Vector   ' Gravity acceleration in zone, if bGravityZone
+Dim ZoneVelocity  as Editable Vector   ' Velocity added to actors in this zone
+Dim ZoneTitle     as Editable String(64) ' Human-readable name of zone
+Dim ZoneAmbientSound as Editable Sound ' Ambient music/sound to play
+
+' Ambient lighting parameters
+Dim AmbientBrightness as Editable Byte
+Dim AmbientHue		  as Editable Byte
+Dim AmbientSaturation as Editable Byte
+
+' Ramp lighting parameters for ramp (non-MMX) hicolor/truecolor rendering
+Dim RampHue		      as Editable Byte
+Dim RampSaturation    as Editable Byte
+
+' Fog parameters for MMX hicolor/truecolor rendering
+Dim FogThickness      as Editable Byte
+Dim FogHue		      as Editable Byte
+Dim FogSaturation     as Editable Byte
+
+' Zone light multiplier
+Dim Lightning         as Editable Real ' Added to all lighting in zone
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=ZoneDescriptor
+	  AmbientSaturation=255
+	  RampSaturation=255
+	  FogSaturation=255
+	  FogThickness=63
+	  Lightning=0.0
+	  DefaultEdCategory=ZoneDescriptor
+   End DefaultProperties
+End Class
+

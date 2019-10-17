@@ -1,0 +1,766 @@
+'
+' UnrealEd class and child classes for class: Pawn
+'
+
+DeclareClass Name=Camera
+DeclareClass Name=Pawn
+DeclareClass Name=Woman
+DeclareClass Name=Dragon
+DeclareClass Name=Skaarj
+DeclareClass Name=BigMan
+DeclareClass Name=ArchAngel
+DeclareClass Name=Gasbag
+DeclareClass Name=Manta
+DeclareClass Name=Tentacle
+
+DeclareClass Name=WallHit
+DeclareClass Name=PawnHit
+DeclareClass Name=Explode3
+DeclareClass Name=BigManGunFlash
+DeclareClass Name=SkaarjGunFlash
+DeclareClass Name=GasBagBelchFlash
+DeclareClass Name=TentacleProjectile
+
+Begin Class Name=Pawn
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+' The base class of all actors that can be controlled by players.
+' Pawns can be posessed by either players or AI.
+'
+Class Pawn Expands Root Intrinsic
+
+EnumDef ELifeState = LS_None, LS_Alive, LS_Dying, LS_Dead
+
+EnumDef EAI_Move =             _ ' The move strategy is 
+    EAI_MoveNone               _ ' ... nothing specific.
+,   EAI_MoveApproach           _ ' ... to approach a target.
+,   EAI_MoveBackOff            _ ' ... to strategically retreat.
+,   EAI_MoveRunAway              ' ... to run away.
+
+' Misc
+Dim YawSpeed as Editable Integer
+Dim PitchSpeed as Editable Integer
+Dim RollSpeed as Editable Integer
+Dim FixFrame as Editable Integer
+Dim BaseEyeHeight as Editable Real
+Dim EyeHeight as Real
+Dim Bob as Real
+Dim TeamName as Editable Name
+Dim TargetYaw        As Integer
+Dim TargetPitch      As Integer
+Dim TargetRoll       As Integer
+
+' Player game statistics. 
+'   Those which are always accurate are marked [A] (for accurate).
+'   Those which are periodically calculated are marked [P] (for periodic).
+'   These statistics are tracked for the current level.
+Dim KillCount       As Byte     ' [A] The number of enemies killed by this actor.
+Dim DeathCount      As Byte     ' [A] The number of times this pawn has died.
+Dim SecretCount     As Byte     ' [A] Number of secrets found.
+Dim ShotCount       As Integer  ' [A] Number of shots fired.
+Dim HitCount        As Integer  ' [A] Number of times enemies have been hit.
+Dim DamagedCount    As Integer  ' [A] Total damage taken by actor.
+Dim DamageCount     As Integer  ' [A] Total damage inflicted by actor.
+Dim HealthCount     As Integer  ' [P] Total health of actor.
+Dim LowHealthCount  As Integer  ' [P] Total low-health values of actor.
+Dim HighHealthCount As Integer  ' [P] Total high-health values of actor.
+
+' Monster AI response configuration:
+'   These properties affect the AI of monsters.
+Dim ApproachPeriod         As Editable Byte    ' Deciseconds spent approaching target
+Dim ApproachRandomization  As Editable Byte    ' Randomization of ApproachPeriod
+Dim AttackPeriod           As Editable Byte    ' Deciseconds spent attacking target
+Dim AttackRandomization    As Editable Byte    ' Randomization of AttackPeriod
+Dim BackOffPeriod          As Editable Byte    ' Deciseconds spent backing away from targets, or just resting
+Dim BackOffRandomization   As Editable Byte    ' Randomization of BackOffPeriod
+Dim BackOffThreshold       As Editable Byte    ' Dekaunits. Monster must be at least this close to start backing off.
+Dim TargetCloseness        As Editable Byte    ' Monster's preferred distance from target, in dekaunits.
+Dim TargetZCloseness       As Editable Byte    ' Monster's preferred height above or below target, in dekaunits.
+Dim ApproachDirectness     As Editable Byte    ' Directness of approaching target (0=direct, 255=indirect).
+Dim bHasAI                 As Editable Boolean ' Does the pawn have intelligence?
+Dim bSensesTargets         As Editable Boolean ' TRUE iff the pawn senses potential targets
+Dim bRespondsToNoise       As Editable Boolean ' TRUE iff the pawn responds to nearby noise (not necessarily those of a target).
+Dim bRespondsToSights      As Editable Boolean ' TRUE iff the pawn responds to nearby sights (not necessarily those of a target).
+Dim bHarmsMonsters         As Editable Boolean ' TRUE iff the pawn harms other monsters (but only when provoked).
+Dim bNeverStill            As Editable Boolean ' TRUE iff the pawn never becomes quiescent.
+Dim bIsXenophobic          As Editable Boolean ' TRUE iff the pawn harms monsters different from itself. Meaningful only if bHarmsMonsters.
+Dim LurkingDistance        As Editable Byte    ' If non-zero, waits until target is this close before attacking. In dekaunits.
+Dim AuralAcuity            As Editable Real    ' Measures how well the pawn can hear things. 1.0 means a noise of 1 can be heard 100 units away. 0 means superb hearing.
+Dim RunAwayHealthThreshold As Editable Byte    ' Health threshold below which pawn runs away. 0 for none.
+
+Dim AIMove                As EAI_Move 
+Dim AIPreviousTask        As EAI_Task
+Dim AIPreviousMove        As EAI_Move
+
+Dim AmmoCount(10) As Integer ' Ammo carried by the pawn. Indexed by EAmmoType.
+
+Dim MinorInjurySounds(3) As Editable Sound
+Dim MajorInjurySounds(3) As Editable Sound
+Dim DeathSounds(2)       As Editable Sound
+Dim QuestingSounds(2)    As Editable Sound
+Dim StillSounds(2)       As Editable Sound
+Dim VictorySounds(2)     As Editable Sound
+Dim AttackSounds(4)      As Editable Sound ' Sounds used for pawn-specific attacks
+Dim SoundTimer           As          Byte  ' Countdown from last sound made by pawn.
+
+Dim AttackEffects(2)     As Editable Class ' Pyrotechnic effects to use when shooting
+Dim ExplosionEffect      As Editable Class ' Pyrotechnic effect when something explodes in the pawn.
+
+Dim NaturalArmor(4) As Editable Real ' Indexed by EDamageType. Values are: 0.0..1.0
+Dim HealRate        As Editable Real ' Amount pawn heals each tick.
+Dim Armor(4)        As Editable Real ' Indexed by EDamageType
+
+Dim SightRadius          As Editable Real   ' Maximum seeing distance.
+Dim PeripheralVision     As Editable Real   ' Cosine of limits of peripheral vision.
+Dim HearingAccuracy      As Editable Byte   ' Ability to locate the direction of a noise, 0=none, 255=superb
+Dim Visibility           As Byte            ' How visible is the pawn? 0=invisible. 255=highly visible.
+Dim Noise                As Real            ' The amount of noise being made by the pawn.
+
+Dim LungeSpeed     As Editable Real ' Lunge speed. Decreases stamina.
+Dim RunSpeed       As Editable Real ' Running speed. Does not decreases stamina.
+Dim NormalSpeed    As Editable Real ' The usual speed. Does not decrease stamina.
+Dim MaxStrength    As Editable Real ' The usual strengh of the pawn.
+Dim Strength       As Editable Real ' The current strength of the pawn. 0=weak, 1.0=really strong.
+Dim Stamina        As Real   ' Stamina: 0=none (can't run), 1.0=normal max.
+Dim Health         As Editable Real   ' Health: 0=none (dead or near death), 100.0=normal maximum, >100 in special situations(?).
+Dim DesiredSpeed   As Real   ' Pawn's current desired speed.
+
+Dim LifeState    As ELifeState
+Dim Killer       As Actor       ' Actor pawn which killed this pawn, when LifeState==LS_Dead or LS_Dying
+Dim DeathSpawn   As Editable Class  ' Object to spawn when pawn dies
+Dim HitDisplayTimer As Byte ' Count-down timer set last time monster showed hit animation.
+
+Dim ExplorationTimer As Byte ' Count-down timer to limit consecutive explorations (for performance considerations).
+
+' Information about a target (meaningful if there is a target or if TargetWasLost is TRUE).
+Dim TargetLostTime     As Integer   ' Time the target was lost
+Dim TargetLastLocation As Vector    ' Last known location of target.
+Dim TargetLastVelocity As Vector    ' Last known velocity of target.
+
+' Information about animations, attacks, and so on:
+Dim bHasDistantMovingAttack  As Editable Boolean ' Does the monster have a distant, moving attack?
+Dim bHasDistantStillAttack   As Editable Boolean ' Does the monster have a distant, still attack?
+Dim bHasCloseUpAttack        As Editable Boolean ' Does the monster have a close-up attack?
+
+Dim LastNonFallZ             As Real          ' Z-coordinate of last time on surface or otherwise not falling.
+
+' Status of usually temporary effects: 
+Dim InvisibilityTimeLeft   As Integer ' Ticks left before invisibility wears off
+Dim SilenceTimeLeft        As Integer ' Ticks left before silence wears off
+Dim InvincibilityTimeLeft  As Integer ' Ticks left before invincibility wears off
+Dim SuperStaminaTimeLeft   As Integer ' Ticks left before super-stamina wears off
+Dim SuperStrengthTimeLeft  As Integer ' Ticks left before super-strength wears off
+Dim ExplosiveCharge        As Real    ' Amount of explosive charge imbedded in pawn.
+Dim DelayedDamage          As Real    ' Amount of delayed basic damage
+Dim DamageDelay            As Byte    ' Ticks left before DelayedDamage takes effect.
+
+' todo: Make the effects into a BYTE flag (simplifies checking)
+Dim bHasInvisibility   As Editable Boolean ' TRUE iff the pawn has the power of invisibility.
+Dim bHasSilence        As Editable Boolean ' TRUE iff the pawn has the power of silence.
+Dim bHasInvincibility  As Editable Boolean ' TRUE iff a target suffers no damage
+Dim bHasSuperStrength  As Editable Boolean ' TRUE iff the pawn has the power of strength.
+Dim bHasSuperStamina   As Editable Boolean ' TRUE iff the pawn has the power of stamina.
+Dim bIsQuiescent       As          Boolean ' TRUE iff the pawn is quiescent
+Dim bTargetIsNear      As          Boolean ' TRUE iff the current iTarget is close enough for a melee attack
+Dim bTargetWasHere     As          Boolean ' When bTargetWasLost, are we near the place the target was lost?
+Dim bTargetWasNear     As          Boolean ' When we have a target, or when bTargetWasLost, was the target recently within melee range?
+Dim bTargetWasLost     As          Boolean ' TRUE iff a target was lost. 
+Dim bLimitRotation     As Editable Boolean ' TRUE iff pitch and roll rotations are limited (can't turn upside down).
+Dim bLookingAlongStair As          Boolean ' TRUE iff the view has been adjusted to look along stairs.
+Dim bIsOnSurface       As          Boolean ' TRUE iff the pawn is standing on a surface.
+Dim bCheated           As          Boolean ' TRUE iff the pawn has cheated.
+Dim bStatusChanged     As          Boolean ' TRUE after change in the pawn's health, ammo, weapons, armour, and so on.
+Dim bIsAlarmed         As          Boolean ' TRUE iff the pawn is alarmed by something.
+
+' Player controls:
+Dim bCannotTurn        As Editable Boolean ' The pawn is not allowed to turn.
+Dim bCannotMove        As Editable Boolean ' The pawn is not allowed to move (forward/backward/left/right/up/down).
+
+Dim MaxStepUpHeight    As Editable Byte    ' Maximum size of upward step.
+Dim MaxStepDownHeight  As Editable Byte    ' Maximum size of downward step.
+
+' Max. amount of ammo pawn can carry:
+Dim AmmoCapacity(10)  As Editable Integer ' Indexed by EAmmoType
+
+'Inventory information:
+Dim RecentWeapons(2) As Actor ' (1) is the most recently used or current weapon, (2) the second most recently used.
+
+' Rendering effects for players
+Dim HurtEffectCount as Byte
+Dim PickupEffectCount as Byte
+Dim HealthEffectCount as Byte
+Dim TeleportEffectCount as Byte
+Dim bRenderUnderwater as Integer
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Pawn
+      bDirectional=True
+      bCollideActors=True
+      bHasAI=True
+      bCollideWorld=True
+      bBlocksActors=True
+      bTemplateClass=False
+      bGravity=True
+      bMomentum=True
+      bProjTarget=True
+      bCanPossess=True
+      bLimitRotation=True
+      TeamName=None
+      bAnimate=True
+      SightRadius=+04100.0
+      PeripheralVision=+00000.000000
+      HearingAccuracy=128
+      NormalStrength=128
+      bSensesTargets=True
+      bHasInvisibility=False
+      bHasSilence=False
+      bHasInvincibility=False
+      bHasSuperStrength=False
+      bHasSuperStamina=False
+      AmmoCapacity(0)=250
+      AmmoCapacity(1)=100
+      AmmoCapacity(2)=500
+      AmmoCapacity(3)=900
+      ApproachPeriod=30
+      ApproachRandomization=10
+      AttackPeriod=20
+      AttackRandomization=5
+      BackOffPeriod=20
+      BackOffRandomization=10
+      BackOffThreshold=15
+      RunAwayHealthThreshold=6
+      RunSpeed=+00010.000000
+      NormalSpeed=+00005.000000
+      bLookingAlongStair=False
+      bCheated=False
+      AuralAcuity=1.0
+      bRespondsToNoise=True
+      bRespondsToSights=True
+      ExplosionEffect=Explode3
+      Health=100.0
+      AttackSounds(0)=None
+      AttackSounds(1)=None
+      AttackSounds(2)=None
+      AttackSounds(3)=None
+      bCannotTurn=False
+      bCannotMove=False
+      MaxStepUpHeight=25
+      MaxStepDownHeight=25
+	  DefaultEdCategory=General
+   End DefaultProperties
+End Class
+
+Begin Class Name=Camera
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified.
+' A camera, used in UnrealEd.
+'
+Class Camera Expands Pawn Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Camera
+      Texture=s_camera
+      CollisionHeight=+00055.000000
+      LightBrightness=100
+      LightRadius=16
+      bDirectional=True
+      bTemplateClass=True
+   End DefaultProperties
+End Class
+
+Begin Class Name=Woman
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class Woman Expands Pawn Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Woman
+      MeshMap=Woman
+      CollisionRadius=+00022.000000
+      CollisionHeight=+00055.000000
+      DrawType=2
+      Mass=+00100.000000
+      LightType=1
+      LightBrightness=20
+      LightHue=40
+      LightSaturation=192
+      LightRadius=12
+      LightPeriod=16
+      LungeSpeed=+00020.000000
+      RunSpeed=+00010.000000
+      NormalSpeed=+00005.000000
+      HealRate=0.000
+      MinorInjurySounds(0)=fgrunt2
+      MinorInjurySounds(1)=fyell1
+      MinorInjurySounds(2)=None
+      MajorInjurySounds(0)=fgrunt3
+      MajorInjurySounds(1)=None
+      MajorInjurySounds(2)=None
+      DeathSounds(0)=fscrm1
+      DeathSounds(1)=None
+      QuestingSounds(0)=None
+      QuestingSounds(1)=None
+      StillSounds(0)=None
+      StillSounds(1)=None
+      VictorySounds(0)=None
+      VictorySounds(1)=None
+      bCanBeTeleported=True
+   End DefaultProperties
+End Class
+
+Begin Class Name=Dragon
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class Dragon Expands Pawn Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Dragon
+      MeshMap=Dragon
+      CollisionRadius=+00052.000000
+      CollisionHeight=+00052.000000
+      DrawType=2
+      bGravity=False
+   End DefaultProperties
+End Class
+
+Begin Class Name=Skaarj
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class Skaarj Expands Pawn Intrinsic
+EnumDef ESkaarjAnimationTriggers = _
+        SkaarjAT_None       _
+    ,   SkaarjAT_Lunge      _
+    ,   SkaarjAT_Spin       _
+    ,   SkaarjAT_Fire       _
+    ,   SkaarjAT_ClawLeft   _
+    ,   SkaarjAT_ClawRight
+EnumDef ESkaarjAnimations = _
+        SkaarjA_None        _
+    ,   SkaarjA_Squat       _
+    ,   SkaarjA_Blade       _
+    ,   SkaarjA_TwoClaw     _
+    ,   SkaarjA_Death       _
+    ,   SkaarjA_Fighter     _
+    ,   SkaarjA_HeadUp      _
+    ,   SkaarjA_Firing      _
+    ,   SkaarjA_Looking     _
+    ,   SkaarjA_Jog         _
+    ,   SkaarjA_Lunge       _
+    ,   SkaarjA_Spin        _
+    ,   SkaarjA_T1          _
+    ,   SkaarjA_T2          _
+    ,   SkaarjA_T3          _
+    ,   SkaarjA_T4          _
+    ,   SkaarjA_T5          _
+    ,   SkaarjA_T6          _
+    ,   SkaarjA_TakeHit     
+Dim Hack1 As ESkaarjAnimationTriggers ' Hack so EnumDef doesn't disappear in root.h
+Dim Hack2 As ESkaarjAnimations        ' Hack so EnumDef doesn't disappear in root.h
+
+' Sounds:
+Dim LungeSound    As Editable Sound   ' Sound made when Skaarj lunges
+Dim SpinSound     As Editable Sound   ' Sound made when Skaarj does spin
+Dim ClawSound     As Editable Sound   ' Sound made when Skaarj claws
+Dim ShootSound    As Editable Sound   ' Sound made when Skaarj shoots
+
+' Attack damage:
+Dim LungeDamage   As Editable Byte    ' Basic damage done by lunge
+Dim SpinDamage    As Editable Byte    ' Basic damage done by spin
+Dim ClawDamage    As Editable Byte    ' Basic damage done by each claw
+Dim ShootDamage   As Editable Byte    ' Basic damage caused by shooting
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Skaarj
+      MeshMap=Skaarj
+      CollisionRadius=+00040.000000
+      CollisionHeight=+00068.000000
+      DrawType=2
+      Mass=+00200.000000
+      NormalSpeed=+00004.000000
+      LungeDamage=25
+      SpinDamage=20
+      ClawDamage=20
+      ShootDamage=11
+      TriggerSequences(0)=3
+      TriggerSequences(1)=3
+      TriggerSequences(2)=7
+      TriggerSequences(3)=10
+      TriggerSequences(4)=11
+      TriggerFrames(0)=2
+      TriggerFrames(1)=12
+      TriggerFrames(2)=9
+      TriggerFrames(3)=12
+      TriggerFrames(4)=7
+      TriggerValues(0)=4
+      TriggerValues(1)=5
+      TriggerValues(2)=3
+      TriggerValues(3)=1
+      TriggerValues(4)=2
+      AttackEffects(0)=SkaarjGunFlash
+      bHasDistantMovingAttack=True
+      bHasDistantStillAttack=True
+      bHasCloseUpAttack=True
+   End DefaultProperties
+End Class
+
+Begin Class Name=BigMan
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class BigMan Expands Pawn Intrinsic
+EnumDef EBigManAnimationTriggers = _
+        BigManAT_None            _
+    ,   BigManAT_StillFireLeft   _
+    ,   BigManAT_StillFireRight  _
+    ,   BigManAT_PistolWhip      _
+    ,   BigManAT_GutFire         _
+    ,   BigManAT_WalkFireLeft    _
+    ,   BigManAT_WalkFireRight   
+EnumDef EBigManAnimations =  _
+         BigManA_None       _
+    ,    BigManA_StillLook  _
+    ,    BigManA_StillFire  _
+    ,    BigManA_PistolWhip _
+    ,    BigManA_Sleep      _
+    ,    BigManA_GutShot    _
+    ,    BigManA_DieForward _
+    ,    BigManA_ShootLeft  _
+    ,    BigManA_Walk       _
+    ,    BigManA_WalkLeft   _
+    ,    BigManA_WalkRight  _
+    ,    BigManA_ShootRight _
+    ,    BigManA_T1         _
+    ,    BigManA_T2         _
+    ,    BigManA_T3         _
+    ,    BigManA_T4         _
+    ,    BigManA_T5         _
+    ,    BigManA_TakeHit    _
+    ,    BigManA_DieBackward
+Dim Hack1 As EBigManAnimationTriggers ' Hack so EnumDef doesn't disappear in root.h
+Dim Hack2 As EBigManAnimations        ' Hack so EnumDef doesn't disappear in root.h
+
+' Sounds:
+Dim ShootSound    As Editable Sound   ' Sound made when monster shoots
+Dim WhipSound     As Editable Sound   ' Sound made during pistol-whip
+
+' Attack damage:
+Dim ShootDamage   As Editable Byte    ' Basic damage done by each shot.
+Dim WhipDamage    As Editable Byte    ' Basic damage done by pistol-whip.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=BigMan
+      MeshMap=BigMan
+      CollisionRadius=+00030.000000
+      CollisionHeight=+00064.000000
+      DrawType=2
+      Mass=+00300.000000
+      NormalSpeed=+00003.700000
+      WhipDamage=20
+      ShootDamage=5
+      TriggerSequences(0)=2
+      TriggerSequences(1)=2
+      TriggerSequences(2)=3
+      TriggerSequences(3)=5
+      TriggerSequences(4)=5
+      TriggerSequences(5)=7
+      TriggerSequences(6)=11
+      TriggerFrames(0)=2
+      TriggerFrames(1)=12
+      TriggerFrames(2)=10
+      TriggerFrames(3)=12
+      TriggerFrames(4)=22
+      TriggerFrames(5)=9
+      TriggerFrames(6)=9
+      TriggerValues(0)=1
+      TriggerValues(1)=2
+      TriggerValues(2)=3
+      TriggerValues(3)=4
+      TriggerValues(4)=4
+      TriggerValues(5)=5
+      TriggerValues(6)=6
+      AttackEffects(0)=BigManGunFlash
+      bHasDistantMovingAttack=True
+      bHasDistantStillAttack=True
+      bHasCloseUpAttack=True
+      MinorInjurySounds(0)=BigManh2
+      MinorInjurySounds(1)=None
+      MinorInjurySounds(2)=None
+      MajorInjurySounds(0)=Bigmanh
+      MajorInjurySounds(1)=None
+      MajorInjurySounds(2)=None
+      DeathSounds(0)=bigman2
+      DeathSounds(1)=None
+      QuestingSounds(0)=Bigman1
+      QuestingSounds(1)=bigman3
+      StillSounds(0)=None
+      StillSounds(1)=None
+      VictorySounds(0)=None
+      VictorySounds(1)=None
+      AttackSounds(0)=growl
+      AttackSounds(1)=None
+      AttackSounds(2)=None
+      AttackSounds(3)=None
+      ShootSound=automag
+      WhipSound=whoosh
+   End DefaultProperties
+End Class
+
+Begin Class Name=ArchAngel
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class ArchAngel Expands BigMan Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=ArchAngel
+      MeshMap=BigMan
+      Mass=+00400.000000
+      NormalSpeed=+00004.300000
+      CollisionRadius=+00046.000000
+      CollisionHeight=+00074.000000
+      DrawScale=+00001.150000
+      WhipDamage=30
+      ShootDamage=8
+   End DefaultProperties
+End Class
+
+Begin Class Name=Gasbag
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Gasbag Expands Pawn Intrinsic
+EnumDef EGasBagAnimationTriggers = _
+        GasBagAT_None            _
+    ,   GasBagAT_PunchLeft       _
+    ,   GasBagAT_PunchRight      _
+    ,   GasBagAT_Pound           _
+    ,   GasBagAT_Belch       
+EnumDef EGasBagAnimations =  _
+        GasBagA_None             _
+    ,   GasBagA_TwoPunch         _
+    ,   GasBagA_Belch            _
+    ,   GasBagA_Deflate          _
+    ,   GasBagA_Fiddle           _
+    ,   GasBagA_Fighter          _
+    ,   GasBagA_Float            _
+    ,   GasBagA_Grab             _
+    ,   GasBagA_Pound            _
+    ,   GasBagA_T1               _
+    ,   GasBagA_T2               _
+    ,   GasBagA_T3               _
+    ,   GasBagA_T4               _
+    ,   GasBagA_TakeHit
+Dim Hack1 As EGasBagAnimationTriggers ' Hack so EnumDef doesn't disappear in root.h
+Dim Hack2 As EGasBagAnimations        ' Hack so EnumDef doesn't disappear in root.h
+
+' Sounds:
+Dim BelchSound    As Editable Sound   ' Sound made when monster belches
+Dim PunchSound    As Editable Sound   ' Sound made during each punch
+Dim PoundSound    As Editable Sound   ' Sound made during pound 
+
+' Attack damage:
+Dim BelchDamage   As Editable Byte    ' Basic damage done by belch
+Dim PunchDamage   As Editable Byte    ' Basic damage done by each punch.
+Dim PoundDamage   As Editable Byte    ' Basic damage done by pound.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Gasbag
+      MeshMap=Gasbag
+      CollisionRadius=+00028.000000
+      CollisionHeight=+00028.000000
+      DrawType=2
+      Mass=+00070.000000
+      bGravity=False
+      NormalSpeed=+00003.000000
+      BelchDamage=10
+      PunchDamage=20
+      PoundDamage=25
+      TriggerSequences(0)=1
+      TriggerSequences(1)=1
+      TriggerSequences(2)=2
+      TriggerSequences(3)=8
+      TriggerFrames(0)=9
+      TriggerFrames(1)=14
+      TriggerFrames(2)=16
+      TriggerFrames(3)=11
+      TriggerValues(0)=1
+      TriggerValues(1)=2
+      TriggerValues(2)=4
+      TriggerValues(3)=3
+      AttackEffects(0)=GasBagBelchFlash
+      bHasDistantMovingAttack=True
+      bHasDistantStillAttack=True
+      bHasCloseUpAttack=True
+   End DefaultProperties
+End Class
+
+Begin Class Name=Manta
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Manta Expands Pawn Intrinsic
+EnumDef EMantaAnimationTriggers = _
+        MantaAT_None       _
+    ,   MantaAT_Sting      _
+    ,   MantaAT_Whip      
+EnumDef EMantaAnimations =  _
+         MantaA_None       _
+    ,    MantaA_Fly        _
+    ,    MantaA_Sting      _
+    ,    MantaA_Whip       _
+    ,    MantaA_Die        _
+    ,    MantaA_Land       _
+    ,    MantaA_Launch 
+Dim Hack1 As EMantaAnimationTriggers ' Hack so EnumDef doesn't disappear in root.h
+Dim Hack2 As EMantaAnimations        ' Hack so EnumDef doesn't disappear in root.h
+
+' Sounds:
+Dim StingSound    As Editable Sound   ' Sound made when monster stings
+Dim WhipSound     As Editable Sound   ' Sound made during whip
+
+' Attack damage:
+Dim StingDamage   As Editable Byte    ' Basic damage done by Sting.
+Dim WhipDamage    As Editable Byte    ' Basic damage done by whip.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Manta
+      MeshMap=Manta
+      CollisionRadius=+00030.000000
+      CollisionHeight=+00030.000000
+      DrawType=2
+      Mass=+00080.000000
+      NormalSpeed=+00009.500000
+      bGravity=False
+      bHasDistantMovingAttack=False
+      bHasDistantStillAttack=False
+      bHasCloseUpAttack=True
+      MinorInjurySounds(0)=None
+      MinorInjurySounds(1)=None
+      MinorInjurySounds(2)=None
+      MajorInjurySounds(0)=None
+      MajorInjurySounds(1)=None
+      MajorInjurySounds(2)=None
+      DeathSounds(0)=None
+      DeathSounds(1)=None
+      QuestingSounds(0)=Manta2
+      QuestingSounds(1)=None
+      StillSounds(0)=None
+      StillSounds(1)=None
+      VictorySounds(0)=None
+      VictorySounds(1)=None
+      AttackSounds(0)=None
+      AttackSounds(1)=None
+      AttackSounds(2)=None
+      AttackSounds(3)=None
+      StingSound=None
+      WhipSound=None
+      StingDamage=20
+      WhipDamage=20
+      TriggerSequences(0)=2
+      TriggerSequences(1)=3
+      TriggerFrames(0)=14
+      TriggerFrames(1)=19
+      TriggerValues(0)=1
+      TriggerValues(1)=2
+   End DefaultProperties
+End Class
+
+Begin Class Name=Tentacle
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Class Tentacle Expands Pawn Intrinsic
+EnumDef ETentacleAnimationTriggers = _
+        TentacleAT_None       _
+    ,   TentacleAT_Shoot      
+EnumDef ETentacleAnimations =  _
+         TentacleA_None       _
+    ,    TentacleA_Waver      _
+    ,    TentacleA_Shoot      _
+    ,    TentacleA_Mebax      _
+    ,    TentacleA_Death
+Dim Hack1 As ETentacleAnimationTriggers ' Hack so EnumDef doesn't disappear in root.h
+Dim Hack2 As ETentacleAnimations        ' Hack so EnumDef doesn't disappear in root.h
+
+' Sounds:
+Dim ShootSound    As Editable Sound   ' Sound made when monster shoots
+Dim MebaxSound    As Editable Sound   ' Sound made during mebax
+
+' Attack damage:
+Dim Projectile    As Editable Class   ' The projectile used
+Dim WhipDamage    As Editable Byte    ' Damage done by whipping action.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Tentacle
+      MeshMap=Tentacle
+      CollisionRadius=+00040.000000
+      CollisionHeight=+00040.000000
+      DrawType=2
+      Mass=+00000.000000
+      bMomentum=False
+      bGravity=False
+      NormalSpeed=+00000.000000
+      PeripheralVision=-00001.000000
+      bHasDistantMovingAttack=False
+      bHasDistantStillAttack=True
+      bHasCloseUpAttack=True
+      MinorInjurySounds(0)=None
+      MinorInjurySounds(1)=None
+      MinorInjurySounds(2)=None
+      MajorInjurySounds(0)=None
+      MajorInjurySounds(1)=None
+      MajorInjurySounds(2)=None
+      DeathSounds(0)=None
+      DeathSounds(1)=None
+      QuestingSounds(0)=None
+      QuestingSounds(1)=None
+      StillSounds(0)=None
+      StillSounds(1)=None
+      VictorySounds(0)=None
+      VictorySounds(1)=None
+      AttackSounds(0)=None
+      AttackSounds(1)=None
+      AttackSounds(2)=None
+      AttackSounds(3)=None
+      ShootSound=whoosh
+      MebaxSound=None
+      Projectile=TentacleProjectile
+      TriggerSequences(0)=2
+      TriggerFrames(0)=1
+      TriggerValues(0)=1
+      WhipDamage=20
+      ApproachPeriod=0
+      ApproachRandomization=0
+      AttackPeriod=20
+      AttackRandomization=5
+      BackOffPeriod=15
+      BackOffRandomization=4
+      BackOffThreshold=0
+   End DefaultProperties
+End Class
+

@@ -1,0 +1,396 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DPLAYPROVIDERS DIALOGEX 0, 0, 286, 177
+STYLE WS_CHILD
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "< &Back",ID_BACK,127,159,50,15
+    PUSHBUTTON      "Cancel",IDCANCEL,232,159,50,15
+    LISTBOX         IDC_PROVIDERS,90,25,192,120,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "&Next >",ID_NEXT,176,159,52,15
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,7,151,
+                    274,1
+    CONTROL         111,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,8,7,79,137
+    LTEXT           "Please select the DirectPlay service you wish to use:",
+                    IDC_STATIC,91,13,183,12
+END
+
+IDD_FAKEWIZARD DIALOG DISCARDABLE  0, 0, 290, 179
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION
+CAPTION "Network Game Wizard"
+FONT 8, "MS Sans Serif"
+BEGIN
+END
+
+IDD_NETWIZ DIALOGEX 0, 0, 286, 178
+STYLE WS_CHILD
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "< &Back",ID_BACK,127,159,50,15,WS_DISABLED
+    PUSHBUTTON      "Cancel",IDCANCEL,232,159,50,15
+    DEFPUSHBUTTON   "&Next >",ID_NEXT,176,159,52,15
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,10,151,
+                    272,1
+    CONTROL         111,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,8,7,79,137
+    LTEXT           "This wizard will help you connect to an UnrealServer so that you may join an existing network game, or start UnrealServer running so that your machine may host a new network game.",
+                    IDC_STATIC,98,9,169,36
+    LTEXT           "To begin setting up a network game, select one of the following options then click Next.",
+                    IDC_STATIC,97,92,172,20
+    LTEXT           "The UnrealServer controls the network game.  The game continues as long as the UnrealServer is up and running.  New players may join an Unreal game at any time.",
+                    IDC_STATIC,97,51,166,36
+    CONTROL         "Join an existing game",IDC_JOIN,"Button",
+                    BS_AUTORADIOBUTTON,98,117,169,10
+    CONTROL         "Launch UnrealServer and host a new game",IDC_HOST,
+                    "Button",BS_AUTORADIOBUTTON,98,129,170,11
+END
+
+IDD_JOINTYPE DIALOGEX 0, 0, 284, 177
+STYLE WS_CHILD
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Connect via Modem or LAN using DirectPlay",IDC_DPLAY,
+                    "Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,107,
+                    38,162,11
+    CONTROL         "Connect to an UnrealServer on the Internet",IDC_INET,
+                    "Button",BS_AUTORADIOBUTTON | WS_TABSTOP,107,78,162,11
+    PUSHBUTTON      "< &Back",ID_BACK,127,159,50,15
+    DEFPUSHBUTTON   "&Next >",ID_NEXT,176,159,52,15
+    PUSHBUTTON      "Cancel",IDCANCEL,232,159,50,15
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,9,151,
+                    272,1
+    CONTROL         111,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,8,7,79,137
+    LTEXT           "There are two ways to join an existing network game of Unreal:",
+                    IDC_STATIC,98,11,169,17
+    LTEXT           "Internet play enables you to join wide-area Unreal games, and journey among UnrealServers which are linked in a fashion similar to the WorldWide Web.\r\rInternet play requires a fast connection (28.8 is the minimum).  Your performance may vary wildly.",
+                    IDC_STATIC,98,92,172,54
+    LTEXT           "This enables you to connect to an opponent or join small groups of Unreal players in combat.",
+                    IDC_STATIC,99,50,166,22
+END
+
+IDD_HOSTTYPE DIALOGEX 0, 0, 284, 177
+STYLE WS_CHILD
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Host a one-level game via DirectPlay",IDC_DPLAY,
+                    "Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,110,
+                    33,160,11
+    CONTROL         "Host a multi-level Internet-based game",IDC_INET,
+                    "Button",BS_AUTORADIOBUTTON | WS_TABSTOP,110,71,158,11
+    PUSHBUTTON      "< &Back",ID_BACK,127,159,50,15
+    DEFPUSHBUTTON   "&Next >",ID_NEXT,176,159,52,15
+    PUSHBUTTON      "Cancel",IDCANCEL,232,159,50,15
+    LTEXT           "There are two ways to host a game with UnrealServer:",
+                    IDC_STATIC,99,10,169,18
+    LTEXT           "This launches a dedicated session of UnrealServer, which may host multiple game levels and will run persistently while players join in and travel from level to level.",
+                    IDC_STATIC,98,86,176,33
+    LTEXT           "You can play a single-level game of Unreal which your opponents can connect to.",
+                    IDC_STATIC,99,47,166,20
+    LTEXT           "When hosting an Internet game, you will have to run another copy of Unreal in order to join the game yourself.",
+                    IDC_STATIC,98,123,181,21
+    CONTROL         111,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,8,7,76,139
+END
+
+IDD_DPLAYSESSIONS DIALOGEX 0, 0, 284, 177
+STYLE WS_CHILD
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "< &Back",ID_BACK,127,159,50,15
+    PUSHBUTTON      "Cancel",IDCANCEL,232,159,50,15
+    LISTBOX         IDC_SESSIONS,89,34,192,111,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "&Next >",ID_NEXT,176,159,52,15
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,8,151,
+                    272,1
+    CONTROL         111,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,8,7,79,137
+    LTEXT           "The following UnrealServers are available via DirectPlay.  Select the one you would like to join:",
+                    IDC_STATIC,90,12,188,19
+END
+
+IDD_INETPROVIDER DIALOGEX 0, 0, 284, 177
+STYLE WS_CHILD
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Sans Serif"
+BEGIN
+    PUSHBUTTON      "< &Back",ID_BACK,127,159,50,15
+    PUSHBUTTON      "Cancel",IDCANCEL,232,159,50,15
+    DEFPUSHBUTTON   "&Next >",ID_NEXT,176,159,52,15
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,9,151,
+                    272,1
+    CONTROL         111,IDC_STATIC,"Static",SS_BITMAP | SS_SUNKEN,9,7,79,137
+    LTEXT           "Enter the Internet address of the UnrealServer you wish to connect to.",
+                    IDC_STATIC,93,16,173,19
+    LTEXT           "Example: unreal://unreal.epicgames.com/",IDC_STATIC,92,
+                    38,149,10
+    EDITTEXT        IDC_HOST,92,48,186,14,ES_AUTOHSCROLL
+    LTEXT           "If you're looking for a list of UnrealServers on the Internet, and you have a Web browser installed, come visit Epic's Unreal directory:",
+                    IDC_STATIC,95,95,173,28
+    PUSHBUTTON      "Epic &Directory",IDC_DIRECTORY,95,124,59,14
+    PUSHBUTTON      "&Epic's UnrealServer",IDC_EPICSERVER,92,66,73,14
+END
+
+IDD_SERVERPROP DIALOGEX 0, 0, 286, 178
+STYLE WS_CHILD
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "< &Back",ID_BACK,127,159,50,15
+    PUSHBUTTON      "Cancel",IDCANCEL,232,159,50,15
+    DEFPUSHBUTTON   "&Launch",ID_NEXT,176,159,52,15
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,9,151,
+                    272,1
+    LTEXT           "Click on ""Configure"" if you need to change the server's configuration file.  This enables you to set advanced options which affect gameplay and other properties of UnrealServer.",
+                    IDC_STATIC,13,121,257,27
+    EDITTEXT        IDC_SERVERNAME,98,46,179,14,ES_AUTOHSCROLL
+    RTEXT           "Server Name:",IDC_STATIC,30,48,62,8
+    RTEXT           "Optional password:",IDC_STATIC,24,69,69,8
+    EDITTEXT        IDC_PASSWORD,98,67,180,14,ES_PASSWORD | ES_AUTOHSCROLL
+    RTEXT           "Game type:",IDC_STATIC,14,91,48,8
+    CONTROL         "Single-level:",IDC_LEVEL_SINGLE,"Button",
+                    BS_AUTORADIOBUTTON,69,91,52,11
+    CONTROL         "Multi-level (dedicated server; you can't play)",
+                    IDC_LEVEL_MULTI,"Button",BS_AUTORADIOBUTTON,69,105,158,
+                    11
+    EDITTEXT        IDC_LEVEL,124,89,135,13,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "...",IDC_LEVEL_FIND,264,90,13,11
+    LTEXT           "Now you must give your UnrealServer a name.  You may also give the server a password, which other players will be required to enter in order to join your server.  The password is optional.",
+                    IDC_STATIC,7,22,257,27
+    PUSHBUTTON      "&Configure",ID_CONFIGURE,8,159,50,15
+END
+
+IDD_LAUNCH DIALOGEX 0, 0, 284, 177
+STYLE WS_CHILD
+EXSTYLE WS_EX_NOPARENTNOTIFY
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "< &Back",ID_BACK,127,159,50,15
+    PUSHBUTTON      "Cancel",IDCANCEL,232,159,50,15
+    DEFPUSHBUTTON   "&Connect",ID_CONNECT,176,159,52,15
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,9,151,
+                    272,1
+    LTEXT           "Unreal is now ready to connect to:",IDC_STATIC,24,16,
+                    169,11
+    LTEXT           "Please enter your name or alias, which will be used to identify you when you connect to the UnrealServer.  If the server requires a password, enter it below.",
+                    IDC_STATIC,25,58,234,27
+    EDITTEXT        IDC_DEST,52,30,197,13,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "When you are ready to begin, click on ""Connect"":",
+                    IDC_STATIC,26,131,234,10
+    CONTROL         "Progress1",IDC_PROGRESS,"msctls_progress32",WS_BORDER,
+                    52,46,197,7
+    LTEXT           "Your Name or alias:",IDC_STATIC,38,92,70,11,0,
+                    WS_EX_RIGHT
+    LTEXT           "Server's password:",IDC_STATIC,37,108,70,11,0,
+                    WS_EX_RIGHT
+    EDITTEXT        IDC_NAME,116,90,134,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PSWD,116,106,134,13,ES_PASSWORD | ES_AUTOHSCROLL
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_DPLAYPROVIDERS, DIALOG
+    BEGIN
+        RIGHTMARGIN, 282
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_FAKEWIZARD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 283
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 172
+    END
+
+    IDD_NETWIZ, DIALOG
+    BEGIN
+        RIGHTMARGIN, 285
+        BOTTOMMARGIN, 177
+    END
+
+    IDD_JOINTYPE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 275
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_HOSTTYPE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 275
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_DPLAYSESSIONS, DIALOG
+    BEGIN
+        RIGHTMARGIN, 282
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_INETPROVIDER, DIALOG
+    BEGIN
+        RIGHTMARGIN, 275
+        BOTTOMMARGIN, 176
+    END
+
+    IDD_SERVERPROP, DIALOG
+    BEGIN
+        RIGHTMARGIN, 275
+        BOTTOMMARGIN, 177
+    END
+
+    IDD_LAUNCH, DIALOG
+    BEGIN
+        RIGHTMARGIN, 275
+        BOTTOMMARGIN, 174
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "..\\Res\\Unreal.ico"
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Epic MegaGames, Inc.\0"
+            VALUE "FileDescription", "Unreal Network Interface\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "UnrealNet\0"
+            VALUE "LegalCopyright", "Copyright © 1996\0"
+            VALUE "LegalTrademarks", "Unreal(tm), UnrealServer(tm)\0"
+            VALUE "OriginalFilename", "UnNet.dll\0"
+            VALUE "ProductName", "Epic MegaGames, Inc. Unreal Network Interface\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_NETWIZ              BITMAP  DISCARDABLE     "Res\\X_wix1.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_DESCRIPTION         "******** Unreal networking library text ********"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

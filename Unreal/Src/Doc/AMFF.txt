@@ -1,0 +1,319 @@
+/*=============================================================================
+  Galaxy sound system file format docs.
+  By: Carlo Vogelsang, Independent developer
+=============================================================================*/
+
+  ฤฤ- Internal revision no. 3.00แ -ฤฤฤ Last revision at 21:16 on 19-11-1995 -ฤฤ
+
+                ÛÛÛ฿฿ÛÛÛ ÛÛÛ฿ÛÛÛ ÛÛÛ    ÛÛÛ฿ÛÛÛ ÛÛÛ  ÛÛÛ ÛÛÛ ÛÛÛ
+                ÛÛÛ  ฿฿฿ ÛÛÛ ÛÛÛ ÛÛÛ    ÛÛÛ ÛÛÛ  ฿ÛÛÛÛ฿  ÛÛÛ ÛÛÛ
+                ÛÛÛ ÜÜÜÜ ÛÛÛÜÛÛÛ ÛÛÛ    ÛÛÛÜÛÛÛ    ÛÛ     ฿ÛÛÛ฿
+                ÛÛÛ  ÛÛÛ ÛÛÛ ÛÛÛ ÛÛÛ    ÛÛÛ ÛÛÛ  ÜÛÛÛÛÜ    ÛÛÛ
+                ÛÛÛÜÜÛÛÛ ÛÛÛ ÛÛÛ ÛÛÛÜÜÜ ÛÛÛ ÛÛÛ ÛÛÛ  ÛÛÛ   ÛÛÛ
+
+                                MUSIC SYSTEM 
+ 	           ADVANCED MODULE FILE FORMAT SPECIFICATION
+                     Copyright (c) 1993-95 Carlo Vogelsang
+
+
+  ฺฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฟ
+  ณÛฒฑ COPYRIGHT NOTICE ฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฑฒÛณ
+  รฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤด
+  ณ This doc. file, AMFF.DOC is Copyright (C) 1993-95 by Carlo Vogelsang.     ณ
+  ณ You may not copy, distribute,  duplicate or clone this file  in any form, ณ
+  ณ modified or non-modified without permission of the author.By unauthorized ณ
+  ณ copying this file you are violating laws and will be punished. So don't   ณ
+  ณ do that and let us all live in peace..                                    ณ
+  ณ                                                                     Carlo ณ
+  ภฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤู
+
+
+                                Legal disclaimer
+                                ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
+
+
+  Carlo Vogelsang makes no warranty of any kind, either express or implied about
+  this software or accompanied files/products. Carlo Vogelsang is not respons-
+  ible for any personal, financial or positional losses or profits resulting
+  from the use, posession or any other association with this product. Carlo
+  Vogelsang can not be liable for any damages or profits resulting from the use
+  of this software including damages for loss of business profits, loss of
+  information, damages to any type of being, financial loss or inability to use
+  this software. All trademarks used in this documentation are property of
+  their respective owners.
+
+
+                                  Introduction
+                                  ฤฤฤฤฤฤฤฤฤฤฤฤ
+
+
+  This is the Advanced Module File Format Specification used by the Galaxy
+  Music System v3.00แ. I know this is not a very compressed file format, it's
+  just basically a dump of the Player's internal variables. Ok, first of all
+  I have to explain some basics of this file format. This is a "chunked" file
+  format, the chunk system is originating from the amiga (IFF). Actually the
+  file just consists of "chunks" which each a unique name specifying its
+  contents and a chunk size, this allows for easy backwards compatibility.
+  Because old program versions will only process chunks with names they know,
+  unknown chunks will be ignored. So in future versions things can be added
+  without having to worry about backwards compatibility. All chunks will have
+  an eight byte header, the first four bytes will be the chunkname/identifier.
+  The next four bytes will form a DWord chunk length (stored Little-endian)
+
+
+                           File format specification
+                           ฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤฤ
+
+
+  Now a description of all currently defined chunk names will follow including
+  their contents. Please note that the chunks can be in ANY order so don't
+  assume anything about the chunk order, the order down below is just the most
+  common used one.
+
+  ChunkName :
+  ฤฤฤฤฤฤฤฤฤฤฤ
+
+ ีออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออธ
+ ณ  "AMFF"     	Advanced Module File Format ID Chunk.                         ณ
+ ณ 		This chunk contains the *entire* music file,                  ณ
+ ณ		thus allowing to skip the entire music file                   ณ
+ ณ		if needed.                                                    ณ
+ ิออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออพ
+
+ ีออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออธ
+ ณ "BASE"       Base information chunk :                                      ณ
+ ิออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออพ
+
+ 		Size	Type
+
+  		32	Bytes		ASCIIZ Songname padded with ASCII 0.
+  		32 	Bytes		ASCIIZ Authorname padded with ASCII 0.
+                 1	Byte		Number of channels needed for music
+                 			stored, valid values range from 1..32.
+                 1	Byte		Initial speed value, should be loaded
+                 			at row zero of order zero.
+		 1	Byte		Initial tempo value, should be loaded
+		 			at row zero of order zero.
+		 1	Byte		Master volume, logarithmically affects
+		 			each channel's volume, valid values
+		 			range from 0..128.
+                 1      Byte		Song information :
+
+				           &1  = Logarithmic period-system.
+				                 Else Linear period-system
+				                 with 768 units per octave.
+
+                XX      Bytes           Panning data, for each channel needed
+                                        in the music there's a byte stating
+                                        what the channel's initial pan-position
+                			should be. Currently valid values range
+                			from 0 (Left) 'till 15 (Right) the
+                			remaining 4 bits are reserved, don't
+                  			make any assumptions on their values.
+
+ ีออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออธ
+ ณ "ORDR"	Pattern order chunk :                                         ณ
+ ิออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออพ
+
+ 		Size	Type
+
+  		 1	Byte		Number of orders saved, base zero. This
+                                        value is also know as the Songlength-1,
+  		 			please note that this value is base zero
+  		 			this to avoid the problem of saving
+  		 			zero-length songs.
+
+                XX	Bytes		Pattern orders, for each order there's
+                			a byte indicating the pattern number,
+                			base zero, that should be played.
+
+ ีออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออธ
+ ณ "PATT"	Pattern data chunk :                                          ณ
+ ิออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออพ
+
+ 		Size	Type
+
+		 1 	Byte		Pattern number of pattern saved, this
+		 			value is again base zero.
+
+		 1	DWord		Pattern size, because the patterns are
+					compressed you will need to know it's
+					compressed size, this is the same
+					number as bytes stored in the file.
+
+		 1	Byte		Number of rows in pattern, base zero.
+		 			This value states how many rows this
+		 			pattern consists of, thus any pattern
+		 			length ranging from 1..256 is allowed.
+
+		XX	Bytes		Pattern data, compressed ofcourse :
+
+					 Flag  1  Byte  :
+
+                                         &128 = Command info present (1 BYTE)
+                                                Command present	     (1 BYTE)
+					  &64 = Instrument present   (1 BYTE)
+                                                Note present	     (1 BYTE)
+					  &32 = Volume present 	     (1 BYTE)
+					  &31 = Channel number
+					    0 = End of row
+
+                                          So for each channel there's a Flag
+                                          which states what is following for
+                                          which channel or marks an end of row.
+                                          As you can see the sequence seems a
+                                          little strange (command before note)
+                                          but this is done for easier implemen-
+                                          tation in the player.
+
+                                          A couple of comments on the values
+                                          for the separate items :
+
+                                            Command range 0..15
+                                            Command info range 0..255
+                                            Note range 0..96 (0=No change)
+                                            		     (&128=Key off)
+                                            Ins. range 0..64 (0=No change)
+                                            Volume range 0..64
+
+ ีออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออธ
+ ณ "INST"		Instrument data chunk :                               ณ
+ ิออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออพ
+
+ 		Size	Type
+
+ 		  1	Byte		Instrument number of instrument saved,
+ 		 			base zero. Valid values range from 0..63
+
+		 28	Bytes		ASCIIZ Instrument name padded with
+		 			ASCII 0.
+
+		 96	Bytes		Split point definitions, for eight
+		 			octaves. Thus a byte is reserved for
+					each note, this byte will hold the
+					sample number to be used for the
+					corresponding note. Valid values range
+					from 0..255.
+
+                  1	Byte		Number of different samples used :
+
+                   			 &128 = Instrument used in song
+                   			 &127 = Samples used by instrument
+
+		  1     Byte            Volume & panning envelope information :
+
+                                         &128 = Reserved for future/internal
+                                          &64 = Panning envelope looping
+                                          &32 = Panning envelope sustain
+                  		          &16 = Panning envelope
+                                           &8 = Reserved for future/internal
+                                           &4 = Volume envelope looping
+                                           &2 = Volume envelope sustain
+                                           &1 = Volume envelope
+
+		  1	Byte		Volume & panning envelope size :
+
+                                         Upper nibble = Panning envelope points
+                                         Lower nibble = Volume envelope points
+
+		  1	Byte		Volume & panning envelope sustain :
+
+                                         Upper nibble = Panning sustain point
+                                         Lower nibble = Volume sustain point
+
+		  1 	Byte		Volume & panning envelope loop start :
+
+                                         Upper nibble = Panning loopstart point
+                                         Lower nibble = Volume loopstart point
+
+		  1	Byte		Volume & panning envelope loop end :
+
+		  			 Upper nibble = Panning loop end point
+ 		  			 Lower nibble = Volume loop end point
+
+                 36	Bytes		12 volume envelope points :
+
+                                          1 Word envelope time (1/50th sec.)
+                                          1 Byte envelope volume (0..64)
+
+                 24	Bytes		8 panning envelope points :
+
+                                          1 Word envelope time (1/50th sec.)
+                                          1 Byte envelope panning (0..64)
+
+		  1     Word  		Fade out volume step (range 0..64*256):
+
+                                          Substract each 1/50th sec. from
+                                          initial fade out volume of 16384.
+
+ ีออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออธ
+ ณ "SAMP"	Sample data chunk :                                           ณ
+ ิออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออออพ
+
+ 		Size	Type
+
+  		  1	Byte		Sample number of sample saved, base zero
+  		  			Valid values range from 0..255.
+
+		 28	Bytes		ASCIIZ Sample name padded with ASCII 0.
+
+		  1	Byte		Sample default panning position,
+                                        use in conjunction with Type byte.
+                			Currently valid values range from 0
+                			(Left) 'till 15 (Right) the remaining
+                			4 bits are reserved, don't make any
+                                        assumptions about their values.
+
+	          1	Byte		Sample default volume, valid values
+	          			range from 0..64. Thus allowing	for 64
+	          			volume levels and one additional mute
+	          			step.
+
+		  1	Byte		Sample type defined as follows :
+
+				           &1  = Delta sample
+ 					   &2  = Unsigned sample
+ 					   &4  = Sixteen bit sample
+					   &8  = Looped sample
+ 					  &16  = Bidirectional looped sample
+ 				          &32  = Sample has default panning pos.
+                                          &64  = Stereo sample
+                                         &128  = Reserved (Used for crunching)
+
+		  1	Byte            Reserved for future/internal use.
+
+                  1	DWord           Sample length in SAMPLES, so this number
+                  			has to be multiplied by two for 16 bit
+                  			data and also for stereo data.
+
+		  1	DWord		Sample loop starting point in SAMPLES,
+                  			this value may NOT exceed the sample
+                  			length.
+
+                  1	DWord		Sample loop ending point in SAMPLES,
+                                        this value may NOT exceed the sample
+                                        length nor be lower than the sample
+                                        loop starting point.
+
+		  1	DWord		Sample Central C (C-4) Replay speed in
+		  			SAMPLES per second (Hz).
+
+		 XX	Bytes		Sample data, maybe stored in ANY way
+                                        allowed by the type byte. Most of time
+                                        it will stored as 8 or 16 bit signed
+                                        delta encoded samples.
+
+
+                                   Contacting
+                                   ฤฤฤฤฤฤฤฤฤฤ
+
+
+  If you want to contact the author of the Galaxy Music System for suggestions,
+  bug reports etc. You can use one of the ways mentioned below :
+
+  Snail-mail :           Telephone :		InterNet:
+
+  Carlo Vogelsang	 Carlo Vogelsang 	k.c.vogelsang@student.utwente.nl
+  Witbreuksweg 377-309   +31-(0)53-4311187
+  7522 ZA Enschede       Please call between
+  The netherlands        10:00 and 22:00 CET!

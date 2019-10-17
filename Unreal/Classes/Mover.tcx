@@ -1,0 +1,160 @@
+'
+' Mover
+'
+
+DeclareClass Name=Mover
+
+Begin Class Name=Mover
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class Mover Expands Root Intrinsic
+
+' How the mover should react when it bumps into an actor
+EnumDef EMoverBumpType = MB_StopWhenBump, MB_ReturnWhenBump, _
+   MB_CrushWhenBump
+
+' How the mover should respond to Trigger/UnTrigger/Touch/UnTouch
+EnumDef EMoverTriggerType = MT_None, MT_TriggerOpenTimed, MT_TriggerToggle, _
+   MT_TriggerControl, MT_TriggerCycleOn, MT_TriggerCycleOff, MT_TriggerInstant, _
+   MT_ProximityOpenTimed, MT_ProximityControl, _
+   MT_StandOpenTimed
+
+' How the mover moves from one position to the other
+EnumDef EMoverGlideType = MV_MoveByTime, MV_GlideByTime, MV_Sinusoid
+
+Dim MoverBumpType as Editable EMoverBumpType
+Dim MoverTriggerType as Editable EMoverTriggerType
+Dim MoverGlideType as Editable EMoverGlideType
+Dim KeyNum as Editable Byte
+Dim WorldRaytraceKey as Editable Byte
+Dim BrushRaytraceKey as Editable Byte
+Dim PrevKeyNum as Byte
+Dim MoverTime as Editable Integer
+Dim RemainOpenTime as Editable Integer
+Dim BumpPlayerDamage as Editable Real
+Dim bCanInterruptMove as Editable Boolean
+Dim bSlave as Editable Boolean
+Dim bTrigger as Editable Boolean
+Dim bAdded as Boolean
+Dim bMoving as Boolean
+Dim bReverseWhenDone as Boolean
+Dim bDynamicShadows as Boolean
+Dim bTriggerOnceOnly as Editable Boolean
+
+Dim OpenSound as Editable Sound ' When hit full-open position
+Dim ClosedSound as Editable Sound ' When hit full-closed position
+Dim MoveAmbientSound as Editable Sound ' Ambient sound when moving
+
+'
+' Array of 4 keyframe offsets:
+'
+Dim KeyPos (4) as Vector
+Dim KeyRot (4) as Rotation
+Dim FreeRotation as Editable Rotation
+
+' Base absolute location and rotation
+Dim BasePos as Vector,   OldPos as Vector
+Dim BaseRot as Rotation, OldRot as Rotation
+
+' Movement parameters
+Dim CurTime as Integer
+Dim HoldTime as Integer
+Dim Slaves(16) as Actor
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Mover
+		Begin Brush Name=MoverDefaultBrush
+		 Settings  CSG=0 Flags=64 PolyFlags=0 Color=0
+		 Location  +00208.000000,-00384.000000,+00000.000000
+		 PrePivot  +00000.000000,+00000.000000,+00000.000000
+		 PostPivot +00000.000000,+00000.000000,+00000.000000
+		 Scale     X=+00001.000000 Y=+00001.000000 Z=+00001.000000 S=+00000.000000 AXIS=5
+		 PostScale X=+00001.000000 Y=+00001.000000 Z=+00001.000000 S=+00000.000000 AXIS=5
+		 Rotation  0,0,0
+		 Begin PolyList Num=6 Max=6
+			Begin Polygon Group=RECT Item=OUTSIDE Link=0
+			   Origin   -00016.000000,-00064.000000,+00128.000000
+			   Normal   +00000.000000,+00000.000000,+00001.000000
+			   TextureU +00000.000000,+00001.000000,+00000.000000
+			   TextureV -00001.000000,+00000.000000,+00000.000000
+			   Vertex   -00016.000000,-00064.000000,+00128.000000
+			   Vertex   +00016.000000,-00064.000000,+00128.000000
+			   Vertex   +00016.000000,+00064.000000,+00128.000000
+			   Vertex   -00016.000000,+00064.000000,+00128.000000
+			End Polygon
+			Begin Polygon Group=RECT Item=OUTSIDE Link=1
+			   Origin   -00016.000000,+00064.000000,-00128.000000
+			   Normal   +00000.000000,+00000.000000,-00001.000000
+			   TextureU +00000.000000,-00001.000000,+00000.000000
+			   TextureV -00001.000000,+00000.000000,+00000.000000
+			   Vertex   -00016.000000,+00064.000000,-00128.000000
+			   Vertex   +00016.000000,+00064.000000,-00128.000000
+			   Vertex   +00016.000000,-00064.000000,-00128.000000
+			   Vertex   -00016.000000,-00064.000000,-00128.000000
+			End Polygon
+			Begin Polygon Group=RECT Item=OUTSIDE Link=2
+			   Origin   -00016.000000,+00064.000000,-00128.000000
+			   Normal   +00000.000000,+00001.000000,+00000.000000
+			   TextureU +00001.000000,+00000.000000,+00000.000000
+			   TextureV +00000.000000,+00000.000000,-00001.000000
+			   Vertex   -00016.000000,+00064.000000,-00128.000000
+			   Vertex   -00016.000000,+00064.000000,+00128.000000
+			   Vertex   +00016.000000,+00064.000000,+00128.000000
+			   Vertex   +00016.000000,+00064.000000,-00128.000000
+			End Polygon
+			Begin Polygon Group=RECT Item=OUTSIDE Link=3
+			   Origin   +00016.000000,-00064.000000,-00128.000000
+			   Normal   +00000.000000,-00001.000000,+00000.000000
+			   TextureU -00001.000000,+00000.000000,+00000.000000
+			   TextureV +00000.000000,+00000.000000,-00001.000000
+			   Vertex   +00016.000000,-00064.000000,-00128.000000
+			   Vertex   +00016.000000,-00064.000000,+00128.000000
+			   Vertex   -00016.000000,-00064.000000,+00128.000000
+			   Vertex   -00016.000000,-00064.000000,-00128.000000
+			End Polygon
+			Begin Polygon Group=RECT Item=OUTSIDE Link=4
+			   Origin   +00016.000000,+00064.000000,-00128.000000
+			   Normal   +00001.000000,+00000.000000,+00000.000000
+			   TextureU +00000.000000,-00001.000000,+00000.000000
+			   TextureV +00000.000000,+00000.000000,-00001.000000
+			   Vertex   +00016.000000,+00064.000000,-00128.000000
+			   Vertex   +00016.000000,+00064.000000,+00128.000000
+			   Vertex   +00016.000000,-00064.000000,+00128.000000
+			   Vertex   +00016.000000,-00064.000000,-00128.000000
+			End Polygon
+			Begin Polygon Group=RECT Item=OUTSIDE Link=5
+			   Origin   -00016.000000,-00064.000000,-00128.000000
+			   Normal   -00001.000000,+00000.000000,+00000.000000
+			   TextureU +00000.000000,+00001.000000,+00000.000000
+			   TextureV +00000.000000,+00000.000000,-00001.000000
+			   Vertex   -00016.000000,-00064.000000,-00128.000000
+			   Vertex   -00016.000000,-00064.000000,+00128.000000
+			   Vertex   -00016.000000,+00064.000000,+00128.000000
+			   Vertex   -00016.000000,+00064.000000,-00128.000000
+			End Polygon
+		 End PolyList
+		End Brush
+	  Brush=MoverDefaultBrush
+      CollisionRadius=+000160.000000
+      CollisionHeight=+000160.000000
+      bCollideActors=True
+      bTemplateClass=False
+	  bCanInterruptMove=True
+	  MoverTime=35
+	  DrawType=3
+	  RemainOpenTime=140
+	  MoverBumpType=1
+	  MoverTriggerType=7
+	  MoverGlideType=1
+      KeyName(0)=None
+      KeyName(1)=None
+      KeyName(2)=None
+      KeyName(3)=None
+	  DefaultEdCategory=Mover
+   End DefaultProperties
+End Class
+

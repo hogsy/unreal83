@@ -1,0 +1,113 @@
+'==========================================================='
+'              Internal Unreal Engine classes               '
+'==========================================================='
+
+Begin Class Name=Level
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Level class.  Defines all properties of a level.
+'
+Class Level Intrinsic
+
+' Enums
+EnumDef ELevelState = LEVEL_Down, LEVEL_UpPlay, LEVEL_UpEdit
+
+' Class:
+Dim Class as Const Editable Class
+
+' State:
+Dim LevelState as ELevelState
+
+' Text:
+Dim LevelTitle as Editable String(32)
+Dim Creator as Editable String(32)
+Dim Project as Editable String(32)
+Dim ReleaseStatus as Editable String(32)
+Dim EnterMessage as Editable String(32)
+
+' Physics:
+Dim Gravity as Editable Vector
+
+' Time:
+Dim Ticks as Integer
+Dim Hours as Integer
+Dim Minutes as Integer
+Dim Seconds as Integer
+Dim TimeRate as Float
+
+' Acoustic:
+Dim AmbientSong as Editable Sound
+
+' Backdrop:
+Dim BackdropTex(3) as Editable Texture
+Dim BackdropRate(3) as Editable Integer
+Dim UPan(3) as Editable Float
+Dim VPan(3) as Editable Float
+Dim Wavyness(3) as Editable Float
+Dim Masked(3) as Editable Byte
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Level
+   End DefaultProperties
+End Class
+
+Begin Class Name=Texture
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' Texture class.  Defines all properties of a level.
+'
+Class Texture Intrinsic
+
+Enum ESpecialPalette = P_Fire, P_WavyFire, P_Lightning, P_Electricity, _
+	P_Smoke, P_Unused1, P_Unused2, P_Unused3
+
+' Class:
+Dim Class as Const Editable Class
+
+' State:
+Dim LevelState as ELevelState
+
+' Text:
+Dim LevelTitle as Editable String(32)
+Dim Creator as Editable String(32)
+Dim Project as Editable String(32)
+Dim ReleaseStatus as Editable String(32)
+Dim EnterMessage as Editable String(32)
+
+' Physics:
+Dim Gravity as Editable Vector
+
+' Time:
+Dim Ticks as Integer
+Dim Hours as Integer
+Dim Minutes as Integer
+Dim Seconds as Integer
+Dim TimeRate as Float
+
+' Acoustic:
+Dim AmbientSong as Editable Sound
+
+' Backdrop:
+Dim BackdropTex(3) as Editable Texture
+Dim BackdropRate(3) as Editable Integer
+Dim UPan(3) as Editable Float
+Dim VPan(3) as Editable Float
+Dim Wavyness(3) as Editable Float
+Dim Masked(3) as Editable Byte
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Level
+   End DefaultProperties
+End Class
+
+'
+' Also need:
+' Sound
+' Ambient
+' Vector
+' Rotation
+'

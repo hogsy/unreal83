@@ -1,0 +1,141 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+; Classes.mac
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; This is an UnrealEd macro which imports all of the actor class definition
+; files and the resources associated with them.  The resources must be 
+; imported first so that they can be matched to the appropriate references
+; by name in the .tcx class definitions.
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+; Import all sounds:
+;
+; Pawn sounds:
+AUDIO IMPORT FILE="..\Sounds\Pawns\BIGMAN1.ufx"  NAME="BIGMAN1"  FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\BIGMAN2.ufx"  NAME="BIGMAN2"  FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\BIGMAN3.ufx"  NAME="BIGMAN3"  FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\BIGMANH.ufx"  NAME="BIGMANH"  FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\BIGMANH2.ufx" NAME="BIGMANH2" FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\FGRUNT2.ufx"  NAME="FGRUNT2"  FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\FGRUNT3.ufx"  NAME="FGRUNT3"  FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\FSCRM1.ufx"   NAME="FSCRM1"   FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\FYELL1.ufx"   NAME="FYELL1"   FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\GROWL.ufx"    NAME="GROWL"    FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\MANTA2.ufx"   NAME="MANTA2"   FAMILY="Pawns"
+AUDIO IMPORT FILE="..\Sounds\Pawns\WHOOSH.ufx"   NAME="WHOOSH"   FAMILY="Pawns"
+; Weapon sounds:
+AUDIO IMPORT FILE="..\Sounds\Weapons\AUTOMAG.ufx" NAME="AUTOMAG" FAMILY="Weapons"
+AUDIO IMPORT FILE="..\Sounds\Weapons\NAILGUN.ufx" NAME="NAILGUN" FAMILY="Weapons"
+AUDIO IMPORT FILE="..\Sounds\Weapons\NEWQUAD.ufx" NAME="NEWQUAD" FAMILY="Weapons"
+AUDIO IMPORT FILE="..\Sounds\Weapons\QUADRLN.ufx" NAME="QUADRLN" FAMILY="Weapons"
+
+;
+; Import all models:
+;
+MACRO PLAY NAME=TempModels FILE=..\Models\Models.mac
+
+;
+; Import all textures:
+;
+; Status bar textures:
+TEXTURE IMPORT FILE="..\Textures\StatBar\shell.pcx"     NAME="StatShel" FAMILY="!StatusBar" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\StatBar\clip.pcx"      NAME="StatClip" FAMILY="!StatusBar" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\StatBar\tarydium.pcx"  NAME="StatTary" FAMILY="!StatusBar" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+; Wall hit textures:
+TEXTURE IMPORT FILE="..\Textures\WallHits\bllt0001.pcx"  NAME="bllt0001" FAMILY="!WallHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\WallHits\bllt0002.pcx"  NAME="bllt0002" FAMILY="!WallHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\WallHits\bllt0003.pcx"  NAME="bllt0003" FAMILY="!WallHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\WallHits\bllt0004.pcx"  NAME="bllt0004" FAMILY="!WallHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\WallHits\bllt0005.pcx"  NAME="bllt0005" FAMILY="!WallHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\WallHits\bllt0006.pcx"  NAME="bllt0006" FAMILY="!WallHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\WallHits\bllt0007.pcx"  NAME="bllt0007" FAMILY="!WallHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\WallHits\bllt0008.pcx"  NAME="bllt0008" FAMILY="!WallHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+; Pawn hit textures:
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0001.pcx"  NAME="blud0001" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0002.pcx"  NAME="blud0002" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0003.pcx"  NAME="blud0003" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0004.pcx"  NAME="blud0004" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0005.pcx"  NAME="blud0005" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0006.pcx"  NAME="blud0006" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0007.pcx"  NAME="blud0007" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0008.pcx"  NAME="blud0008" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\PawnHits\blud0009.pcx"  NAME="blud0009" FAMILY="!PawnHits" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+; Explosion textures:
+TEXTURE IMPORT FILE="..\Textures\Explode\ex0.pcx"  NAME="ex0" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\ex1.pcx"  NAME="ex1" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\ex2.pcx"  NAME="ex2" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\ex3.pcx"  NAME="ex3" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\ex4.pcx"  NAME="ex4" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\ex5.pcx"  NAME="ex5" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\ex6.pcx"  NAME="ex6" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\ex7.pcx"  NAME="ex7" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\exp1.pcx"  NAME="exp1" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\exp2.pcx"  NAME="exp2" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\exp3.pcx"  NAME="exp3" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\exp4.pcx"  NAME="exp4" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\exp5.pcx"  NAME="exp5" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\exp6.pcx"  NAME="exp6" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\exp7.pcx"  NAME="exp7" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\exp8.pcx"  NAME="exp8" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0000.pcx"  NAME="expl0000" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0001.pcx"  NAME="expl0001" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0002.pcx"  NAME="expl0002" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0003.pcx"  NAME="expl0003" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0004.pcx"  NAME="expl0004" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0005.pcx"  NAME="expl0005" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0006.pcx"  NAME="expl0006" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0007.pcx"  NAME="expl0007" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0008.pcx"  NAME="expl0008" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Explode\expl0009.pcx"  NAME="expl0009" FAMILY="!Explosions" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+; Miscellaneous textures:
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0000.pcx"  NAME="frbl0000" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0001.pcx"  NAME="frbl0001" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0002.pcx"  NAME="frbl0002" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0003.pcx"  NAME="frbl0003" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0004.pcx"  NAME="frbl0004" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0005.pcx"  NAME="frbl0005" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0006.pcx"  NAME="frbl0006" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0007.pcx"  NAME="frbl0007" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0008.pcx"  NAME="frbl0008" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0009.pcx"  NAME="frbl0009" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0010.pcx"  NAME="frbl0010" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0011.pcx"  NAME="frbl0011" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0012.pcx"  NAME="frbl0012" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0013.pcx"  NAME="frbl0013" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0014.pcx"  NAME="frbl0014" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0015.pcx"  NAME="frbl0015" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0016.pcx"  NAME="frbl0016" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0017.pcx"  NAME="frbl0017" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0018.pcx"  NAME="frbl0018" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\frbl0019.pcx"  NAME="frbl0019" FAMILY="!FireBall" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+
+TEXTURE IMPORT FILE="..\Textures\Misc\flsh0001.pcx"  NAME="flsh0001" FAMILY="!MuzzleFlashes" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\flsh0002.pcx"  NAME="flsh0002" FAMILY="!MuzzleFlashes" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\flsh0003.pcx"  NAME="flsh0003" FAMILY="!MuzzleFlashes" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\flsh0004.pcx"  NAME="flsh0004" FAMILY="!MuzzleFlashes" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+TEXTURE IMPORT FILE="..\Textures\Misc\flsh0005.pcx"  NAME="flsh0005" FAMILY="!MuzzleFlashes" MIPS=off PALDIFFUSION=0.50 FLAGS=2
+
+;
+; Import all Unreal actor classes:
+;
+CLASS LOAD FILE=..\Classes\Root.tcx
+CLASS LOAD FILE=..\Classes\Projecti.tcx
+CLASS LOAD FILE=..\Classes\Pawn.tcx
+CLASS LOAD FILE=..\Classes\Light.tcx
+CLASS LOAD FILE=..\Classes\KeyPoint.tcx
+CLASS LOAD FILE=..\Classes\Mover.tcx
+CLASS LOAD FILE=..\Classes\Inventor.tcx
+CLASS LOAD FILE=..\Classes\Trigger.tcx
+CLASS LOAD FILE=..\Classes\Decorati.tcx
+CLASS LOAD FILE=..\Classes\Pyrotech.tcx
+CLASS LOAD FILE=..\Classes\Explosio.tcx
+CLASS LOAD FILE=..\Classes\ZoneDesc.tcx
+
+;
+; Save all Unreal classes in Unreal.ucx.  This automatically
+; saves all of the Meshes and MeshMaps associated with the 
+; classes:
+;
+CLASS SAVEBELOW NAME=Root FILE=..\Classes\Root.ucx
+CLASS SAVEBELOW NAME=Root FILE=..\Classes\Root.h

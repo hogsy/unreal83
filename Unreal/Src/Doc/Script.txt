@@ -1,0 +1,629 @@
+/*=============================================================================
+	Script.txt: UnrealScript documentation and samples
+	By: Tim Sweeney, Epic MegaGames, Inc.
+	Status: Early, unfinished!
+=============================================================================*/
+
+***************
+* Conventions *
+***************
+
+The following conventions are used for describing code and syntax in the 
+document:
+
+	<variable name>		The name of a variable
+	<variable type>		A variable type
+	<integer>			An integer value
+	<real>				A floating-point value
+	<command>			A script command
+	<modifier>			A variable type modifier
+	<classname>			The name of an actor class>
+	<expression>		An arithmetic or string expression, like 123.0, or (A+B)*2
+	<function name>		The name of a function
+	<event name>		The name of an event
+
+	...					Indicates that a function or declaration can take 
+						multiple items separated by spaces
+
+	,...				Indicates that a function or declaration can take 
+						multiple items separated by commas
+
+	[parameter]			A parameter enclosed in []'s is optional
+
+	'					Everything following a ' character is a comment
+	_					The line continuation character
+
+*****************
+* Script layout *
+*****************
+
+UnrealScripts are laid out as follows:
+
+1. The class definition ("Class MyClass expands ParentClass")
+2. Global variable definitions ("Dim X as Integer")
+3. Functions and event handlers
+
+Here is a very simple example script:
+
+	Class Minotaur Expands Pawn ' Names the class, says what class it's based on
+
+	Dim Counter as Integer
+	Dim B as Byte
+
+	Function Squared(N as Integer) as Integer
+		Return N*N ' A sample function to return the square of a number
+	EndFunction
+
+	State Wandering Default
+		When SeePlayer(Player as Actor)
+			Target = Player ' Set the player as the minotaur's target
+			SpawnProjectileAt(Fireball, Target) ' Shoot a fireball at the target
+		EndWhen
+	EndState
+
+************
+* Commands *
+************
+
+Class <this classname> Expands <parent classname> [Intrinsic]
+
+	Example:
+		Class RedDragon Expands Dragon
+
+	Defines the name of the script's class, and the parent class it's based on.
+	This command must appear at the top of a script, before any other commands.
+	When you define a new class, the class automatically inherets all of the
+	functionality (variables, states, and functions) of its parent.  This enables
+	you to create simple but highly-functional scripts that only define the
+	actions that are unique to the new actor class.  For example, you don't have 
+	to say how the RedDragon wanders around, attacks, dies, and handles all of 
+	those specific actions if you don't want to.
+
+	"Intrinsic" classes are classes that are built into Unreal and are unmodifiable.
+	These classes are usually programmed in C++ rather than UnrealScript; you 
+	can't declare them yourself.
+
+Dim <variable name>[(<integer dimension>)] as [<modifier> ...] <variable type>, ...
+
+	Examples:
+		Dim MyNumber as Integer				' Declares a variable of type integer
+		Dim Editable Message as String(32)	' Declares an editable variable of type string
+		Dim A as Byte, B as Byte, C as Byte	' Declares three separate byte variables
+		Dim MyArray(10)						' Declares an array of 10 elements
+
+	Declares a new variable of a certain type.  You can use the variable throughout
+	your script to hold useful values, etc.
+
+	Variables can be used in two different ways:
+
+		* Global variables (variables that you declare at the top of your script,
+		  immediately after the class definition).  These are available to all
+		  code in your script, and they retain their values for as long as the
+		  actor lives.
+
+		* Local variables (variables that you declare inside of a function).  These
+		  are only available within the function where you declare them, and they
+		  lose their values as soon as the function returns.
+
+	You can use any of the following variable types in UnrealScript:
+
+		Category	Variable type	Description
+		----------- --------------- ---------------------------------------------------
+		Simple		Byte			A whole number from 0 to 255
+					Integer			A whole number from –2,147,483,648 to 2,147,483,647
+					Boolean			A value of 0 (false) or 1 (true)
+					Real			A 32-bit floating-point number
+
+		Compound	Name			An actor name or tag name
+					String(size)	A string of variable length
+					Vector			A vector with floating point X, Y, and Z components
+					Rotation		A rotation with integer Pitch, Yaw, and Roll components
+					Actor			A reference to an actor in the world
+
+		Resources	TextBuffer		A block of text
+					Texture			A texture map
+					Palette			A 256-color palette
+					Class			An actor class
+					Sound			A sound effect
+					Ambient			A continuous ambient sound (music, or a looping sound)
+					MeshMap			A texture-mapped creature or object mesh
+					Model			A solid brush
+					Player			A logged-in, human player
+
+		Enums		User-definable enumerated types
+
+	You can use the following type modifiers to change the properties of a variable
+	when you declare it:
+
+		Type modifier		Description
+		------------------- ---------------------------------------------------------
+		Private				A private variable - can't be accessed by child classes
+		NoSave				For resource variables only - resource must not be saved
+		Editable			The property can be edited in UnrealEd
+		ExportResource		For resource variables only - export the resource with the actor
+
+Const <constant name>
+
+<variable name> = <expression>
+
+	Examples:
+		MyNumber = 123
+		A = A + 12
+		Message = "You picked up a shotgun"
+		B = (C+D)/2 + Square(C)
+
+	Assigns a new value to a variable.
+
+Function <function name>(<variable declaration>,...) [as <type>] [Intrinsic] [Fast] 
+
+	Example:
+		Function Square(X as Integer) as Integer ' Return the square of a number X
+			Return X*X
+		EndFunction
+
+	Declares a function, which may optionally take variables as parameters, perform 
+	some action or computation, and return a value.
+
+	A function can take zero or more parameters, which can be any type of variable.
+	If a function takes no parameters, do something like this:
+
+		Function DoSomething() as Integer
+			' Code goes here...
+			Return 1234 ' Return some integer value
+		EndFunction
+
+	A function without parameters can be called like this:
+
+		Dim X as Integer
+		X = DoSomething
+
+	If a function returns no value, do this:
+
+		Function DoSomething(X as Real, S as String)
+		EndFunction
+
+	You can call a function that returns no value like this:
+
+		DoSomething(100.0,"A String")
+
+	Functions are useful for computing things, changing variables, and performing
+	actions which take no game time.
+
+	"Intrinsic" functions are functions that are built into Unreal and are unmodifiable.
+	These functions are programmed in C++ rather than UnrealScript for speed; you 
+	can't declare them yourself.
+
+	If you're writing a function that you don't need to be overridden in state blocks,
+	event blocks, or child classes, declare it as "Fast".  This enables the function to
+	be executed more rapidly than functions which are overridable.
+
+Operator <operator name> (<variable declaration>,...) [as <type>] [Intrinsic] [Fast]
+
+	Example:
+		Operator + (A as Integer, B as Integer) as Integer
+		Operator Not (A as Integer) as Integer
+
+For <variable> = <integer expression> To <integer expression> [Step <integer expression>]
+Next [<variable>]
+
+While <boolean expression> / Repeat
+EndWhile / Until <boolean expression>
+
+Break
+Continue
+
+Goto?
+
+When <event>
+EndWhen
+
+[Default] [Editable] State <statename>
+EndState
+
+********************************
+* UnrealScript Execution Model *
+********************************
+
+	An UnrealServer is a fast PC on a network that Unreal players can connect to.
+	The server controls all gameplay and interaction between players and actors.
+
+	A server can run many maps (also called levels) simultaneously.
+
+	Each map can contain many actors.
+
+	Actors in a map are confined to that map and can only be aware of events 
+	occuring in that map; actors can't see into other maps or interact with other
+	maps.
+
+	Each actor in a map can either be under player control (there can be many players
+	in a network game) or under script control.  When an actor is under script control,
+	its script completely defines how the actor moves and interacts with other actors.
+
+	With all of those actors running around, scripts executing, and events occuring in
+	the world, you're probably asking how one can understand the flow of execution in
+	an UnrealScript.  The answer is as follows:
+
+	* To manage time, Unreal divides each second of gameplay into 35 "Ticks".
+	  A tick is the smallest unit of time which UnrealScripts can deal with. Some commands
+	  in Unreal take zero ticks (i.e. they execute without any game time passing), and others
+	  take many ticks.
+
+	* When a script uses a command which takes more than one tick, that script's execution
+	  doesn't continue until the command is finished.  For example, the following piece
+	  of code takes 10 ticks to execute:
+		
+		SpawnProjectileAt(Fireball, Target) ' Shoot a fireball at our target
+		Delay(5)							' Wait for 5 ticks
+		SpawnProjectileAt(Fireball, Target) ' Shoot another fireball at our target
+		Delay(5)							' Wait for 5 more ticks
+
+	* All UnrealScripts execute in parallel.  If there are 100 monsters walking around
+	  in a level, all 100 of those monsters' scripts are executing simultaneously
+	  and independently.
+
+	* When a script it notified of an event (for example, being shot or running into
+	  a wall), the script's execution can either be interrupted, queued up for later
+	  execution, or the script can ignore the event and continue on, depending on the 
+	  use of the Hold/Lock/Unlock commands.  This enables you to control script execution
+	  precisely in a complex environment.
+
+	* Functions that you declare as "Public" are a special case and can be called
+      by other scripts even when the script is busy performing some action.  For this
+	  reason, you must design public functions carefully so that they don't interfere with
+	  your other code in unintended ways.  Functions also must be designed to execute in
+	  zero ticks, so they are not allowed to use commands which take time.
+
+************************
+* Functions vs. Events *
+************************
+
+Functions can be called with parameters and can optionally return a value.  Functions must
+execute in zero ticks.
+	
+***************
+* Definitions *
+***************
+
+Actor: A monster, item, player, lightsource, or other moving entity in a level.
+Class: Each actor belongs to one and only one class; the class defines the actor's behaviour.
+Destroy: To remove an existing actor from a map.
+Editable: An actor property (variable) that can be adjusted from within UnrealEd.
+Event: A piece of script code which reacts to a message and can execute in variable-time.
+Function: A piece of script code that executes in zero-time and can return a value.
+Intrinsic: A function or actor class that is built into Unreal and can't be modified.
+Level: See "Map".
+Map: See "Level".
+Pawn: The actor class that contains all players and monsters which can be controlled by players.
+Player: A human participant in a game, who controls one actor.
+Real Number (also known as Floating Point Number):
+Root: The parent class of all classes in Unreal. Defines default properties and behaviours for all actors.
+Script: A bunch of text that tells an actor how to behave.
+Server: A computer that's set up to host a multiplayer game of Unreal.
+Spawn: To create a new actor.
+String: A kind of variable which can contain text.
+Tick: The smallest unit of time Unreal recognizes. There are 35 ticks in a second.
+UnrealScript: The scripting language built into Unreal.
+Variable: Actors can contain variables, which their scripts can read and modify.
+Variable-time: A command that takes more than one tick to execute.
+Zero-time: A command that executes in zero ticks.
+
+******************************
+* Automatic type conversions *
+******************************
+
+	Source      Destination		Meaning
+	--------    ---------------	--------------------------------------------------
+	Byte	 -> Boolean			True if nonzero, false if zero
+	Integer	 -> Boolean			True if nonzero, false if zero
+	Real	 -> Boolean			True if not 0.0, false if zero
+	Actor	 -> Boolean			True if it references an actor, False otherwise
+	Resource -> Boolean			True if it references a resource, False otherwise
+	Name	 -> Boolean			True if it references a name, false otherwise
+	String	 -> Boolean			True if non-empty, false if empty
+	Vector	 -> Boolean			True if any components are not 0.0, false if all zero
+	Rotation -> Boolean			True if any components are nonzero, false if all zero
+
+	Boolean	 -> Byte			Resulting byte is 1 (True) or 0 (False)
+	Integer	 -> Byte			Chops number down and only keeps the low 8 bits
+	Real	 -> Byte			Saturates to the range (0,255)
+
+	Boolean	 -> Integer			Resulting integer is 1 (True) or 0 (False)
+	Byte	 -> Integer			Converts to exact integer representation
+	Real	 -> Integer			Chops off fractional part and converts to integer
+
+	Boolean	 -> Real			Converts to 1.0 (True) or 0.0 (False)
+	Byte	 -> Real			Converts to exact real number representation
+	Integer	 -> Real			Converts to exact real number representation
+
+	These are all of the automatic type conversions that UnrealScript performs.  Note
+	that UnrealScript can't apply multiple type conversions to get a desired result.  For
+	example, you can't convert a Vector to an Integer, even though you can convert a Vector
+	to a Boolean and a Boolean to an Integer.  To convert a Vector to an Integer, you
+	could, however, use an explicit type conversion as described below.
+
+*****************************
+* Explicit type conversions *
+*****************************
+
+	You can use any of the built-in type conversions explicitly like this:
+
+		Dim A as Vector
+		Dim B as Integer
+		'
+		B = Integer(Boolean(Vector))
+		' Now B = 1 if all vector components is nonzero, 0 otherwise
+
+	There are also a lot of built-in type conversion functions to perform more advanced
+	conversions:
+
+	Function StrInteger(I as Integer) as String(256) ' Convert an integer to its string representation
+	(to be expanded)
+
+********************
+* General Commands *
+********************
+
+Hold
+UnHold
+
+Block
+UnBlock
+
+.Delay(#)
+
+************************
+* Sample BigMan script *
+************************
+
+'
+' Sample BigMan script
+'
+Class BigMan Expands Monster
+
+Dim CheckSightFrequency as Editable Byte
+Dim SightDist as Editable Float
+Dim FieldOfVision as Editable Float
+
+Dim Health as Editable Integer
+
+Dim TargetLoseDist as Float
+Dim FaceTargetTime as Integer
+Dim FaceTargetYaw  as Angle
+
+'
+' These are created as variables so they can be changed in UnrealEd
+' or changed for child classes.
+'
+Dim FarAutoSound   as Sound
+Dim HitSound       as Sound
+Dim DieSound       as Sound
+Dim ShootSound     as Sound
+Dim FootstepSound  as Sound
+Dim SnortSound     as Sound
+
+State Alive, Auto Editable
+	When Hit(Source as Actor, Weapon as Actor, Damage(4) as Byte, HitLocation as Vector)
+		Target = Source
+		Heath -= Damage(DM_MELEE)
+		'
+		If Health<0 Then
+			Source.CreditNonPlayerKill(Me)
+			Goto Dead.Dying
+		EndIf
+		'
+		PlayVariedSound (HitSound)
+		Block Hit ' Ignore successive hits while playing hit animation
+		PlayAnim(TakeHit,0)
+		UnBlock Hit
+		Goto AttackTarget
+	EndWhen
+	State Idle, Auto
+		PlayAnim(Idle,0)
+		If Random(10)=0 then 
+			PlayVariedSound(SnortSound)
+			PlayAnim (LookLeft,0)
+		ElseIf Random(10)=0 then 
+			{
+			PlayVariedSound(SnortSound)
+			PlayAnim (LookRight,0)
+			}
+		Goto Idle
+		When SeeTarget(Source as Actor)
+			Target         = Source
+			FaceTargetTime = 10 ' Begin facing target
+			FaceTargetYaw  = 0
+			When AnimEnd Goto AttackTarget ' Wait till idle animation is done
+			EndWhen
+		EndState
+	State AttackTarget
+		When LoseTarget
+			Goto Idle
+		EndWhen
+		State FaceAndAdvance, Auto
+			FaceTargetTime = 10 ' Begin whipping around and facing player
+			FaceTargetYaw  = 0  ' Face straight at player
+			'
+			If InMeleeRange(Target) Then
+				' Pistol whip the player
+			Else
+				Select Case Random(4)
+					Case 0:
+						' Walk towards player
+					Case 1:
+						' Shoot left while walking
+					Case 2:
+						' Shoot right while walking
+					Case 3:
+						' Stop and shoot with both guns
+				EndSelect
+			EndIf
+		EndState
+	EndState
+EndState
+
+State Dead, Auto Editable
+	State Dying, Auto
+		PlayVariedSound (DieSound)
+		PlayAnim(Dying,0)
+		Goto Dead
+	EndState
+	State Idle
+		PlayAnim(DeadFrame,0)
+	EndState
+EndState
+
+***************************
+* Root class declarations *
+***************************
+
+'
+' Constants:
+'
+Dim Pi           as Const Real       = 3.1415926535897932
+Dim MaxInt       as Const Integer    = 2147483647
+Dim MaxByte      as Const Integer    = 255
+Dim MaxRot       as Const Integer    = 65535
+Dim RotPerDegree as Const Real       = 182.04444444444444
+Dim MetersPerWorldUnit as Const Real = 0.03
+Dim FeetPerWorldUnit as Const Real   = 0.10
+'
+' AI functions:
+'
+Function PlayAnim(Sequence as Name,Rate as Real,Wait as Boolean) Intrinsic Fast
+Function StartAnim(Sequence as Name,Rate as Real,Wait as Boolean) Intrinsic Fast
+Function PlaySound(SoundToPlay as Sound,Frequency as Real) Intrinsic Fast
+Function PlayVariedSound(SoundToPlay as Sound) Intrinsic Fast
+Function DistanceTo(OtherActor as Actor) as Real Intrinsic Fast
+Function CanSee(OtherActor as Actor) as Boolean Intrinsic Fast
+'
+' Intrinsic type conversions:
+'
+Operator Boolean (A as Byte    ) as Boolean Intrinsic Fast AutoConversion
+Operator Boolean (A as Integer ) as Boolean Intrinsic Fast AutoConversion
+Operator Boolean (A as Real    ) as Boolean Intrinsic Fast AutoConversion
+Operator Boolean (A as Actor   ) as Boolean Intrinsic Fast AutoConversion
+Operator Boolean (A as Resource) as Boolean Intrinsic Fast AutoConversion
+Operator Boolean (A as Name    ) as Boolean Intrinsic Fast AutoConversion
+Operator Boolean (A as String(256)) as Boolean Intrinsic Fast AutoConversion
+Operator Boolean (A as Vector  ) as Boolean Intrinsic Fast AutoConversion
+Operator Boolean (A as Rotation) as Boolean Intrinsic Fast AutoConversion
+'
+Operator Byte    (A as Boolean ) as Byte    Intrinsic Fast AutoConversion
+Operator Byte    (A as Integer ) as Byte    Intrinsic Fast AutoConversion
+Operator Byte    (A as Real    ) as Byte    Intrinsic Fast AutoConversion
+'
+Operator Integer (A as Boolean ) as Integer Intrinsic Fast AutoConversion
+Operator Integer (A as Byte    ) as Integer Intrinsic Fast AutoConversion
+Operator Integer (A as Real    ) as Integer Intrinsic Fast AutoConversion
+'
+Operator Real    (A as Boolean ) as Real    Intrinsic Fast AutoConversion
+Operator Real    (A as Byte    ) as Real    Intrinsic Fast AutoConversion
+Operator Integer (A as Integer ) as Integer Intrinsic Fast AutoConversion
+'
+' Integer (and also byte, boolean) operators and functions:
+'
+Operator +    (A as Integer               ) as Integer   Intrinsic Fast
+Operator -    (A as Integer               ) as Integer   Intrinsic Fast
+Operator Not  (A as Integer               ) as Integer   Intrinsic Fast
+Operator +    (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator -    (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator *    (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator /    (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator <    (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator >    (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator <=   (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator >=   (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator =    (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator <>   (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator And  (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator Or   (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator BitAnd(A as Integer, B as Integer) as Integer   Intrinsic Fast
+Operator BitOr(A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator BitXor(A as Integer, B as Integer) as Integer   Intrinsic Fast
+Operator <<   (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Operator >>   (A as Integer, B as Integer ) as Integer   Intrinsic Fast
+Function IntegerStr(A as Integer          ) as String(256) Intrinsic Fast
+Function Random(Max as Integer            ) as Integer   Intrinsic Fast
+'
+' Real operators and functions:
+'
+Operator +    (A as Real                  ) as Real      Intrinsic Fast
+Operator -    (A as Real                  ) as Real      Intrinsic Fast
+Operator +    (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator -    (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator *    (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator /    (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator ^    (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator <    (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator >    (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator <=   (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator >=   (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator =    (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator <>   (A as Real, B as Real       ) as Real      Intrinsic Fast
+Operator Mod  (A as Real, B as Real       ) as Real      Intrinsic Fast
+Function Abs  (A as Real                  ) as Real      Intrinsic Fast
+Function Sqrt (A as Real                  ) as Real      Intrinsic Fast
+Function RealStr(A as Real                ) as String(256) Intrinsic Fast
+Function Int  (A as Real                  ) as Integer   Intrinsic Fast
+Function Sin  (A as Real                  ) as Real      Intrinsic Fast
+Function Cos  (A as Real                  ) as Real      Intrinsic Fast
+Function Tan  (A as Real                  ) as Real      Intrinsic Fast
+Function Atn  (A as Real                  ) as Real      Intrinsic Fast
+Function Exp  (A as Real                  ) as Real      Intrinsic Fast
+Function Log  (A as Real                  ) as Real      Intrinsic Fast
+Function RandomReal(                      ) as Real      Intrinsic Fast
+'
+' String operators and functions:
+'
+Operator +    (A as String(256), B(256) as String   ) as String(256) Intrinsic Fast
+Operator <    (A as String(256), B(256) as String   ) as Integer   Intrinsic Fast
+Operator >    (A as String(256), B(256) as String   ) as Integer   Intrinsic Fast
+Operator <=   (A as String(256), B(256) as String   ) as Integer   Intrinsic Fast
+Operator >=   (A as String(256), B(256) as String   ) as Integer   Intrinsic Fast
+Operator =    (A as String(256), B(256) as String   ) as Integer   Intrinsic Fast
+Operator <>   (A as String(256), B(256) as String   ) as Integer   Intrinsic Fast
+Function Val  (A as String(256))                      as Real      Intrinsic Fast
+'
+' Vector operators and functions
+'
+Operator +    (A as Vector                ) as Vector    Intrinsic Fast
+Operator -    (A as Vector                ) as Vector    Intrinsic Fast
+Operator +    (A as Vector, B as Vector   ) as Vector    Intrinsic Fast
+Operator -    (A as Vector, B as Vector   ) as Vector    Intrinsic Fast
+Operator =    (A as Vector, B as Vector   ) as Integer   Intrinsic Fast
+Operator <>   (A as Vector, B as Vector   ) as Integer   Intrinsic Fast
+Function Size (A as Vector                ) as Real      Intrinsic Fast
+Function VectorStr(A as Integer           ) as Real      Intrinsic Fast
+Function Dot  (A as Vector, B as Vector   ) as Real      Intrinsic Fast
+Function Cross(A as Vector, B as Vector   ) as Vector    Intrinsic Fast
+Function Scale(A as Vector, B as Real     ) as Vector    Intrinsic Fast
+'
+' Rotation operators and functions
+'
+Operator +    (A as Rotation, B as Rotation) as Rotation Intrinsic Fast
+Operator -    (A as Rotation, B as Rotation) as Rotation Intrinsic Fast
+Function GetXAxis (A as Rotation           ) as Vector   Intrinsic Fast
+Function GetYAxis (A as Rotation           ) as Vector   Intrinsic Fast
+Function GetZAxis (A as Rotation           ) as Vector   Intrinsic Fast
+Function GetUnXAxis (A as Rotation         ) as Vector   Intrinsic Fast
+Function GetUnYAxis (A as Rotation         ) as Vector   Intrinsic Fast
+Function GetUnZAxis (A as Rotation         ) as Vector   Intrinsic Fast
+Function RandomRotation(                   ) as Rotation Intrinsic Fast
+'
+' Root functions needed:
+' CurrentStateName()
+' Str(Resource)
+' StatusMessage (for players)
+' Log(str)
+' Debug(str)
+' Error(str)
+' CVar functions (get, set)
+' SpawnActor
+' Global (non-class) functions & modules
+' How to teleport?
+' bOnGround, or OnGround()
+'
+
+***********
+* The End *
+***********

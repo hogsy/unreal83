@@ -1,0 +1,197 @@
+/*=============================================================================
+	ProjMan.txt: Unreal Project Management notes
+	By: Tim Sweeney, Epic MegaGames, Inc.
+=============================================================================*/
+
+******************************
+** Programming Requirements **
+******************************
+
+1. When you originate a piece of code, include a heading at the top of every file looking 
+   something like this:
+
+	/*=============================================================================
+		UnClass.cpp: Actor class functions
+
+		Copyright 1996 Epic MegaGames, Inc. This software is a trade secret.
+		Compiled with Visual C++ 4.0 using Tabs=4, Calling method=__fastcall
+
+		Revision history:
+			* Date, Created by My Name
+	=============================================================================*/
+
+2.	Whenever you revise an existing piece of code that you got some somebody else, 
+	put your name, date, and summary of changes in the "Revision history".
+
+3.	Naming conventions for Unreal internals:
+
+	* FClassName:    A simple, non-resource class, for example: FVector, FMemoryCache.
+	* UClassName:    A resource class derived from UResource, for example: UCamera, UTextBuffer.
+	* CClassName:    An MFC-derived class, for example: CUnrealEdServer.
+	* IClassName:    An convenience structure for a locked resource (ICamera, ILevel, IModel, IMeshMap)
+	* PClassName:	 A class used in the "void *Params" parameter along with in actor messages
+	* IObjectName:   A COM/OLE object used by Unreal, for example: IUnrealNetwork, IUnrealGatekeeper.
+	* GVariableName: A global variable, for example: GMem, GBlit.
+
+	The reason is because VC++'s class browser sorts alphabetically and this
+	causes classes to be grouped reasonably well.  It also keeps names consistent so that
+	you can see what a particular class is all about given just its name.
+
+4.	Wrap all of your functions in a GUARD block so that the function calling history can
+	be displayed in case Unreal crashes in a particular routine, or in case appError is
+	called:
+
+	void MyClass::MyRoutine (int x)
+		{
+		GUARD; // A macro that encapsulates the function in a try/catch block
+		int y;
+		for (y=0; y<x; y++) {DoSomthing();};
+		UNGUARD ("MyClass::MyRoutine");
+		};
+
+    The one exception to this is when you're writing a small performance critical function.
+
+	The GUARD/UNGUARD macros expand to something like this:
+
+	void MyClass::MyRoutine (int x)
+		{
+		try
+			{
+			int y;
+			for (y=0; y<x; y++) {DoSomthing();};
+			}
+		catch(...)
+			{
+			GApp->Log(LOG_Critical,"MyClass::MyRoutine"); // Output call history to log
+			if(GApp->GuardTrap) strcat(GApp->ErrorHist," <- "); // Build error message string
+			strcat(GApp->ErrorHist,s); // Build error message string
+			GApp->GuardTrap=1; // Note that we have crashed
+			*(char*)NULL=0; // Trigger caller's exception handler
+			};
+		};
+
+5.	Name classes and class functions in mixed upper and lower case, like FMyClass::MyFunction,
+    no underscores, lowercase-only, caps-only, etc.  For non-class functions, you can either
+	used a mixed name ("OpenCamera") or a mixed name prefixed with a lowercase module name
+	to indicate where the function resides ("gfxOpenCamera").
+
+6.  Use the following functions for informational and debugging output:
+
+	debug (LOG_INFO,"Some message");
+	debugf(LOG_INFO,"Some printf-like message, A=%i, B=%s",SomeInt,SomeString);
+
+	They output text to the Unreal console and also write to System\Unreal.log.
+
+7.  If an unrecoverable error occurs in your code, and you can detect it, call
+    one of these functions:
+
+	appError ("Critical error message");
+	appErrorf("Critical error message, A=%i, B=%s",SomeInt,SomeString);
+
+	This function displays the function calling history, so it allows for easy
+	debugging.
+
+8.	For portability concerns, if your code is not platform-dependent, stick with
+	ANSI C/C++ conventions.  Also avoid structured exception handling with the
+	one exception of using the GUARD/UNGUARD macros.
+
+	These porting concerns don't apply to code specific to a particular platform, such
+	as the Windows networking code or any MFC-derived code.  These can use the full
+	C++ capabilities of the system.
+
+9.  Whenever you use inline assembly language (or separate MASM code), include
+    a conditionally-compilable C version of the routine as well, and verify that
+	it works when compiled with and without ASM:
+
+	void SomeFunction (int x)
+		{
+		#ifdef ASM // Fast assembly-language version
+		__asm
+			{
+			// Assembly code goes here
+			};
+		#else // Slow C version for portability
+			// C code goes here
+		#endif
+		};
+
+10.	Document all of your class functions as black boxes in your class header files,
+    i.e. describe the functions inputs, outputs, and possible error conditions.
+	If you need to document the module in more detail, stick all docs in a comment
+	block of the class header.  This is harder to lose than separate text files.
+
+11.	The best kind of C/C++ code is code which is well-structured and obvious enough
+	that it doesn't need much commenting, like this:
+
+		for (i=0; i<NumCameras; i++) RedrawCamera(CameraList[i]);
+	
+	Use comments within your code to describe non-obvious tricks you're doing,
+	especially in areas where other people may need to understand or modify the code.
+
+12. To prevent multiple inclusion, all of your header files should be guarded with logic 
+    like this:
+
+	#ifndef _INC_MYMODULENAME
+	#define _INC_MYMODULENAME
+	//
+	// All header code goes here...
+	//
+	#endif // _INC_MYMODULENAME
+
+13. Use 8.3 (DOS-compatible) filenames.
+
+14. Use Visual C++'s tabs=4 setting.  Whether you actually use tabs or not is up to you.
+
+15. Define enumerations like this:
+
+	enum EFruit
+		{
+		FRUIT_None		= 0,	// Tag zero should generally be 'none'
+		FRUIT_Apple		= 1,	// Apples are nice
+		FRUIT_Orange	= 2,	// Oranges are tangy
+		FRUIT_MAX		= 3,	// One beyond the maximum enumeration
+		};
+
+********************
+** Using comments **
+********************
+
+1. Comment your code well enough that others are going to be able to browse through
+   it, figure out what's happening, and be able to extend/debug it in the future,
+   after a few hours of reading and learning.
+
+2. Put a comment before the implementation of every function that describes what the function
+   does, especially including any error/exception conditions:
+
+//
+// Open a new camera.  Returns a pointer to the camera structure, or NULL if the
+// maximum number of cameras was exceeded.  Call with AllowEdit to enable editing
+// within the camera window.
+//
+void OpenCamera (char *CameraName, int AllowEdit)
+	{
+	// ...
+	};
+
+*********************
+** Recommendations **
+*********************
+
+1. Indent code like this.  No, this isn't backwards, the rest of the world
+   is backwards.
+
+	void *FMemoryCache::Get(DWORD ID)
+		{
+		GUARD;
+		for (int i=0; i<HackEntities; i++)
+			{
+			if (EntityList[i].ID==ID) return HackEntityList[i].Data;
+			};
+		return NULL;
+		UNGUARD("FMemoryCache::Get");
+		};
+
+2. Name regular variables with a pure name (i.e. PlayerDescription) rather than
+   something crazy like lpszPlayerDescription, playerDescription, or player_description.
+
+-Tim

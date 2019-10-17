@@ -1,0 +1,320 @@
+'
+' UnrealEd class and child classes for class: Projectile
+'
+
+DeclareClass Name=Projectile
+DeclareClass Name=Fireball
+DeclareClass Name=Fireball2
+DeclareClass Name=BulletProjectile
+DeclareClass Name=ShellProjectile
+DeclareClass Name=StingerProjectile
+DeclareClass Name=TentacleProjectile
+
+DeclareClass Name=WallHit
+DeclareClass Name=PawnHit
+DeclareClass Name=Explode1
+
+Begin Class Name=Projectile
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+' A projectile fired from a weapon. 
+' A delayed-hit projectile moves around for some time after it is created.
+' An instant-hit projectile acts immediately. 
+'
+Class Projectile Expands Root Intrinsic
+
+' Editable projectile parameters
+
+Dim bVerticalSeek         As Editable Boolean
+Dim bFollowFloor          As Editable Boolean
+Dim bBounce               As Editable Boolean
+Dim bIsInstantHit         As Editable Boolean ' Is the projectile instant-hit?
+
+' Effects on impact or at the end of the projectiles life: (only 1 is selected)
+Dim EffectAtLifeSpan      As Editable Class   ' Explosion or pyrotechnic when projectile expires.
+Dim EffectOnWallImpact    As Editable Class   ' Explosion or pyrotechnic when projectile hits a wall.
+Dim EffectOnPawnImpact    As Editable Class   ' Explosion or pyrotechnic when projectile hits a pawn.
+Dim EffectOnImpact        As Editable Class   ' Default explosion or pyrotechnic on impact (when other effects do not apply).
+
+' Motion information:
+Dim Speed                 As Editable Real    ' Initial speed of projectile.
+Dim Acceleration          As Editable Real    '
+Dim MaxSpeed              As Editable Real    ' Limit on speed of projectile (0 means no limit)
+Dim MaxBounceCount        As Editable Byte    ' If bBounce, limit on number of bounces, or 0 for unlimited.
+Dim BounceCount           As          Byte    ' Number of times projectile has bounced.
+Dim BounceIncidence       As Editable Real    ' If bBounce, cosine of smallest incident angle (measured to normal) which causes bouncing. 0 for no restriction.
+
+' Other properties
+Dim FollowFloorHeight as Real
+Dim Textures(20) As Editable Texture ' A sequence of animating textures - the first TextureCount are used.
+
+' Damage attributes:
+' DamageDecay() identifies the damage lost per tick (for a delayed-hit projectile)
+' or the damage lost per unit distance travelled (for an instant-hit projectile).
+Dim Damage(4)             As Editable Real    ' Indexed by EDamageType
+Dim DamageDecay(4)        As Editable Real    ' Indexed by EDamageType. Damage lost per tick or distance.
+Dim ExplosiveTransfer     As Editable Byte    ' Amount of explosive charge transfered to target (makes target volatile).
+Dim Hack                  As EDamageType      ' Hack so that EDamageType is not discarded
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Projectile
+      Texture=s_camera
+      CollisionRadius=+00016.000000
+      CollisionHeight=+00016.000000
+      bAnimate=True
+      bDirectional=True
+      bCollideActors=True
+      bCollideWorld=True
+      bTemplateClass=False
+      bMomentum=True
+      LifeSpan=140
+      EffectAtLifeSpan=None
+      EffectAtLifeSpan=None
+      EffectOnWallImpact=None
+      EffectOnPawnImpact=None
+      MaxBounceCount=0
+      ExplosiveTransfer=0
+      BounceIncidence=0
+	  DefaultEdCategory=Projectile
+   End DefaultProperties
+End Class
+
+Begin Class Name=StingerProjectile
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class StingerProjectile Expands Projectile Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=StingerProjectile
+      CollisionRadius=+0005.000000
+      CollisionHeight=+0005.000000
+      Speed=+00060.000000
+      Mass=+00002.00000
+      LifeSpan=34
+      bBounce=True
+      MaxBounceCount=3
+      DrawType=2
+      MeshMap=TarydiumProjectile
+      LightType=1
+      EffectAtLifeSpan=None
+      EffectOnWallImpact=None
+      EffectOnPawnImpact=PawnHit
+      EffectOnImpact=Explode1
+      LightBrightness=100
+      LightHue=188
+      LightSaturation=64
+      LightRadius=10
+      LightPeriod=32
+      bAnimate=False
+      AnimRate=1.0
+      AnimCount=0
+      AnimFirst=0
+      AnimLast=0 
+      TextureCount=0
+      Damage(0)=+00002.000000
+      DamageDecay(0)=+00000.05900
+      ExplosiveTransfer=10
+      BounceIncidence=0.87
+   End DefaultProperties
+End Class
+
+Begin Class Name=TentacleProjectile
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class TentacleProjectile Expands Projectile Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=TentacleProjectile
+      CollisionRadius=+0005.000000
+      CollisionHeight=+0005.000000
+      Speed=+00040.000000
+      Mass=+00002.00000
+      LifeSpan=50
+      bBounce=False
+      DrawType=2
+      MeshMap=TarydiumProjectile
+      LightType=0
+      EffectAtLifeSpan=None
+      EffectOnWallImpact=None
+      EffectOnPawnImpact=PawnHit
+      EffectOnImpact=Explode1
+      bAnimate=False
+      AnimRate=1.0
+      AnimCount=0
+      AnimFirst=0
+      AnimLast=0 
+      TextureCount=0
+      Damage(0)=+00012.000000
+      DamageDecay(0)=+00000.05000
+   End DefaultProperties
+End Class
+
+Begin Class Name=Fireball
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class Fireball Expands Projectile Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Fireball
+      CollisionRadius=+00010.000000
+      CollisionHeight=+00010.000000
+      Speed=+00015.000000
+      LifeSpan=180
+      DrawType=1
+      LightType=1
+      LightBrightness=110
+      LightHue=80
+      LightSaturation=128
+      LightRadius=20
+      LightPeriod=32
+      bAnimate=True
+      AnimRate=1.0
+      AnimCount=0
+      AnimFirst=0
+      AnimLast=19
+      Textures(0)=firb0000
+      Textures(1)=firb0001
+      Textures(2)=firb0002
+      Textures(3)=firb0003
+      Textures(4)=firb0004
+      Textures(5)=firb0005
+      Textures(6)=firb0006
+      Textures(7)=firb0007
+      Textures(8)=firb0008
+      Textures(9)=firb0009
+      Textures(10)=firb0010
+      Textures(11)=firb0011
+      Textures(12)=firb0012
+      Textures(13)=firb0013
+      Textures(14)=firb0014
+      Textures(15)=firb0015
+      Textures(16)=firb0016
+      Textures(17)=firb0017
+      Textures(18)=firb0018
+      Textures(19)=firb0019
+      TextureCount=20
+      Damage(2)=+00015.000000
+      DamageDecay(2)=+00000.070000
+   End DefaultProperties
+End Class
+
+
+Begin Class Name=Fireball2
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class Fireball2 Expands Projectile Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Fireball2
+      CollisionRadius=+00010.000000
+      CollisionHeight=+00010.000000
+      Speed=+00015.000000
+      LifeSpan=180
+      DrawType=1
+      LightType=2
+      LightBrightness=200
+      LightHue=100
+      LightSaturation=128
+      LightRadius=30
+      LightPeriod=32
+      bAnimate=True
+      AnimRate=1.0
+      AnimCount=0
+      AnimFirst=0
+      AnimLast=19
+      Textures(0)=firb0000
+      Textures(1)=firb0001
+      Textures(2)=firb0002
+      Textures(3)=firb0003
+      Textures(4)=firb0004
+      Textures(5)=firb0005
+      Textures(6)=firb0006
+      Textures(7)=firb0007
+      Textures(8)=firb0008
+      Textures(9)=firb0009
+      Textures(10)=firb0010
+      Textures(11)=firb0011
+      Textures(12)=firb0012
+      Textures(13)=firb0013
+      Textures(14)=firb0014
+      Textures(15)=firb0015
+      Textures(16)=firb0016
+      Textures(17)=firb0017
+      Textures(18)=firb0018
+      Textures(19)=firb0019
+      TextureCount=20
+      Damage(2)=+00030.000000
+      DamageDecay(2)=+00000.050000
+   End DefaultProperties
+End Class
+
+Begin Class Name=BulletProjectile
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class BulletProjectile Expands Projectile Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=BulletProjectile
+      CollisionRadius=+00000.000000
+      CollisionHeight=+00000.000000
+      Speed=+200000.0
+      Mass=+00000.00200
+      Damage(0)=+00010.000000
+      DamageDecay(0)=+00000.01000
+      bIsInstantHit=True
+      EffectOnImpact=None
+      EffectOnWallImpact=WallHit
+      EffectOnPawnImpact=PawnHit
+      EffectOnImpact=WallHit
+   End DefaultProperties
+End Class
+
+Begin Class Name=ShellProjectile
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class ShellProjectile Expands Projectile Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=ShellProjectile
+      CollisionRadius=+00000.000000
+      CollisionHeight=+00000.000000
+      Speed=+50000.0
+      Mass=+00000.02000
+      Damage(0)=11
+      DamageDecay(0)=+00000.01300
+      bIsInstantHit=True
+      EffectOnImpact=None
+      EffectOnWallImpact=WallHit
+      EffectOnPawnImpact=PawnHit
+      EffectOnImpact=WallHit
+   End DefaultProperties
+End Class
+

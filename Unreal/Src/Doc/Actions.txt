@@ -1,0 +1,213 @@
+/*=============================================================================
+  Notes about the player actions and input->action mappings
+  By: Mark Randell, Epic MegaGames, Inc.
+  Updated: July 3, 1996
+=============================================================================*/
+
+---------
+Overview:
+---------
+
+The player has various actions, such as jump, move forward, turn left, 
+and so on. The actions can be assigned input combos, such as 
+Shift+CursorUp to run forward. When an input combo is active, its
+associated action is done. Input combos consist of keyboard keys,
+mouse buttons, joystick buttons, mouse movements, and joystick movements.
+
+------------
+Definitions:
+------------
+
+combo: A set of inputs which together define a player action. The simplest
+    combo can be a single input, which is called a combo even though it
+    has only one input. For example, the CursorUp key might be the combo 
+    which performs the MoveForward action. A combo can have one or two  
+    inputs, as listed below. Note that a combo has at most one 
+    movement. A combo with one input has no modifiers and a combo with
+    two inputs has one modifier.
+      1. input                      (input with no modifier)
+      2. switch + input             (input with 1 modifier switches)
+    When there is more than one input, the combo has 1 modifier
+    switch and a main input. Here are some examples that you may be
+    familiar with from other 3D action games:
+      1. CursorLeft                 (turns the player to the left)
+      2. Shift+CursorLeft           (turns the player faster to the left)
+    
+input: A switch or a movement.
+
+modifier: A switch which forms part of a multiple-input combo. The switch
+    is called a modifier because it is typically used to change the meaning
+    of an input. For example, CursorLeft might mean TurnLeft, but 
+    Alt+CursorLeft might mean MoveLeft. In this case, Alt is a modifier
+    which changes the meaning of CursorLeft from TurnLeft to MoveLeft.
+    Modifiers are always switches and never movements.
+
+movement: a mouse movement or a joystick movement. Each joystick or mouse
+    axis of movement is separated into two distinct (but related) movements:
+    the "positive" movement and the "negative" movement. For example, the
+    mouse horizontal axis is separated into "mouse left" and "mouse right".
+    The joystick's X-axis is separated into "positive X" and "negative X"
+    movements. 
+    
+movement combo: A combo where the main input is a movement.
+    Example: Shift + MouseForward
+    
+switch: a mouse button, a keyboard key, or a joystick button.
+    Example: Shift + CursorUp
+    
+switch combo: A combo where the main input is a switch.
+
+-------------
+Input combos:
+-------------
+
+Input combos are briefly explained above under "combo". Here we provide
+more detail. Below are the most complex forms of a switch or modifier combo.
+
+Switch combo   : Modifier*2(T) + Switch*2(T)
+Movement combo : Modifier1*2(T) + Movement(Kind)
+       
+Notes:
+  1. Remember that the modifiers are optional and are switches.
+  2. "*2" is an optional indicator which means the switch is activated
+     only when double-pressed (pressed twice quickly).
+  3. "(T)" is an optional indicator which means the switch is toggled
+     on or off each time it is activated.
+  4. (Kind) is an optional definition of the kind of movement. This is
+     described below.
+     
+The movement kind defines how mouse or joystick movements are to be treated.
+ (Digital)
+     The movement is either on or off, depending on how far away the
+     movement is from the neutral or center position. For example,
+     moving the joystick forward might turn on the MoveForward action.
+     Once you start moving, pushing the joystick further forward doesn't
+     make you move any faster (this is the "digital" nature of the movement).
+ 
+ (Analog)
+     The position of the movement translates to the size or position of
+     the player action. For example, if moving a joystick forward causes
+     the player to move forward, then moving the joystick forward some
+     more causes the player to move forward faster. 
+     
+ (Differential)
+     The *change* in the movement translates to a change in the player's
+     action. For example, moving the mouse forward a little moves the
+     player forward a little. Note that it doesn't matter where the mouse
+     is - it is the change in movement that results in the action.
+     Differential movements are typically used for mouse movements.
+ 
+-----------------------------
+When input combos are active:
+-----------------------------
+
+A switch combo is active if...
+    A switch combo is active if all its modifiers (if any) are active and
+    if the main switch input is active.
+
+A movement combo is active if ...
+    A movement combo is active if all its modifiers (if any) are active and
+    if the movement input is active.
+
+A switch (or modifier) is active if...
+    Whether a switch is considered active depends on whether or not it is
+    doubled (*2) or toggled (T). The cases are described below.
+       Switch: (neither doubled nor toggled)
+          Such a switch is active while it is held down.
+       Switch*2: (doubled but not toggled)
+          Such a switch is active while held down after being pressed
+          twice quickly.
+       Switch(T): (toggled but not doubled)
+          Such a switch is active the first time it is pressed.
+          Thereafter, the switch changes from active to inactive or
+          inactive to active each time it is pressed again.
+          Note that when the switch is active, it remains active even
+          after the switch is released.
+       Switch*2(T): (both doubled and toggled)
+          Such a switch is active the first time it is double-pressed.
+          Thereafter, the switch changes from active to inactive or
+          inactive to active each time it is double-pressed again.
+
+For the purpose of explaining the activation of movements, consider
+the following definition:
+    The relative position of a device in a particular direction is
+    the distance from the center (neutral) position divided by the
+    maximum distance from the center in that direction. This relative
+    position is expressed as a percentage. If the device is not moved
+    in the direction, or is moved in the opposite direction, the relative
+    position is 0. The relative position is always non-negative.
+For example, if the joystick is pushed forward half-way between its
+rest position and its maximum position, then the relative position
+of the joystick in the "joystick forward" direction is 50%, and the
+relative position of the joystick in the "joystick backward" direction
+is 0%. The mouse is assigned maximum movements based on the screen size.
+
+Similarly, consider the following definition for movement changes:
+    The relative change of a device in a particular direction is
+    the change in that direction (from the previous position) divided by the
+    maximum distance from the center in that direction. This relative
+    position is expressed as a percentage. If the device is not moved
+    in the direction, or is moved in the opposite direction, the relative
+    change is 0. The relative change is always non-negative.
+For example, if the joystick is moved forward an extra 5 units, where
+the maximum joystick position in that direction is 50 units, then the
+relative change in the "joystick forward" direction is 10%, and the
+relative change of the joystick in the "joystick backward" direction
+is 0%.
+    
+A Digital movement is active if...
+    A Digital movement is active if the relative position of the device
+    in the movement direction is not less than the digital threshold
+    for the movement. Each movement is assigned a configurable digital 
+    threshold.
+    For example, if the "joystick left" movement has a digital threshold
+    of 33%, then moving the joystick left within 1/3 of its "leftward"
+    range won't active the digital movement. As soon as the joystick 
+    moves to 1/3 of the range, the digital movement is active and it 
+    remains active until the joystick is moved back to within 1/3 of 
+    the leftward range. In this case, there is a 33% "dead zone"
+    to the left of the center of the joystick.
+    
+An Analog movement is active if...
+    An analog movement is active if the relative position of the device in
+    the movement direction is not less than the analog threshold for the
+    movement. Each movement is assigned a configurable analog threshold.
+    In addition, the position of the device is used to determine the
+    size of the corresponding action.
+    
+A Differential movement is active if...
+    A differential movement is active if the relative change of the device in
+    the movement direction is not less than the differential threshold for the
+    movement. In addition, the size of the change is used to determine the
+    size of the corresponding action.
+
+---------------------
+Input Action Mapping:
+---------------------
+
+Each action is assigned a list of combos. Subject to some prioritization,
+as described below, when a combo is active then the corresponding action
+is active. A single input sequence (such as pressing a single key) could
+activate many actions.
+
+Combo prioritization:
+  This is fairly simple: active combos with more modifiers are
+  used instead of active combos with fewer modifiers, for the same
+  main input. This means, for example, that the combo Shift+CursorUp 
+  will take precedence over the combo CursorUp. Shift+CursorUp, however,
+  does not affect Shift+CursorDown since they do not share the same
+  main input.
+  
+  To be more explicit, the test is done like this: consider all combos
+  with main input X.
+    If there are any active combos with 1 modifier:
+        Activate all the actions associated with those combos.
+    Else If there are any active combos with no modifiers:
+        Activate all the actions associated with those combos.
+
+---------
+Warnings:
+---------
+General notes:
+  1. Joysticks will usually have limited motion when using differential
+     movements (linear or non-linear). 

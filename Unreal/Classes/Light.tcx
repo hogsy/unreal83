@@ -1,0 +1,32 @@
+'
+' UnrealEd class and child classes for class: Light 
+'
+
+DeclareClass Name=Light
+
+Begin Class Name=Light
+   Begin Text
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+'
+' This is a built-in Unreal class and it shouldn't be modified
+'
+Class Light Expands Root Intrinsic
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+   End Text
+   Begin DefaultProperties
+      Class=Light
+      Texture=s_light
+      CollisionRadius=+00024.000000
+      CollisionHeight=+00024.000000
+      LightType=1
+      LightBrightness=64
+      LightSaturation=255
+      LightRadius=64
+      LightPeriod=32
+      bStaticActor=True
+      bHidden=True
+      bTemplateClass=False
+	  DefaultEdCategory=Lighting
+   End DefaultProperties
+End Class
+

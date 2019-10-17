@@ -1,0 +1,13 @@
+REGEDIT
+; This .REG file may be used by your SETUP program.
+;   If a SETUP program is not available, the entries below will be
+;   registered in your InitInstance automatically with a call to
+;   CWinApp::RegisterShellFileTypes and COleObjectFactory::UpdateRegistryAll.
+
+
+HKEY_CLASSES_ROOT\UnWn.Document = Unreal World
+HKEY_CLASSES_ROOT\UnWn.Document\CLSID = {D0EB88E0-2016-11CF-98C0-0000C06958A7}
+
+HKEY_CLASSES_ROOT\CLSID\{D0EB88E0-2016-11CF-98C0-0000C06958A7} = Unreal World
+HKEY_CLASSES_ROOT\CLSID\{D0EB88E0-2016-11CF-98C0-0000C06958A7}\LocalServer32 = UNREAL.EXE
+HKEY_CLASSES_ROOT\CLSID\{D0EB88E0-2016-11CF-98C0-0000C06958A7}\ProgId = Unnreal.World
