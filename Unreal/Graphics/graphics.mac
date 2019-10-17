@@ -1,0 +1,109 @@
+;
+; Graphics.mac
+;
+; Startup macro that imports all resources required by the game
+; and by the editor.  This is called during UnrealEd startup when
+; the .gfx file in the System directory does not exist.
+;
+
+;
+; Standard Textures
+;
+Texture Import File=..\Graphics\Texture.pcx  Name=Default       Palette=Palette Mips=Off
+Texture Import File=..\Graphics\Bad.pcx      Name=Bad           Palette=Palette Mips=Off
+Texture Import File=..\Graphics\Bkgnd.pcx    Name=Bkgnd         Palette=Palette Mips=Off
+Texture Import File=..\Graphics\UnLogo.pcx   Name=Logo          Mips=Off Flags=2 ; Masked
+Texture Import File=..\Graphics\Backdrop.pcx Name=Backdrop      Mips=Off
+Texture Import File=..\Graphics\Status1.pcx  Name=StatusBar     Mips=Off
+Texture Import File=..\Graphics\Status2.pcx  Name=ExtraBar      Mips=Off
+Texture Import File=..\Graphics\Console.pcx  Name=ConBackground Mips=Off
+Texture Import File=..\Graphics\Border.pcx   Name=Border        Mips=Off
+
+Res ArrayAdd Type=Texture Name=Default       Array=GfxTables
+Res ArrayAdd Type=Texture Name=Bkgnd         Array=GfxTables
+Res ArrayAdd Type=Texture Name=Backdrop      Array=GfxTables
+Res ArrayAdd Type=Texture Name=Bad           Array=GfxTables
+Res ArrayAdd Type=Texture Name=Logo          Array=GfxTables
+Res ArrayAdd Type=Texture Name=StatusBar     Array=GfxTables
+Res ArrayAdd Type=Texture Name=ExtraBar      Array=GfxTables
+Res ArrayAdd Type=Texture Name=ConBackground Array=GfxTables
+Res ArrayAdd Type=Texture Name=Border        Array=GfxTables
+
+;
+; Fonts
+;
+Texture Import File=..\Graphics\f_huge.pcx   Name=f_huge    Remap=Off Mips=Off
+Texture Import File=..\Graphics\f_large.pcx  Name=f_large   Remap=Off Mips=Off
+Texture Import File=..\Graphics\f_tech.pcx   Name=f_tech    Remap=Off Mips=Off
+Texture Import File=..\Graphics\f_small.pcx  Name=f_small   Remap=Off Mips=Off
+
+Font Build Texture=f_huge
+Font Build Texture=f_large
+Font Build Texture=f_tech
+Font Build Texture=f_small
+
+Res ArrayAdd Type=Font    Name=f_huge    Array=GfxTables
+Res ArrayAdd Type=Font    Name=f_large   Array=GfxTables
+Res ArrayAdd Type=Font    Name=f_tech    Array=GfxTables
+Res ArrayAdd Type=Font    Name=f_small   Array=GfxTables
+
+;
+; Actor icons
+;
+Texture Import File=..\Graphics\s_camera.pcx Name=s_camera  Palette=Palette Mips=Off Flags=2 ; Masked
+Texture Import File=..\Graphics\s_actor.pcx  Name=s_actor   Palette=Palette Mips=Off Flags=2 ; Masked
+Texture Import File=..\Graphics\s_light.pcx  Name=s_light   Palette=Palette Mips=Off Flags=2 ; Masked
+Texture Import File=..\Graphics\s_pickup.pcx Name=s_pickup  Palette=Palette Mips=Off Flags=2 ; Masked
+Texture Import File=..\Graphics\s_player.pcx Name=s_player  Palette=Palette Mips=Off Flags=2 ; Masked
+
+Res ArrayAdd Type=Texture Name=s_camera  Array=GfxTables
+Res ArrayAdd Type=Texture Name=s_actor   Array=GfxTables
+Res ArrayAdd Type=Texture Name=s_light   Array=GfxTables
+Res ArrayAdd Type=Texture Name=s_pickup  Array=GfxTables
+Res ArrayAdd Type=Texture Name=s_player  Array=GfxTables
+
+;
+; Buttons
+;
+Texture Import File=..\Graphics\b_menudn.pcx Name=b_menudn  Palette=Palette Mips=Off 
+Texture Import File=..\Graphics\b_menuup.pcx Name=b_menuup  Palette=Palette Mips=Off 
+Texture Import File=..\Graphics\b_collon.pcx Name=b_collon  Palette=Palette Mips=Off 
+Texture Import File=..\Graphics\b_collof.pcx Name=b_colloff Palette=Palette Mips=Off
+Texture Import File=..\Graphics\b_plyron.pcx Name=b_plyron  Palette=Palette Mips=Off
+Texture Import File=..\Graphics\b_plyrof.pcx Name=b_plyroff Palette=Palette Mips=Off
+Texture Import File=..\Graphics\b_liteon.pcx Name=b_liteon  Palette=Palette Mips=Off
+Texture Import File=..\Graphics\b_liteof.pcx Name=b_liteoff Palette=Palette Mips=Off
+
+Res ArrayAdd Type=Texture Name=b_menudn  Array=GfxTables
+Res ArrayAdd Type=Texture Name=b_menuup  Array=GfxTables
+Res ArrayAdd Type=Texture Name=b_collon  Array=GfxTables
+Res ArrayAdd Type=Texture Name=b_collOff Array=GfxTables
+Res ArrayAdd Type=Texture Name=b_plyron  Array=GfxTables
+Res ArrayAdd Type=Texture Name=b_plyrOff Array=GfxTables
+Res ArrayAdd Type=Texture Name=b_liteon  Array=GfxTables
+Res ArrayAdd Type=Texture Name=b_liteOff Array=GfxTables
+
+;
+; Brushes
+;
+Brush Import File=..\Graphics\Arrow.t3d Name=Arrow Merge=Off
+Res ArrayAdd Type=Model Name=Arrow Array=GfxTables
+
+;
+; Palettes
+;
+Palette Import File=..\Graphics\p_grey.pcx   Name=Greyscale Smooth=On
+Palette Import File=..\Graphics\p_fire.pcx   Name=Fire      Smooth=On
+Palette Import File=..\Graphics\p_blue.pcx   Name=Blue      Smooth=On
+Palette Import File=..\Graphics\p_redwav.pcx Name=RedWave   Smooth=On
+Palette Import File=..\Graphics\p_green.pcx  Name=Green     Smooth=On
+
+Res ArrayAdd Type=Palette Name=Greyscale Array=GfxTables
+Res ArrayAdd Type=Palette Name=Fire      Array=GfxTables
+Res ArrayAdd Type=Palette Name=Blue      Array=GfxTables
+Res ArrayAdd Type=Palette Name=RedWave   Array=GfxTables
+Res ArrayAdd Type=Palette Name=Green     Array=GfxTables
+
+;
+; The End
+;
