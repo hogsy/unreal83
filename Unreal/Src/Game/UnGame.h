@@ -46,7 +46,7 @@
 //
 #ifdef _COMPILING_UNGAME
 #define AUTOREGISTER_CLASS(classname)\
-	int (classname::*classname##Temp)(ILevel *Level, FName Message, void *Params) = classname::Process;\
+	int (classname::*classname##Temp)(ILevel *Level, FName Message, void *Params) = &classname::Process;\
 	DLL_EXPORT void *classname##Process = *(void **)&classname##Temp;
 #endif
 

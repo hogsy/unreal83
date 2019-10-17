@@ -130,12 +130,12 @@ static inline int Max(int Value1, int Value2)
 }
 
 
-static inline SignedAngle(TPositiveAngle Angle)
+static inline SWORD SignedAngle(TPositiveAngle Angle)
 {
     return TSignedAngle(Angle);
 }
 
-static inline PositiveAngle(TSignedAngle Angle)
+static inline WORD PositiveAngle(TSignedAngle Angle)
 {
     return TPositiveAngle(Angle);
 } 

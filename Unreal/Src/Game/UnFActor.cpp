@@ -608,7 +608,8 @@ void FActor::TakeDamage( PHit & Info )
             ,   Pawn.Class->Name
             ,   Pawn.Health
             );
-            for( int Which = 0; Which < DMT_Count; ++Which )
+			int Which;
+            for( Which = 0; Which < DMT_Count; ++Which )
             {
                 Text += sprintf( Text, " %2.1f", Info.Damage[Which] );
             }
@@ -623,7 +624,8 @@ void FActor::TakeDamage( PHit & Info )
 
         // Absorb some of the damage if the actor has armor of the
         // appropriate type. The armor is damaged.
-        for( int WhichDamage = 0; WhichDamage < DMT_Count; ++WhichDamage )
+		int WhichDamage;
+        for( WhichDamage = 0; WhichDamage < DMT_Count; ++WhichDamage )
         {
             FLOAT & Damage = Info.Damage[WhichDamage];
             FLOAT & Armor  = Pawn.Armor[WhichDamage];

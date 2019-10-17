@@ -318,7 +318,8 @@ int AMover::Process(ILevel *Level, FName Message, void *Params)
 		case ACTOR_SteppedOn:
 			{
 			INDEX iActor = *(INDEX *)Params;
-			for (int i=0; i<16; i++)
+			int i;
+			for (i=0; i<16; i++)
 				{
 				if (iSlaves[i]==iActor) break;
 				};

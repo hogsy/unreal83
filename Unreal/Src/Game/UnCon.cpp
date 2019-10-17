@@ -110,7 +110,7 @@ void FCameraConsole::Init(UCamera *ThisCamera)
 	TopLine			= MAX_LINES-1;
 	MsgStart		= 0;
 	MsgDuration 	= 0;
-	for (i=0; i<MAX_LINES; i++) *MsgText[i]=0;
+	for (int i=0; i<MAX_LINES; i++) *MsgText[i]=0;
 	//
 	ConsolePos		= 0.0;
 	ConsoleDest		= 0.0;

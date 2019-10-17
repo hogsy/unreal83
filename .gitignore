@@ -1,3 +1,6 @@
 
 # Visual Studio generated files
 *.vcxproj.user
+*.suo
+*.exp
+*.pdb
