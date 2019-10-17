@@ -37,8 +37,8 @@ int FTaskTelnet::Exec(const char *Cmd,FOutputDevice *Out)
 		char Name[NAME_SIZE], Password[NAME_SIZE];
 		char MatchName[NAME_SIZE], MatchPassword[NAME_SIZE];
 		//
-		GApp->GetProfileValue("UnrealServer","TelnetName",    MatchName,    "god",NAME_SIZE);
-		GApp->GetProfileValue("UnrealServer","TelnetPassword",MatchPassword,"",NAME_SIZE);
+		GApp->GetProfileValue("UnrealServer","TelnetName", "god", MatchName, NAME_SIZE);
+		GApp->GetProfileValue("UnrealServer","TelnetPassword","", MatchPassword,NAME_SIZE);
 		//
 		if (NetGrabSTRING(Str,Name,256) && NetGrabSTRING(Str,Password,256))
 			{

@@ -39,7 +39,7 @@ class NInternetDriver : public NDriver
 	//
 	// NDriver interface:
 	//
-	int Init(char *ParamBuffer,char *ErrorMessage);
+	int Init(const char *ParamBuffer,char *ErrorMessage);
 	void Exit(void);
 	int Exec(const char *Cmd,FOutputDevice *Out);
 	int CanHandleURL(char *ServerURL);
@@ -120,7 +120,7 @@ class FTaskTelnet : public FTask, public FOutputDevice
 //
 // Return a string describing the most recent Windows Sockets error.
 //
-char *wsaError(void);
+const char *wsaError(void);
 
 /*------------------------------------------------------------------------------
 	The End

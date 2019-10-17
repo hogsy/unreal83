@@ -332,7 +332,7 @@ ENetworkPlayMode NManager::BeginGameByUI(char *ResultURL,NSocket **ClientSocket)
 		(HINSTANCE)hInstance,
 		MAKEINTRESOURCE(IDD_FAKEWIZARD),
 		NULL,
-		(DLGPROC)MainWizardDialogProc,
+		(DLGPROC)MainWizardDialogProc
 		))
 		{
 		*ClientSocket = ResultClientSocket;
@@ -400,7 +400,8 @@ void NManager::Init(void)
 	//
 	// Init net manager:
 	//
-	for (int i=0; i<MAX_ACTIVE_LEVELS; i++) Ads    [i]=NULL;
+	int i;
+	for (    i=0; i<MAX_ACTIVE_LEVELS; i++) Ads    [i]=NULL;
 	for (    i=0; i<MAX_DRIVERS;       i++) Drivers[i]=NULL;
 	//
 	Initialized=1;
@@ -470,7 +471,8 @@ int NManager::FindAvailableAd(char *LevelName)
 	if ((!LevelName) || (!*LevelName)) appError ("Null level name");
 	//
 	int Available=0;
-	for (int i=1; i<MAX_ACTIVE_LEVELS; i++)
+	int i;
+	for (i=1; i<MAX_ACTIVE_LEVELS; i++)
 		{
 		if (!Ads[i])
 			{
@@ -533,7 +535,8 @@ int NManager::Exec(const char *Cmd,FOutputDevice *Out)
 		{
 		if (NetGetCMD(&Str,"NET") || !Str[0])
 			{
-			int n=0; for (int i=0; i<MAX_DRIVERS;       i++) if (Drivers[i]) n++;
+			int i;
+			int n=0; for (    i=0; i<MAX_DRIVERS;       i++) if (Drivers[i]) n++;
 			int m=0; for (    i=0; i<MAX_ACTIVE_LEVELS; i++) if (Ads    [i]) m++;
 			//
 			Out->Logf("   NET - Ok: %i drivers, %i ads, %i ticks",n,m,Ticks);
@@ -672,7 +675,7 @@ int NDriver::FindAvailableSocketIndex(void)
 //
 // Initialize the driver's defaults:
 //
-int NDriver::Init(char *ParamBuffer,char *ErrorMessage)
+int NDriver::Init(const char *ParamBuffer,char *ErrorMessage)
 	{
 	GUARD;
 	//

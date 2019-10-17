@@ -34,7 +34,7 @@ union
 //
 // Windows sockets errors
 //
-char *wsaError(void)
+const char *wsaError(void)
 	{
 	switch (WSAGetLastError())
 		{
@@ -145,7 +145,7 @@ LRESULT CALLBACK AsyncResultsWndProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lP
 // If successful, returns 1.  If failure, returns 0 and sets Error to
 // an appropriate description.
 //
-int NInternetDriver::Init(char *ParamBuffer,char *ErrorMessage)
+int NInternetDriver::Init(const char *ParamBuffer,char *ErrorMessage)
 	{
 	GUARD;
 	if (Initialized) appError("Internet already initialized");
@@ -447,7 +447,7 @@ BOOL CALLBACK JoinInternetDialogProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM
 			// Look up default starting URL:
 			//
 			char Location[256];
-			GApp->GetProfileValue("NetGame","Location",Location,URL_GAME,256);
+			GApp->GetProfileValue("NetGame","Location", URL_GAME,Location,256);
 			//
 			hWndReturn = (HWND)lParam;
 			// Set up IDC_HOST edit box:

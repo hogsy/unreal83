@@ -37,7 +37,7 @@ static const GUID GUnrealDirectPlayGUID =
 // If successful, returns 1.  If failure, returns 0 and sets Error to
 // an appropriate description.
 //
-int NDirectPlayDriver::Init(char *ParamBuffer,char *Error)
+int NDirectPlayDriver::Init(const char *ParamBuffer,char *Error)
 	{
 	GUARD;
 	debug(LOG_Net,"DirectPlay Init");
@@ -427,6 +427,13 @@ BOOL CALLBACK DirectPlayProviderDialogProc
 				}
 			else // Success, go on to select a DirectPlay service provider
 				{
+				BOOL CALLBACK DirectPlaySessionDialogProc
+				(
+					HWND	hDlg,
+					UINT	uMsg,
+					WPARAM  wParam,
+					LPARAM  lParam
+				);
 				CreateDialogParam // Go to join-a-game dialog:
 					(
 					(HINSTANCE)NetManager.hInstance,

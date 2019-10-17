@@ -60,11 +60,11 @@ class NDriver : public FTask
 	enum {MAX_DRIVER_SOCKETS=256};
 	NSocket *Sockets[MAX_DRIVER_SOCKETS];
 	//
-	char *DriverDescription;
+	const char *DriverDescription;
 	//
 	// Functions which must be overridden:
 	//
-	virtual int Init(char *ParamBuffer,char *ErrorMessage);
+	virtual int Init(const char *ParamBuffer,char *ErrorMessage);
 	virtual void Exit(void);
 	//
 	virtual int Exec(const char *Cmd,FOutputDevice *Out=GApp)=0;
