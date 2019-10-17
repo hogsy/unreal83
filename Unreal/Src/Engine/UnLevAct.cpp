@@ -10,7 +10,6 @@
 
 #define _DO_NOT_DEFINE_CLASS_ENUMS
 #include "Unreal.h"
-#define AUTOREGISTER_CLASS(classname)
 #include "Root.h"
 
 #define COLLISION_SPHERE_FACTOR 1.0

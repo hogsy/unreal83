@@ -71,6 +71,10 @@ enum EAI_Task {
     EAI_TaskAttack          =4,
 };
 
+#ifndef AUTOREGISTER_CLASS
+#define AUTOREGISTER_CLASS(ignore)
+#endif
+
 class ARoot : public AActorBase {
 public:
     UClass     *Class;

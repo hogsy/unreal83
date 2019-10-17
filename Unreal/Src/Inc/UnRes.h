@@ -112,7 +112,7 @@ class UNREAL_API UTextBuffer : public UDatabase
 	//
 	// Variables:
 	//
-	INT Pos; // Saved cursor position, i.e. for scripts in UnrealEd's script editor
+	INT Pos{ 0 }; // Saved cursor position, i.e. for scripts in UnrealEd's script editor
 	//
 	// Resource operations:
 	//
@@ -233,7 +233,7 @@ class UNREAL_API UFont : public UDatabase
 	//
 	// Variables:
 	//
-	UTexture	*Texture;	// Texture containing font chars
+	UTexture	*Texture{ nullptr };	// Texture containing font chars
 	//
 	// Resource functions:
 	//
@@ -336,7 +336,7 @@ class UNREAL_API UMesh : public UResource
 	FBoundingVolume	Bound;		// Bounding volume of all animation frames combined
 	//
 	INT NumTriangles;	INT MaxTriangles;   
-	INT NumVertices;	INT MaxVertices;    
+	INT NumVertices;	INT MaxVertices{ 0 };
 	INT NumVertLinks;	INT MaxVertLinks;
 	INT NumAnimFrames;	INT MaxAnimFrames;	 
 	INT NumAnimSeqs;	INT MaxAnimSeqs;	 
@@ -1313,7 +1313,7 @@ class UNREAL_API UTexture : public UResource
 	//
 	USound		*FootstepSound;		// Footstep sound
 	USound		*HitSound;			// Sound when the texture is hit with a projectile
-	DWORD		PolyFlags;			// Polygon flags to be applied to Bsp polys with texture (See PF_*)
+	DWORD		PolyFlags{ 0 };		// Polygon flags to be applied to Bsp polys with texture (See PF_*)
 	DWORD		bNoTile			:1;	// Texture is a non-power-of-two size and thus doesn't tile
 	//
 	DWORD		LockCount;			// Number of locks that are active on the texture

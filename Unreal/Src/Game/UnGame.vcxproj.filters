@@ -10,6 +10,9 @@
     <Filter Include="Header Files">
       <UniqueIdentifier>{35298459-0c33-45ff-8b66-94a417266892}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Libraries">
+      <UniqueIdentifier>{c30a08e5-6a76-4d0a-bfe3-b71c45b3c0f8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnWeapon.cpp">
@@ -96,5 +99,10 @@
     <None Include="Res\UnGame.rc2">
       <Filter>Resource Files</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Lib\UnEngine.lib">
+      <Filter>Libraries</Filter>
+    </Library>
   </ItemGroup>
 </Project>
