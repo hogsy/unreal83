@@ -123,7 +123,7 @@ class FRageRenderDevice : public FRenderDevice
 	C3D_HTX RegisterTexture(UTexture *Texture);
 	void    UnregisterTexture(UTexture *Texture);
 	void    BuildTexture(FCachedRageTexture *CachedTexture);
-	char *RageError(C3D_EC Code);
+	const char *RageError(C3D_EC Code);
 	//
 	// Custom members:
 	//
@@ -226,7 +226,7 @@ void FRageRenderDevice::Flush3D(void)
 //
 // Convert a rage error code to text:
 //
-char *FRageRenderDevice::RageError(C3D_EC Code)
+const char *FRageRenderDevice::RageError(C3D_EC Code)
 	{
 	GUARD;
 	switch (Code)

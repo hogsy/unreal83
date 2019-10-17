@@ -340,7 +340,7 @@ void FGlobalPlatform::Init(char *ThisCmdLine, char *BaseDir)
 		{
 		strcpy(CmdLine,ThisCmdLine);
 		//
-		static char *OurLogEventNames[LOG_MAX] =
+		static const char *OurLogEventNames[LOG_MAX] =
 			{
 			"None",		"Info",    "Critical","Win",
 			"Net",      "Ed",      "Rend",    "File",
@@ -676,7 +676,7 @@ void FGlobalPlatform::Disable(void)
 // This is expected to return immediately as the URL is launched by another
 // task.
 //
-void FGlobalPlatform::LaunchURL(char *URL, char *Extra)
+void FGlobalPlatform::LaunchURL(const char *URL, const char *Extra)
 	{
 	GUARD;
 	//
@@ -947,7 +947,7 @@ void FGlobalPlatform::Hide(void)
 //
 // Allocate memory. Tracks all memory allocations.
 //
-void *VARARGS FGlobalPlatform::Malloc (int Size,char *Fmt,...)
+void *VARARGS FGlobalPlatform::Malloc (int Size,const char *Fmt,...)
 	{
 	char TempStr[4096];
 	va_list  ArgPtr;
@@ -972,7 +972,7 @@ void *VARARGS FGlobalPlatform::Malloc (int Size,char *Fmt,...)
 //
 // Allocate memory aligned on the specified power-of-two boundary.
 //
-void *VARARGS FGlobalPlatform::MallocAligned(int Size,int Alignment,char *Fmt,...)
+void *VARARGS FGlobalPlatform::MallocAligned(int Size,int Alignment,const char *Fmt,...)
 	{
 	char TempStr[4096];
 	va_list  ArgPtr;

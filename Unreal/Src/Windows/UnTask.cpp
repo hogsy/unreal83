@@ -199,7 +199,8 @@ int FWindowsTaskManager::AddTask(FTask *Task,FTask *Owner,FOutputDevice *Out,ETa
 	//
 	int TaskID = TopTask++;
 	//
-	for (int i=0; i<MAX_TASKS; i++) if (!Tasks[i]) break;
+	int i;
+	for (i=0; i<MAX_TASKS; i++) if (!Tasks[i]) break;
 	if (i>=MAX_TASKS) return 0; 
 	//
 	Tasks[i]=Task;

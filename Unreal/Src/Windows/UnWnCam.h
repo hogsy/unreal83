@@ -130,7 +130,7 @@ class FWindowsCameraManager : public FCameraManager
 	//
 	int			ddInit(void);
 	void		ddExit();
-	char		*ddError(HRESULT Result);
+	const char	*ddError(HRESULT Result);
 	int			ddSetMode(HWND hWndParent,int Width, int Height, int ColorBytes,int &Caps);
 	void		ddEndMode(void);
 	int			ddSetCamera(UCamera *Camera,int Width, int Height, int ColorBytes, int RequestedCaps);

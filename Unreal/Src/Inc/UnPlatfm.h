@@ -182,7 +182,7 @@ class FGlobalPlatform : public FOutputDevice
 	DWORD	MMX,PentiumPro,Extra2,Extra3; // Processor features present
 	//
 	BYTE	LogEventEnabled[LOG_MAX];
-	char	**LogEventNames;
+	const char	**LogEventNames;
 	FILE	*LogFile;
 	//
 	// Strings:
@@ -218,8 +218,8 @@ class FGlobalPlatform : public FOutputDevice
 	//
 	// Memory allocation:
 	//
-	virtual void	*VARARGS Malloc(int Size,char *Fmt,...);
-	virtual void	*VARARGS MallocAligned(int Size,int Alignment,char *Fmt,...);
+	virtual void	*VARARGS Malloc(int Size,const char *Fmt,...);
+	virtual void	*VARARGS MallocAligned(int Size,int Alignment,const char *Fmt,...);
 	virtual void	*VARARGS Realloc(void *Ptr,int NewSize,char *Fmt,...);
 	virtual void	Free(void *Ptr);
 	//
@@ -262,7 +262,7 @@ class FGlobalPlatform : public FOutputDevice
 	virtual void	ResetKeyboard(void);
 	virtual void	Enable(void);
 	virtual void	Disable(void);
-	virtual void    LaunchURL(char *URL, char *Extra);
+	virtual void    LaunchURL(const char *URL, const char *Extra);
 	virtual int     PasswordDialog(const char *Title,const char *Prompt,char *Name,char *Password);
 	virtual void	GetMemoryInfo(int *MemoryInUse,int *MemoryAvailable);
 	virtual int		Exec(const char *Cmd,FOutputDevice *Out=GApp);

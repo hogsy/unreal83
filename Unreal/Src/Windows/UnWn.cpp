@@ -171,10 +171,7 @@ BOOL CUnrealWnApp::InitInstance()
 		AfxMessageBox(IDP_OLE_INIT_FAILED);
 		return FALSE;
 		};
-	//
-	// Standard initialization:
-	//
-	Enable3dControls();
+
 	//
 	// Handle OLE or regular startup:
 	//
@@ -249,7 +246,7 @@ BOOL CUnrealWnApp::InitInstance()
 			MessagePump();
 			//
 			Platform.ServerAlive = 0;
-			if (OleCrashed || Platform.InAppError) goto Crashed;
+			if (OleCrashed || Platform.InAppError) throw;
 			//
 			Timer.Exit();
 			GUnreal.Exit();
@@ -258,7 +255,6 @@ BOOL CUnrealWnApp::InitInstance()
 			}
 		catch(...) // Exception due to appError call or GPF
 			{
-			Crashed:
 			ExceptionExit			= 1;
 			PlatformCrashed			= 1;
 			Timer.Exit();

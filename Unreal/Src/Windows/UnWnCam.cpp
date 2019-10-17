@@ -162,7 +162,8 @@ UCamera *FWindowsCameraManager::CurrentCamera(void)
 	UCamera *TestCamera;
 	if (!CameraArray->Num) return NULL; // No cameras exist
 	//
-	for (int i=0; i<CameraArray->Num; i++)
+	int i;
+	for (i=0; i<CameraArray->Num; i++)
 	   	{
 		TestCamera = CameraArray->Element(i);
      	if (TestCamera->Current) break;
@@ -494,7 +495,7 @@ int FWindowsCameraManager::Exec(const char *Cmd,FOutputDevice *Out)
 // Return a DirectDraw error message.
 // Error messages commented out are DirectDraw II error messages.
 //
-char *FWindowsCameraManager::ddError(HRESULT Result)
+const char *FWindowsCameraManager::ddError(HRESULT Result)
 	{
 	GUARD;
 	switch (Result)

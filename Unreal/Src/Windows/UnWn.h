@@ -34,7 +34,7 @@ class CUnrealTimer
 	//
 	// Functions:
 	//
-	CTimer(void);
+	CUnrealTimer(void);
 	void Enable(void);
 	void Disable(void);
 	void Init(DWORD TimerRate);
