@@ -72,8 +72,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <PostBuildEvent>
-      <Command>xcopy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\System\" /F /Y
-del /f "$(OutDir)$(TargetName)$(TargetExt)"</Command>
+      <Command>xcopy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\System\" /F /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

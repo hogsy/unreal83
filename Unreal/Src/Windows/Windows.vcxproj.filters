@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Libraries">
+      <UniqueIdentifier>{02b4ef25-8b73-49af-9bca-5b44d190a488}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="UnWnTime.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnSerD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnSend.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnProp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnPref.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnKeyD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnEdSv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnDlg.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnDevD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnCam.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnAudD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnActD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWnAccD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnWn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnTask.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnRenDev.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnRage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnPswd.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnPlatfm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StdAfx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="UnWn.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Res\Icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Res\UnSplash.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Res\UnWn.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\Lib\UnEditor.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\Lib\UnEngine.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\Lib\UnGame.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\Lib\UnNet.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+    <Library Include="..\Lib\UnRender.lib">
+      <Filter>Libraries</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="UnWnSerD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnSend.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnProp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnPref.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnKeyD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnEdSv.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnDlg.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnDevD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnCam.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnAudD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnActD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWnAccD.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnWn.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UnPswd.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StdAfx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ati3dCif.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

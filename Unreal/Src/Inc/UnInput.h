@@ -161,17 +161,17 @@ public:
     // Look for a movement name at the beginning of Text, after any whitespace.
     // If found, move Text beyond the movement name and return the identified movement.
     // Otherwise, leading whitespace is removed and 0 is returned.
-    static TMovement FInput::ParseMovement( const char * & Text );
+    static TMovement ParseMovement( const char * & Text );
     // FindMovement is like ParseMovement, without any adjustments in the text.
-    static TMovement FInput::FindMovement( const char * Text );
+    static TMovement FindMovement( const char * Text );
 
     //         Parse a switch name out of a text string.    
     // Look for a switch name at the beginning of Text, after any whitespace.
     // If found, move Text beyond the switch name and return the identified switch.
     // Otherwise, leading whitespace is removed and 0 is returned.
-    static TSwitch FInput::ParseSwitch( const char * & Text );
+    static TSwitch ParseSwitch( const char * & Text );
     // FindSwitch is like ParseSwitch, without any adjustments in the text.
-    static TSwitch FInput::FindSwitch( const char * Text );
+    static TSwitch FindSwitch( const char * Text );
 
     //            Key-Value pairs for input.
     // The recognized keys are not documented here because they tend to

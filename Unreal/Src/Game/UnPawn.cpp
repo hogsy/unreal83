@@ -56,11 +56,11 @@
     static inline void __cdecl Debug(const char * Message, ...)
     {
     }
-    #define DebugVector(Text,Vector)
+    #define DebugVector(Text,Vector)	{}
 #endif
 
-static const FLOAT StopThresholdSpeed = 0.04; // Speeds below this are set to 0.
-static const FLOAT MotionDamping = 0.9;
+static const FLOAT StopThresholdSpeed = 0.04f; // Speeds below this are set to 0.
+static const FLOAT MotionDamping = 0.9f;
 
 //tbm: Convert degrees to WORD angle measurements.
 static inline int Degrees(int Degrees)
@@ -850,7 +850,7 @@ static void actorAI( INDEX iActor )
     if( Pawn.LifeState == LS_Alive )
     {
         // Periodic check slightly randomized so all pawns don't check at once.
-        if( (GServer.Ticks&0xf) == (iActor&0xf) || GServer.Ticks&GCheat->MonsterSlowMotionValue != 0 ) 
+        if( (GServer.Ticks&0xf) == (iActor&0xf) || (GServer.Ticks & GCheat->MonsterSlowMotionValue) != 0 ) 
         {
             if ( Pawn.bSensesTargets && Actor.iTarget == INDEX_NONE )
             {
@@ -1497,10 +1497,10 @@ int APawn::Process(ILevel *Level, FName Message, void *Params)
                 // check for noises infrequently, and can make game-play more interesting
                 // as the noise "clings" to the player.
                 static FLOAT LastNoise; //tbd: for debugging
-                Pawn.Noise *= 0.85; 
+                Pawn.Noise *= 0.85f; 
                 if( DebugNoise && Actor.IsPlayer() )
                 {
-                    if( (Pawn.Noise >= 0.1 && Pawn.Noise > LastNoise) || (GServer.Ticks&0x1f)==0 )
+                    if( (Pawn.Noise >= 0.1f && Pawn.Noise > LastNoise) || (GServer.Ticks&0x1f)==0 )
                     {
                         debugf( LOG_Info, "Noise: %3.3f", Pawn.Noise );
                     }
@@ -1522,7 +1522,7 @@ int APawn::Process(ILevel *Level, FName Message, void *Params)
             }
             if( Pawn.ExplosiveCharge > 0 )
             {
-                Pawn.ExplosiveCharge *= 0.996; // Decay any explosive charge.
+                Pawn.ExplosiveCharge *= 0.996f; // Decay any explosive charge.
                 if( Pawn.ExplosiveCharge <= 0.4 )
                 {
                     Pawn.ExplosiveCharge = 0;
@@ -1565,7 +1565,7 @@ int APawn::Process(ILevel *Level, FName Message, void *Params)
                             Effect->Velocity.Z = Random(0.0,3.0);
                             if( Which==1 ) // First one?
                             {
-                                Effect->Velocity *= 0.2; // Slow it down
+                                Effect->Velocity *= 0.2f; // Slow it down
                             }
                         }
                     }

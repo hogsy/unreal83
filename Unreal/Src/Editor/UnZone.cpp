@@ -898,7 +898,8 @@ QWORD FZoneFilter::BuildZoneMasks(INDEX iNode)
 void FZoneFilter::BuildConnectivity(void)
 	{
 	GUARD;
-	for (int i=0; i<64; i++) // Init to identity
+	int i;
+	for (i=0; i<64; i++) // Init to identity
 		{
 		ModelInfo.BspNodesResource->Zones[i].Connectivity = ((QWORD)1)<<i;
 		};
@@ -962,7 +963,8 @@ void FZoneFilter::BuildZoneDescriptors(void)
 	//
 	int Descriptors=0, Duplicates=0, Zoneless=0;
 	//
-	for (int i=0; i<64; i++)
+	int i;
+	for (i=0; i<64; i++)
 		{
 		ModelInfo.BspNodesResource->Zones[i].iZoneActor = INDEX_NONE;
 		};
@@ -1027,7 +1029,8 @@ void FEditor::visBuild(ULevel *Level)
 		//
 		// Give each leaf in the world a unique zone number.
 		//
-		for (int i=0; i<Filter.ModelInfo.NumBspNodes; i++)
+		int i;
+		for (i=0; i<Filter.ModelInfo.NumBspNodes; i++)
 			{
 			Filter.NodeZones         [i]			= INDEX_NONE;
 			Filter.BackZones         [i]			= INDEX_NONE;

@@ -77,7 +77,8 @@ void texQueryFamilyForLink (int All)
 		ListName = Texture->FamilyName;
 		if ((!ListName.IsNone()) && (All || (ListName.Name()[0]!='!')))
 			{
-			for (DWORD j=0; j<GNumFamResults; j++) if (GTempFamList[j] == ListName) break;
+			DWORD j;
+			for (j=0; j<GNumFamResults; j++) if (GTempFamList[j] == ListName) break;
 			if ((j >= GNumFamResults) && (GNumFamResults < MAX_FAM_RESULTS))
 				GTempFamList [GNumFamResults++] = ListName;
 			};

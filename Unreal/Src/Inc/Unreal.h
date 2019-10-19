@@ -19,9 +19,7 @@
 //
 // Version info and compile options specific to this build of the Unreal engine
 //
-#ifndef  _INC_UNBUILD
 #include "UnBuild.h"
-#endif
 
 //
 // Unreal Platform-specific defines for portability
@@ -69,77 +67,59 @@ UNREAL_API extern class NManager				*GNetManager;
 	High-level includes
 -----------------------------------------------------------------------------*/
 
-#ifndef _INC_UNFILE		// Low-level, platform-independent file functions
+// Low-level, platform-independent file functions
 #include "UnFile.h"
-#endif
 
-#ifndef _INC_UNMATH		// Vector math functions
+// Vector math functions
 #include "UnMath.h"
-#endif
 
-#ifndef _INC_UNPARAMS	// Parameter parsing routines
+// Parameter parsing routines
 #include "UnParams.h"
-#endif
 
-#ifndef _INC_UNCACHE	// In-memory object caching
+// In-memory object caching
 #include "UnCache.h"
-#endif
 
-#ifndef _INC_UNMEM		// Fast memory pool allocation
+// Fast memory pool allocation
 #include "UnMem.h"
-#endif
 
-#ifndef _INC_UNRESTYP	// Resource type definitions
+// Resource type definitions
 #include "UnResTyp.h"
-#endif
 
-#ifndef _INC_UNRES		// Resource manager
+// Resource manager
 #include "UnRes.h"
-#endif
 
-#ifndef _INC_UNTOPICS	// Topic handlers for editor/server communication
+// Topic handlers for editor/server communication
 #include "UnTopics.h"
-#endif
 
-#ifndef _INC_UNACTOR	// Actor subsystem
+// Actor subsystem
 #include "UnActor.h"
-#endif
 
-#ifndef _INC_UNLEVEL	// Level resource
+// Level resource
 #include "UnLevel.h"
-#endif
 
-#ifndef _INC_UNCAMERA	// Camera subsystem
+// Camera subsystem
 #include "UnCamera.h"
-#endif
 
-#ifndef _INC_UNFGAUD	// Audio subsystem FGlobalAudio
+// Audio subsystem FGlobalAudio
 #include "UnFGAud.h"
-#endif
 
-#ifndef _INC_UNSOUND	// Audio subsystem main
+// Audio subsystem main
 #include "UnSound.h"
-#endif
 
-#ifndef _INC_UNGFX		// Graphics subsystem
+// Graphics subsystem
 #include "UnGfx.h"
-#endif
 
-#ifndef _INC_UNSERVER	// Unreal server
+// Unreal server
 #include "UnServer.h"
-#endif
 
-#ifndef _INC_UNDEFLTS	// Unreal defaults
+// Unreal defaults
 #include "UnDeflts.h"
-#endif
 
-#ifndef _INC_UNENGINE	// Unreal engine
+// Unreal engine
 #include "UnEngine.h"
-#endif
 
-#ifndef _INC_UNVGAME	// Virtual game class
+// Virtual game class
 #include "UnVGame.h"
-#endif
 
 //
 // Files required by the Unreal editor

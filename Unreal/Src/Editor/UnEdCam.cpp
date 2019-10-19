@@ -850,7 +850,7 @@ void FEditor::edcamMove (UCamera *Camera, BYTE Buttons, SWORD MouseX, SWORD Mous
    			CameraInfo.Level.Brush->Lock(&BrushInfo,LOCK_Trans);
 			Vector  = BrushInfo.Scale.Scale * (1 + (FLOAT)(-MouseY) / 256.0);
 			//
-			if (ScaleIsWithinBounds(&Vector,0.05,400.0)) BrushInfo.Scale.Scale = Vector;
+			if (ScaleIsWithinBounds(&Vector,0.05f,400.0f)) BrushInfo.Scale.Scale = Vector;
 			CameraInfo.Level.Brush->Unlock (&BrushInfo);
 			break;
 		case EM_BrushStretch: /* Stretch brush axially */
@@ -869,7 +869,7 @@ void FEditor::edcamMove (UCamera *Camera, BYTE Buttons, SWORD MouseX, SWORD Mous
 			Vector.Y *= (1 + Delta.Y / 256.0);
 			Vector.Z *= (1 + Delta.Z / 256.0);
 			//
-			if (ScaleIsWithinBounds(&Vector,0.05,400.0)) BrushInfo.Scale.Scale = Vector;
+			if (ScaleIsWithinBounds(&Vector,0.05f,400.0f)) BrushInfo.Scale.Scale = Vector;
 			CameraInfo.Level.Brush->Unlock (&BrushInfo);
 			break;
 		case EM_BrushSnap: /* Scale brush snapped to grid */
@@ -883,11 +883,11 @@ void FEditor::edcamMove (UCamera *Camera, BYTE Buttons, SWORD MouseX, SWORD Mous
 			else CalcAxialPerspMove (&CameraInfo,MouseX,MouseY,Buttons,&Delta,&DeltaRot);
 			//
 			Vector = BrushInfo.TempScale.Scale;
-			Vector.X *= (1 + Delta.X / 400.0);
-			Vector.Y *= (1 + Delta.Y / 400.0);
-			Vector.Z *= (1 + Delta.Z / 400.0);
+			Vector.X *= (1 + Delta.X / 400.0f);
+			Vector.Y *= (1 + Delta.Y / 400.0f);
+			Vector.Z *= (1 + Delta.Z / 400.0f);
 			//
-			if (ScaleIsWithinBounds(&Vector,0.05,400.0))
+			if (ScaleIsWithinBounds(&Vector,0.05f,400.0f))
 				{
 				BrushInfo.TempScale.Scale = Vector;
 				BrushInfo.PostScale.Scale = Vector;

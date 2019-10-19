@@ -71,7 +71,7 @@ class UNREAL_API FGlobalTopicTable
 	class HANDLERCLASS : public FTopicHandler \
 		{\
 		public:\
-		HANDLERCLASS(char *Name){GTopics.Register(Name,this);};\
+		HANDLERCLASS(const char *Name){GTopics.Register(Name,this);};\
 		void Get (ULevel *Level, const char *Topic, const char *Item, char *Result);\
 		void Set (ULevel *Level, const char *Topic, const char *Item, const char *Value);\
 		};\

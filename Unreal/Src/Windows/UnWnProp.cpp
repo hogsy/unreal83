@@ -53,22 +53,22 @@ BOOL CDialogProperties::OnInitDialog()
         TabInfo.mask = TCIF_TEXT;
         BOOL CreatedOkay = TRUE;
 
-        TabInfo.pszText = "Preferences";
+        TabInfo.pszText = (char*)"Preferences";
         CreatedOkay = CreatedOkay && TabControl.InsertItem( PreferencesPage, &TabInfo ) != -1;
 
-        TabInfo.pszText = "Audio";
+        TabInfo.pszText = (char*)"Audio";
         CreatedOkay = CreatedOkay && TabControl.InsertItem( AudioPage, &TabInfo ) != -1;
 
-        TabInfo.pszText = "Video";
+        TabInfo.pszText = (char*)"Video";
         CreatedOkay = CreatedOkay && TabControl.InsertItem( VideoPage, &TabInfo ) != -1;
 
-        TabInfo.pszText = "Devices";
+        TabInfo.pszText = (char*)"Devices";
         CreatedOkay = CreatedOkay && TabControl.InsertItem( DevicesPage, &TabInfo ) != -1;
 
-        TabInfo.pszText = "Actions";
+        TabInfo.pszText = (char*)"Actions";
         CreatedOkay = CreatedOkay && TabControl.InsertItem( ActionsPage, &TabInfo ) != -1;
 
-        TabInfo.pszText = "Sensitivity";
+        TabInfo.pszText = (char*)"Sensitivity";
         CreatedOkay = CreatedOkay && TabControl.InsertItem( SensitivityPage, &TabInfo ) != -1;
 
 //todo:add        TabInfo.pszText = "Server";

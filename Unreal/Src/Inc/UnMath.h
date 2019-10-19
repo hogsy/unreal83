@@ -380,20 +380,20 @@ class UNREAL_API FGlobalMath
 // Magic numbers required for CSG to work stably:
 //
 #define THRESH_POINT_ON_PLANE			(0.10)		/* Thickness of plane for front/back/inside test */
-#define THRESH_POINT_ON_SIDE			(0.20)		/* Thickness of polygon side's side-plane for point-inside/outside/on side test */
-#define THRESH_POINTS_ARE_SAME			(0.002)		/* Two points are same if within this distance */
-#define THRESH_POINTS_ARE_NEAR			(0.015)		/* Two points are near if within this distance and can be combined if imprecise math is ok */
-#define THRESH_NORMALS_ARE_SAME			(0.00002)	/* Two normal points are same if within this distance */
+#define THRESH_POINT_ON_SIDE			(0.20f)		/* Thickness of polygon side's side-plane for point-inside/outside/on side test */
+#define THRESH_POINTS_ARE_SAME			(0.002f)	/* Two points are same if within this distance */
+#define THRESH_POINTS_ARE_NEAR			(0.015f)	/* Two points are near if within this distance and can be combined if imprecise math is ok */
+#define THRESH_NORMALS_ARE_SAME			(0.00002f)	/* Two normal points are same if within this distance */
 													/* Making this too large results in incorrect CSG classification and disaster */
-#define THRESH_VECTORS_ARE_NEAR			(0.0004)	/* Two vectors are near if within this distance and can be combined if imprecise math is ok */
+#define THRESH_VECTORS_ARE_NEAR			(0.0004f)	/* Two vectors are near if within this distance and can be combined if imprecise math is ok */
 													/* Making this too large results in lighting problems due to inaccurate texture coordinates */
-#define THRESH_SPLIT_POLY_WITH_PLANE	(0.25)		/* A plane splits a polygon in half */
+#define THRESH_SPLIT_POLY_WITH_PLANE	(0.25f)		/* A plane splits a polygon in half */
 #define THRESH_SPLIT_POLY_PRECISELY		(0.01f)		/* A plane exactly splits a polygon */
-#define THRESH_ZERO_NORM_SQUARED		(0.01*0.01)	/* Size of a unit normal that is considered "zero", squared */
-#define THRESH_VECTORS_ARE_PARALLEL		(0.02)		/* Vectors are parallel if dot product varies less than this */
+#define THRESH_ZERO_NORM_SQUARED		(0.01*0.01f)/* Size of a unit normal that is considered "zero", squared */
+#define THRESH_VECTORS_ARE_PARALLEL		(0.02f)		/* Vectors are parallel if dot product varies less than this */
 
-#define THRESH_OPTGEOM_COPLANAR			(0.05)		/* Threshold for Bsp geometry optimization */
-#define THRESH_OPTGEOM_COSIDAL			(0.05)		/* Threshold for Bsp geometry optimization */
+#define THRESH_OPTGEOM_COPLANAR			(0.05f)		/* Threshold for Bsp geometry optimization */
+#define THRESH_OPTGEOM_COSIDAL			(0.05f)		/* Threshold for Bsp geometry optimization */
 
 /*-----------------------------------------------------------------------------
 	Fast, global inline functions

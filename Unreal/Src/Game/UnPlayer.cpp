@@ -31,8 +31,8 @@ typedef SWORD TSignedAngle;
 //----------------------------------------------------------------------------
 //                  Player noise parameters
 //----------------------------------------------------------------------------
-static const FLOAT RunNoise  = 1.0;
-static const FLOAT MoveNoise = 0.5;
+static const FLOAT RunNoise  = 1.0f;
+static const FLOAT MoveNoise = 0.5f;
 
 //----------------------------------------------------------------------------
 //                  Player movement parameters
@@ -44,14 +44,14 @@ static const FLOAT MoveNoise = 0.5;
 //      This means that:
 //          V(infinity) = A/(1-F)
 
-static const FLOAT RightwardFactor = 0.8; // Rightward motions are generally this fraction of forward motions.
+static const FLOAT RightwardFactor = 0.8f; // Rightward motions are generally this fraction of forward motions.
 
-static const FLOAT VelocitySurfaceDamping     = 0.90  ; // Velocity of pawn on surfaces is damped by this factor.
-static const FLOAT VelocityFlyDamping         = 0.97  ; // Velocity of flying pawn in air is damped by this factor.
-static const FLOAT VelocityAirDamping         = 0.999 ; // Velocity of non-flying pawn in air is damped by this factor.
-static const FLOAT UsualForwardAcceleration   = 0.50; // The usual forward or backward acceleration.
+static const FLOAT VelocitySurfaceDamping     = 0.90f  ; // Velocity of pawn on surfaces is damped by this factor.
+static const FLOAT VelocityFlyDamping         = 0.97f  ; // Velocity of flying pawn in air is damped by this factor.
+static const FLOAT VelocityAirDamping         = 0.999f ; // Velocity of non-flying pawn in air is damped by this factor.
+static const FLOAT UsualForwardAcceleration   = 0.50f; // The usual forward or backward acceleration.
 static const FLOAT UsualRightwardAcceleration = RightwardFactor*UsualForwardAcceleration; // The usual rightward or leftward acceleration.
-static const FLOAT UsualUpwardAcceleration    = 0.40; // The usual upwards or downward acceleration.
+static const FLOAT UsualUpwardAcceleration    = 0.40f; // The usual upwards or downward acceleration.
 
 
 static const TPositiveAngle MaxPitchSpeed   = 0x600; 
@@ -64,7 +64,7 @@ static const TSignedAngle PitchLimit = 0x3400 ; // About 73 degrees upward/downw
 static const FLOAT DifferentialMoveFactor = 20.0; //tbe:
 
 
-static const FLOAT StopThresholdSpeed = 0.04; // Speeds below this are set to 0.
+static const FLOAT StopThresholdSpeed = 0.04f; // Speeds below this are set to 0.
 
 //
 // Rotation parameters
@@ -105,9 +105,9 @@ static const FLOAT StopThresholdSpeed = 0.04; // Speeds below this are set to 0.
 #define MAX_FALLING_Z_SPEED           30.0  /* Prevents player from falling down too fast */
 #define MAX_SMOOTH_STAIR_DIST         25.0    /* Let player climb stairs and descend smoothly */
 
-static const FLOAT LungeStaminaThreshold = 0.10     ; // The minimum amount of stamina to allow a lunge:
-static const FLOAT StaminaDecayRate      = 0.015    ; // Amount stamina decays each tick while lunging.
-static const FLOAT StaminaRechargeRate   = 0.005    ; // Amount stamina recharges each tick not lunging.
+static const FLOAT LungeStaminaThreshold = 0.10f     ; // The minimum amount of stamina to allow a lunge:
+static const FLOAT StaminaDecayRate      = 0.015f    ; // Amount stamina decays each tick while lunging.
+static const FLOAT StaminaRechargeRate   = 0.005f    ; // Amount stamina recharges each tick not lunging.
 
 static inline FLOAT Min(FLOAT Value1, FLOAT Value2)
 {
@@ -1032,7 +1032,7 @@ int FGame::PlayerTick(INDEX iActor, void *Params)
         const TActionStatus & Accelerate = Actions[FAction::Accelerate];
         if( FAction::CheckStatus( Accelerate, FAction::IsActiveStatus ) )
         {
-            FLOAT Magnitude = 0.01;
+            FLOAT Magnitude = 0.01f;
             if( Pawn.DesiredSpeed == 0 )
             {
                 Pawn.DesiredSpeed = MaxSpeed;
@@ -1053,15 +1053,15 @@ int FGame::PlayerTick(INDEX iActor, void *Params)
         const TActionStatus & Decelerate = Actions[FAction::Decelerate];
         if( FAction::CheckStatus( Decelerate, FAction::IsActiveStatus ) )
         {
-            FLOAT Magnitude = 0.01;
+            FLOAT Magnitude = 0.01f;
             if( Pawn.DesiredSpeed == 0 )
             {
                 Pawn.DesiredSpeed = MaxSpeed;
             }
             Pawn.DesiredSpeed = Pawn.DesiredSpeed - Magnitude * RunSpeed;
-            if( Pawn.DesiredSpeed < 0.1 ) 
+            if( Pawn.DesiredSpeed < 0.1f ) 
             { 
-                Pawn.DesiredSpeed = 0.1; 
+                Pawn.DesiredSpeed = 0.1f; 
             }
         }
     }
@@ -1405,7 +1405,7 @@ int FGame::PlayerTick(INDEX iActor, void *Params)
         }
         else // Speed < Pawn.DesiredSpeed
         {
-            const FLOAT SpeedUpFactor = Min( Pawn.DesiredSpeed / Speed, 1.1 );
+            const FLOAT SpeedUpFactor = Min( Pawn.DesiredSpeed / Speed, 1.1f );
             Pawn.Velocity.X *= SpeedUpFactor;
             Pawn.Velocity.Y *= SpeedUpFactor;
             Speed *= SpeedUpFactor;
@@ -1470,7 +1470,7 @@ int FGame::PlayerTick(INDEX iActor, void *Params)
             {
                 // Falling:
                 Pawn.Velocity += Gravity;
-                Pawn.Velocity *= 0.92; 
+                Pawn.Velocity *= 0.92f; 
                 FallingVelocity = Pawn.Velocity.Z;
 				// Detach from moving floor if we're falling but not jumping
 				if (!IsJumping)
@@ -1539,7 +1539,7 @@ int FGame::PlayerTick(INDEX iActor, void *Params)
                     //debugf( LOG_Info, "Player is hurt!" );
                     PHit HitInfo;
                     HitInfo.Empty();
-                    HitInfo.Damage[DMT_Basic] = 0.142; //tbi: Hard-coded value
+                    HitInfo.Damage[DMT_Basic] = 0.142f; //tbi: Hard-coded value
                     if( (GServer.Ticks&0x1f)==0 )
                     {
                         Pawn.EyeHeight += Random( 5.0, 8.0 ) * ( FRandom::Boolean() ? -1.0 : 1.0 );
@@ -1599,7 +1599,7 @@ int FGame::PlayerTick(INDEX iActor, void *Params)
     //
     // Update roll:
     //
-    static FLOAT RollFactor = 1.2;
+    static FLOAT RollFactor = 1.2f;
     if( GCheat->Adjustment == FCheat::AdjustPlayerViewRoll )
     {
         GCheat->DoAdjustments(Actor.iMe, &RollFactor );

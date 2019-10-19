@@ -1578,7 +1578,7 @@ char *FGlobalResourceManager::CombineName (char *Result, const char *Name, const
 // arbitrary number string.  The resource name returned is guaranteed not to
 // exist.
 //
-char *FGlobalResourceManager::MakeUniqueName(char *Result, char *BaseName, char *Append, EResourceType ResType)
+char *FGlobalResourceManager::MakeUniqueName(char *Result, char *BaseName, const char *Append, EResourceType ResType)
 	{
 	static int TempInt = 0;
 	int StartInt = TempInt;

@@ -190,7 +190,7 @@ class UNREAL_API FGlobalGfx
 	private:
 	void LookupAllTables(void);
 	void LookupAllLuts(void);
-	int FGlobalGfx::ScanFontBox (UTexture *Texture,int X,int Y,int *XL,int *YL);
+	int ScanFontBox (UTexture *Texture,int X,int Y,int *XL,int *YL);
 	};
 
 /*------------------------------------------------------------------------------------

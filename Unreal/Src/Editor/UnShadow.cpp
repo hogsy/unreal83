@@ -259,7 +259,8 @@ void FMeshIlluminator::LightBspSurf (INDEX iSurf)
 		// generated the surface:
 		//
 		FPoly *Poly = &Brush->Polys->Element(0);
-		for (int i=0; i<Brush->Polys->Num; i++)
+		int i;
+		for (i=0; i<Brush->Polys->Num; i++)
 			{
 			if (Poly->iLink == iSurf)
 				{
@@ -389,7 +390,8 @@ void FMeshIlluminator::LightAllSurfs(void)
 	GUARD;
 	//
 	int n=0,c=0;
-	for (INDEX i=0; i<ModelInfo->MaxBspSurfs; i++)
+	INDEX i;
+	for (i=0; i<ModelInfo->MaxBspSurfs; i++)
 		{
 		n += (ModelInfo->BspSurfs[i].iLightMesh != INDEX_NONE);
 		};
@@ -507,7 +509,8 @@ void FEditor::shadowIlluminateBsp (ULevel *Level, int Selected)
 		//
 		// Clear all poly light mesh indices:
 		//
-		for (INDEX i=0; i<Illum.ModelInfo->MaxBspSurfs; i++)
+		INDEX i;
+		for (i=0; i<Illum.ModelInfo->MaxBspSurfs; i++)
 			{
 			Illum.ModelInfo->BspSurfs[i].iLightMesh = INDEX_NONE;
 			};

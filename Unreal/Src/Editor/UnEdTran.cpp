@@ -44,7 +44,7 @@ class FTransChangeLog  				// Log of additions/deletions/modifications to record
 //
 // Globals:
 //
-char *GTransTypeNames[] = {"Actor","BrushLoc","BrushPoly","BspNode","BspSurf"};
+const char *GTransTypeNames[] = {"Actor","BrushLoc","BrushPoly","BspNode","BspSurf"};
 
 /*-----------------------------------------------------------------------------
 	Lock, Unlock, and Reset

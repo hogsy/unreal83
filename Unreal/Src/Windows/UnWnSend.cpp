@@ -276,7 +276,7 @@ void CDialogInputSensitivity::OnSelchangeInputMovementList()
 // Return TRUE if all the values are the same (or very close), FALSE otherwise.
 static BOOL IsSame(FLOAT Value1, FLOAT Value2)
 {
-    const FLOAT MaxDelta = 0.001;
+    const FLOAT MaxDelta = 0.001f;
     const FLOAT Delta = Value2-Value1;
     const BOOL IsSame = -MaxDelta <= Delta && Delta <= MaxDelta;
     return IsSame;

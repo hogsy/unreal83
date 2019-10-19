@@ -96,7 +96,7 @@ UModel *FEditor::csgAddOperation (UModel *Brush,ULevel *Level, DWORD PolyFlags, 
 	Misc
 -----------------------------------------------------------------------------*/
 
-char *FEditor::csgGetName (ECsgOper CSG)
+const char *FEditor::csgGetName (ECsgOper CSG)
 	{
 	GUARD;
 	switch (CSG)
@@ -484,7 +484,8 @@ void FEditor::polySelectMatchingItems (IModel *ModelInfo)
 	mymemset (GFlags2,0,sizeof(GFlags2));
 	//
 	Poly = &ModelInfo->BspSurfs[0];
-	for (INDEX i=0; i<ModelInfo->NumBspSurfs; i++)
+	INDEX i;
+	for (i=0; i<ModelInfo->NumBspSurfs; i++)
 		{
 		if (Poly->Brush)
 			{

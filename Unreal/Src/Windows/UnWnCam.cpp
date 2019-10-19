@@ -682,7 +682,8 @@ void FWindowsCameraManager::FindAvailableModes(UCamera *Camera)
 		// Completely rebuild the "Size" submenu based on what modes are available:
 		//
 		int n=GetMenuItemCount(hSizes);
-		for (int i=0; i<n; i++) if (!DeleteMenu(hSizes,0,MF_BYPOSITION)) appErrorf("DeleteMenu failed %i",GetLastError());
+		int i;
+		for (i=0; i<n; i++) if (!DeleteMenu(hSizes,0,MF_BYPOSITION)) appErrorf("DeleteMenu failed %i",GetLastError());
 		//
 		AppendMenu(hSizes,MF_STRING,ID_COLOR_8BIT,"&8-bit color");
 		AppendMenu(hSizes,MF_STRING,ID_COLOR_16BIT,"&16-bit color");
@@ -818,7 +819,7 @@ int FWindowsCameraManager::ddSetMode(HWND hWndParent,int Width, int Height,int C
 	HRESULT 		Result;
 	DDSCAPS 		caps;
 	HDC 			hDC;
-	char			*Descr;
+	const char		*Descr;
 	//
 	if (!dd)
 		{
@@ -2092,7 +2093,7 @@ LRESULT FWindowsCameraManager::CameraWndProc(HWND hWnd, UINT iMessage, WPARAM wP
 			//
 			// Stop clipping mouse to current window, and restore original position:
 			//
-			if ((!(wParam&GApp->KnownButtons)&(MK_LBUTTON|MK_MBUTTON|MK_RBUTTON))) 
+			if ((!(wParam & GApp->KnownButtons) & (MK_LBUTTON|MK_MBUTTON|MK_RBUTTON))) 
                 {
                     {
                     StopClippingCursor (Camera,1);
@@ -3184,7 +3185,8 @@ void FWindowsCameraManager::SetPalette(UPalette *Palette,UPalette *GammaPalette)
 	memcpy(PaletteEntry,     Palette->GetData(),     256*4); // Assumes same palette formats
 	memcpy(GammaPaletteEntry,GammaPalette->GetData(),256*4);
 	//
-	for (int i=10; i<246; i++)
+	int i;
+	for (i=10; i<246; i++)
 		{
 		PaletteEntry 	[i].peFlags     = PalFlags();
 		GammaPaletteEntry[i].peFlags    = 0;

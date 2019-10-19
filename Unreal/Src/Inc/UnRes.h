@@ -1405,7 +1405,7 @@ class UNREAL_API UTexture : public UResource
 		UNGUARD("UTexture::GetData");
 		};
 	private:
-	void UTexture::DoRemap (BYTE *Remap);
+	void DoRemap (BYTE *Remap);
 	void InitRemap(BYTE *Remap);
 	};
 

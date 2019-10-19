@@ -82,7 +82,7 @@ IMPLEMENT_OLECREATE(CUnrealEdServer, "Unreal.UnrealEdServer", 0xf936c3a7, 0x1ff8
 // CUnrealEdServer OLE handlers
 /////////////////////////////////////////////////////////////////////////////
 
-void HandleOleError(char *Module)
+void HandleOleError(const char *Module)
 	{
 	App.InOle=0;
 	App.OleCrashed=1;
@@ -100,7 +100,7 @@ void HandleOleError(char *Module)
 	else AfxThrowOleDispatchException(1,App.Platform.ErrorHist);
 	};
 
-int inline CheckUnrealState(char *Descr)
+int inline CheckUnrealState(const char *Descr)
 	{
 	if (App.PlatformCrashed)
 		{

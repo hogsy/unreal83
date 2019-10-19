@@ -449,7 +449,8 @@ void FGlobalPlatform::Startup(void)
 	DWORD A,B,C,D;
 	//
 	FGlobalPlatform_CPUID(0,&A,&B,&C,&D);
-	char Brand[13]="",*Model="Unknown Processor Type",Features[256]="";
+	char Brand[13]="",Features[256]="";
+	const char* Model = "Unknown Processor Type";
 
 	Brand[ 0]=B;
 	Brand[ 1]=B>>8;

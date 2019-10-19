@@ -313,7 +313,7 @@ class UNREAL_API FGlobalResourceManager // Global resource table (in memory only
 	/////////////////////////////
 	//
 	char *CombineName				(char *Result, const char *Name, const char *TypeChar,int Num);
-	char *MakeUniqueName			(char *Result, char *BaseName, char *Append, EResourceType ResType);
+	char *MakeUniqueName			(char *Result, char *BaseName, const char *Append, EResourceType ResType);
 	//
 	///////////////////////////////////////
 	// Internals: Only used in UnRes.cpp //

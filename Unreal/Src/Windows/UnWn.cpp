@@ -203,11 +203,12 @@ BOOL CUnrealWnApp::InitInstance()
 			RegisterTypeLib (tlUnreal,bTlbFname,bHlpFname))
 			{
 			char Msg[256];
+			CT2A ascii(cTlbFname);
 			sprintf
 				(
 				Msg,
 				"Type library %s couldn't be registered.  Please reinstall Unreal.",
-				cTlbFname
+				ascii.m_psz
 				);
 			AfxMessageBox(Msg);
 			return FALSE;

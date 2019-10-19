@@ -252,7 +252,7 @@ class UNEDITOR_API FEditor
 	virtual UModel	*csgAddOperation		(UModel *Brush,ULevel *Level, DWORD PolyFlags, ECsgOper CSG, BYTE BrushFlags);
 	virtual void	csgRebuild		 		(ULevel *Level);
 	virtual void	csgInvalidateBsp		(ULevel *Level);
-	virtual char	*csgGetName 			(ECsgOper CsgOper);
+	virtual const char	*csgGetName 			(ECsgOper CsgOper);
 	//
 	// Editor EdPoly/BspSurf assocation virtuals from UnEdCsg.cpp:
 	//

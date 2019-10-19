@@ -1863,7 +1863,7 @@ int FEditor::bspBrushCSG (UModel *Brush, UModel *Model, DWORD PolyFlags, ECsgOpe
 	FLOAT			Orientation;
 	FModelCoords	Coords,Uncoords;
 	int				NumPolysFromBrush,i,j,ReallyBig;
-	char			*Descr;
+	const char		*Descr;
 	//
 	// See if an overflow is likely:
 	//

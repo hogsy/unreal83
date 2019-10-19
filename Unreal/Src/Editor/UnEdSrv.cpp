@@ -74,7 +74,7 @@ int FEditor::Exec(const char *Stream,FOutputDevice *Out)
 	char Temp[256];
 	mystrncpy(Temp,Stream,256);
 	const char *Str = &Temp[0];
-	if (strchr(Str,';')) *strchr(Str,';') = 0; // Kill comments
+	if (strchr(Str,';')) *(char*)strchr(Str,';') = 0; // Kill comments
 	//
 	strncpy(ErrorTemp,Str,79);
 	ErrorTemp[79]=0;
