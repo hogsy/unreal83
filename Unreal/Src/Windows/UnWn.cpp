@@ -400,13 +400,16 @@ void CUnrealWnApp::RegisterFileTypes(char *BaseDir)
 	//
 	// Register map file type:
 	//
-	RegCreateKey				(HKEY_CLASSES_ROOT,MAP_EXTENSION,&Key1);
-		RegDoSet				(Key1,OLE_MAP_TYPE);
-	RegCloseKey					(Key1);
-	//
-	RegCreateKey				(HKEY_CLASSES_ROOT,OLE_APP,&Key1);
-		RegDoSet				(Key1,OLE_APP_DESCRIPTION);
-	RegCloseKey					(Key1);
+	if (RegCreateKey(HKEY_CLASSES_ROOT, MAP_EXTENSION, &Key1) == ERROR_SUCCESS) {
+		RegDoSet(Key1, OLE_MAP_TYPE);
+		RegCloseKey(Key1);
+	}
+
+	if (RegCreateKey(HKEY_CLASSES_ROOT, OLE_APP, &Key1) == ERROR_SUCCESS) {
+		RegDoSet(Key1, OLE_APP_DESCRIPTION);
+		RegCloseKey(Key1);
+	}
+
 	//
 	// Register application/unreal MIME type
 	//
@@ -424,57 +427,69 @@ void CUnrealWnApp::RegisterFileTypes(char *BaseDir)
 	//
 	// Register UnServer.exe (and optionally UnrealEd.exe) shell launch info:
 	//
-	RegCreateKey				(HKEY_CLASSES_ROOT,OLE_MAP_TYPE,&Key1);
-		RegDoSet				(Key1,OLE_MAP_DESCRIPTION);
-		RegCreateKey			(Key1,"DefaultIcon",&Key2);
-			RegDoSet			(Key2,Base + ENGINE_PARTIAL + ",0");
-		RegCloseKey				(Key2);
+	if (RegCreateKey(HKEY_CLASSES_ROOT, OLE_MAP_TYPE, &Key1) == ERROR_SUCCESS) {
+		RegDoSet(Key1, OLE_MAP_DESCRIPTION);
+		if (RegCreateKey(Key1, "DefaultIcon", &Key2) == ERROR_SUCCESS) {
+			RegDoSet(Key2, Base + ENGINE_PARTIAL + ",0");
+			RegCloseKey(Key2);
+		}
 		/*
 		RegCreateKey			(Key1,"ContentType",&Key2);
 			RegDoSet			(Key2,MIME_MAP_TYPE);
 		RegCloseKey				(Key2);
 		*/
-		RegCreateKey			(Key1,"shell",&Key2);
-			RegDoSet			(Key2,"open");
-			RegCreateKey		(Key2,"open",&Key3);
-				RegDoSet		(Key3,PLAY_COMMAND);
-				RegCreateKey	(Key3,"command",&Key4);
-					RegDoSet	(Key4,Base + ENGINE_PARTIAL + " FILE=\"%1\"");
-				RegCloseKey		(Key4);
-			RegCloseKey			(Key3);
+		if (RegCreateKey(Key1, "shell", &Key2) == ERROR_SUCCESS) {
+			RegDoSet(Key2, "open");
+			if (RegCreateKey(Key2, "open", &Key3) == ERROR_SUCCESS) {
+				RegDoSet(Key3, PLAY_COMMAND);
+				if (RegCreateKey(Key3, "command", &Key4) == ERROR_SUCCESS) {
+					RegDoSet(Key4, Base + ENGINE_PARTIAL + " FILE=\"%1\"");
+					RegCloseKey(Key4);
+				}
+				RegCloseKey(Key3);
+			}
 			//
-			Temp=fopen(EDITOR_FNAME,"rb");
+			Temp = fopen(EDITOR_FNAME, "rb");
 			if (Temp)
-				{
+			{
 				fclose(Temp);
-				RegCreateKey	(Key2,"edit",&Key3);
-					RegDoSet	(Key3,EDIT_COMMAND);
-					RegCreateKey(Key3,"command",&Key4);
-						RegDoSet(Key4,Base + EDITOR_PARTIAL + " FILE=\"%1\"");
-					RegCloseKey	(Key4);
-				RegCloseKey		(Key3);
-				};
-		RegCloseKey				(Key2);
-	RegCloseKey					(Key1);
+				if (RegCreateKey(Key2, "edit", &Key3) == ERROR_SUCCESS) {
+					RegDoSet(Key3, EDIT_COMMAND);
+					if (RegCreateKey(Key3, "command", &Key4) == ERROR_SUCCESS) {
+						RegDoSet(Key4, Base + EDITOR_PARTIAL + " FILE=\"%1\"");
+						RegCloseKey(Key4);
+					}
+					RegCloseKey(Key3);
+				}
+			};
+			RegCloseKey(Key2);
+		}
+		RegCloseKey(Key1);
+	}
 	//
 	// Register with Internet Explorer:
 	//
-	RegCreateKey				(HKEY_CLASSES_ROOT,"Unreal",&Key1);
-		RegDoSet				(Key1,"URL:Unreal Protocol");
-		RegCreateKey			(Key1,"DefaultIcon",&Key2);
-			RegDoSet			(Key2,Base + ENGINE_PARTIAL);
-		RegCloseKey				(Key2);
-		RegSetEx				(Key1,"URL Protocol","");
-		RegCreateKey			(Key1,"shell",&Key2);
-			RegDoSet			(Key2,"open");
-			RegCreateKey		(Key2,"open",&Key3);
-				RegDoSet		(Key3,PLAY_COMMAND);
-				RegCreateKey	(Key3,"command",&Key4);
-					RegDoSet	(Key4,Base + ENGINE_PARTIAL + " URL=\"%1\"");
-				RegCloseKey		(Key4);
-			RegCloseKey			(Key3);
-		RegCloseKey				(Key2);
-	RegCloseKey					(Key1);
+	if (RegCreateKey(HKEY_CLASSES_ROOT, "Unreal", &Key1) == ERROR_SUCCESS) {
+		RegDoSet(Key1, "URL:Unreal Protocol");
+		if (RegCreateKey(Key1, "DefaultIcon", &Key2) == ERROR_SUCCESS) {
+			RegDoSet(Key2, Base + ENGINE_PARTIAL);
+			RegCloseKey(Key2);
+		}
+		RegSetEx(Key1, "URL Protocol", "");
+		if (RegCreateKey(Key1, "shell", &Key2) == ERROR_SUCCESS) {
+			RegDoSet(Key2, "open");
+			if (RegCreateKey(Key2, "open", &Key3) == ERROR_SUCCESS) {
+				RegDoSet(Key3, PLAY_COMMAND);
+				if (RegCreateKey(Key3, "command", &Key4) == ERROR_SUCCESS) {
+					RegDoSet(Key4, Base + ENGINE_PARTIAL + " URL=\"%1\"");
+					RegCloseKey(Key4);
+				}
+				RegCloseKey(Key3);
+			}
+			RegCloseKey(Key2);
+		}
+		RegCloseKey(Key1);
+	}
 	//
 	// Register with Netscape:
 	//
