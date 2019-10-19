@@ -418,9 +418,11 @@ void rendDrawAcrossSetup(ICamera *Camera, UTexture *Texture, DWORD ThesePolyFlag
 		else if (PolyFlags & PF_Glow)			GBlit.BlendKind = BLEND_Glow;
 		else									GBlit.BlendKind = BLEND_Ghost;
 		//
-		GBlit.BlendTable = GGfx.Blenders[GBlit.BlendKind];
 		};
+
+	GBlit.BlendTable = GGfx.Blenders[GBlit.BlendKind];
 	GEffect = GEffectTable[Camera->ColorBytes][GBlit.DrawKind];
+
 	//
 	// Handle dithering:
 	//

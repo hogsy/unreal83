@@ -1768,20 +1768,19 @@ void inline RectLoop(FTexLattice **LatticeBase,int Start, int End)
 		//
 		// Sublattice setup:
 		//
-#if 0 // todo: restore?
-		if (GRender.LightList.Index)
+		if (GLightManager->Index)
 			{
 			int B_IG, B_IGX, B_IGY, B_IGXY;
 
-			INT MeshBaseU	= GRender.LightList.Index->TextureUStart;
-			INT MeshBaseV	= GRender.LightList.Index->TextureVStart;
-			VMask			= (1 << GRender.LightList.MeshVBits) - 1;
+			INT MeshBaseU	= GLightManager->Index->TextureUStart;
+			INT MeshBaseV	= GLightManager->Index->TextureVStart;
+			VMask			= (1 << GLightManager->MeshVBits) - 1;
 			NotVMask		= ~VMask;
 			//
 			GP				= GBlit.InterXBits;
 			GL				= GBlit.InterYBits;
-			GM				= GRender.LightList.Index->MeshShift;
-			GMU				= GM + GRender.LightList.MeshUBits;
+			GM				= GLightManager->Index->MeshShift;
+			GMU				= GM + GLightManager->MeshUBits;
 			//
 			// Can conditionally skip parts if GP=0 or GM=0 (which can occur a lot)
 			//
@@ -1810,7 +1809,6 @@ void inline RectLoop(FTexLattice **LatticeBase,int Start, int End)
 			T0->SubHX		= (((B_IVX  >> (16+GP   )))&VMask     )+((B_IUX  << (16-GP   ))&NotVMask  );
 			T0->SubHXY		= (((B_IVXY >> (16+GP+GL)))&VMask     )+((B_IUXY << (16-GP-GL))&NotVMask  );
 			};
-#endif
 		LatticePtr++;
 		};
 	UNGUARD("RectLoop");
@@ -2053,7 +2051,6 @@ void DrawSoftwareTexturedBspSurf ( ICamera* Camera, FBspDrawList* Draw )
 	LSL_BaseU = (FLOAT)0xC0000000 - (LSL_TextureU | LSL_Base);
 	LSL_BaseV = (FLOAT)0xC0000000 - (LSL_TextureV | LSL_Base);
 
-#if 0
 #ifdef ASM_LATTICE
 	TRL_RoutineOfsEffectBase = 0;
 	if (GLightManager->Index)
@@ -2073,7 +2070,6 @@ void DrawSoftwareTexturedBspSurf ( ICamera* Camera, FBspDrawList* Draw )
 		mov dl,[GBlit]GBlit.InterYBits
 		call TRL_SelfModRect
 	}
-#endif
 #endif
 
 	// Interpolate affine values RZ, URZ, VRZ, XRZ, YRZ.

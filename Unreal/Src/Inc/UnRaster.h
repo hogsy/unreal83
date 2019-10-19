@@ -202,8 +202,8 @@ class FRasterTexLine : public TRasterLine<FRasterTexPoint>
 		int Pixels  = ftoi(End.FloatX) - StartX;
 		if (Pixels>0)
 			{
-			FLOAT RLength	= 1.0/(End.FloatX - Start.FloatX);
-			FLOAT XAdjust	= (FLOAT)StartX + 0.5 - Start.FloatX;
+			FLOAT RLength	= 1.0f/(End.FloatX - Start.FloatX);
+			FLOAT XAdjust	= (FLOAT)StartX + 0.5f - Start.FloatX;
 			//
 			FLOAT FloatDU	= (End.FloatU - Start.FloatU) * RLength;
 			FLOAT FloatDV	= (End.FloatV - Start.FloatV) * RLength;
