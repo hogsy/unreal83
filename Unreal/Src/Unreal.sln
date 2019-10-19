@@ -10,7 +10,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnGame", "Game\UnGame.vcxpr
 		{34A6AA1A-3FAB-46F1-BEA0-0BB26551DCBD} = {34A6AA1A-3FAB-46F1-BEA0-0BB26551DCBD}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Windows", "Windows\Windows.vcxproj", "{892A241F-F24D-4AC3-B28D-AD614CC93A1A}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnServer", "Windows\Windows.vcxproj", "{892A241F-F24D-4AC3-B28D-AD614CC93A1A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{34A6AA1A-3FAB-46F1-BEA0-0BB26551DCBD} = {34A6AA1A-3FAB-46F1-BEA0-0BB26551DCBD}
 		{F402A5B5-80BD-4EF2-9B8F-7468353C7CF7} = {F402A5B5-80BD-4EF2-9B8F-7468353C7CF7}
@@ -19,6 +19,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnNet", "Network\UnNet.vcxproj", "{9435D8AE-9F5F-430D-938C-BBB3BB9BE21F}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnEditor", "Editor\UnEditor.vcxproj", "{3EF5797E-EE37-497B-96F0-E0256EEC78AA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnRender", "Render\UnRender.vcxproj", "{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,6 +70,14 @@ Global
 		{3EF5797E-EE37-497B-96F0-E0256EEC78AA}.Release|x64.Build.0 = Release|x64
 		{3EF5797E-EE37-497B-96F0-E0256EEC78AA}.Release|x86.ActiveCfg = Release|Win32
 		{3EF5797E-EE37-497B-96F0-E0256EEC78AA}.Release|x86.Build.0 = Release|Win32
+		{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}.Debug|x64.ActiveCfg = Debug|x64
+		{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}.Debug|x64.Build.0 = Debug|x64
+		{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}.Debug|x86.ActiveCfg = Debug|Win32
+		{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}.Debug|x86.Build.0 = Debug|Win32
+		{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}.Release|x64.ActiveCfg = Release|x64
+		{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}.Release|x64.Build.0 = Release|x64
+		{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}.Release|x86.ActiveCfg = Release|Win32
+		{5E3586AE-E7FF-43CC-A20E-89285E3A37E2}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

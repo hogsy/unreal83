@@ -414,7 +414,7 @@ int FGlobalRender::Project (ICamera *Camera, FVector *V, FLOAT *ScreenX, FLOAT *
 		{
 		Temp.TransformVector(Camera->Coords);
 		//
-		Z  = Temp.Z; if (OurAbs (Z)<0.01) Z+=0.02;
+		Z  = Temp.Z; if (OurAbs (Z)<0.01) Z+=0.02f;
 		RZ	= Camera->ProjZ / Z;
 		//
 		*ScreenX = Temp.X * RZ + Camera->FSXR2;
@@ -1104,8 +1104,8 @@ void FGlobalRender::DrawGridSection (ICamera *Camera, int CameraLocX,
 		*AX = (i * CameraGridY) << IncBits;
 		*BX = (i * CameraGridY) << IncBits;
 		//
-		if ((i<<IncBits)&7)	Ofs = 6.9; // Normal
-		else				Ofs = 8.9; // Highlight 8-aligned
+		if ((i<<IncBits)&7)	Ofs = 6.9f; // Normal
+		else				Ofs = 8.9f; // Highlight 8-aligned
 		//
 		if ((i&1)!=AlphaCase)
 			{

@@ -70,7 +70,8 @@ void DrawNormalRaster(BYTE *Dest, QWORD Start, QWORD Inc, int Pixels)
 	#ifdef ASM
 		CallAsm(Dest,Start,Inc,Pixels,0);
 	#else
-		QWORD VMask = (GBlit.VSize-1) << GBlit.UBits;
+	// Was VSize
+		QWORD VMask = (GBlit.VBits-1) << GBlit.UBits;
 		while (Pixels-- > 0)
 			{
 			*Dest++ = GGfx.ShadeData
@@ -93,7 +94,8 @@ void DrawMaskedRaster(BYTE *Dest, QWORD Start, QWORD Inc, int Pixels)
 	#ifdef ASM
 		CallAsm(Dest,Start,Inc,Pixels,1);
 	#else
-		QWORD VMask = (GBlit.VSize-1) << GBlit.UBits;
+	// Was VSize
+		QWORD VMask = (GBlit.VBits-1) << GBlit.UBits;
 		BYTE B;
 		while (Pixels-- > 0)
 			{
@@ -119,7 +121,8 @@ void DrawBlendedRaster(BYTE *Dest, QWORD Start, QWORD Inc, int Pixels)
 	#ifdef ASM
 		CallAsm(Dest,Start,Inc,Pixels,2);
 	#else
-		QWORD VMask = (GBlit.VSize-1) << GBlit.UBits;
+	// Was VSize
+		QWORD VMask = (GBlit.VBits-1) << GBlit.UBits;
 		while (Pixels-- > 0)
 			{
 			*Dest++ = GBlit.BlendTable
@@ -147,7 +150,8 @@ void DrawMaskedBlendedRaster(BYTE *Dest, QWORD Start, QWORD Inc, int Pixels)
 	#ifdef ASM
 		CallAsm(Dest,Start,Inc,Pixels,3);
 	#else
-		QWORD VMask = (GBlit.VSize-1) << GBlit.UBits;
+	// Was VSize
+		QWORD VMask = (GBlit.VBits-1) << GBlit.UBits;
 		BYTE B;
 		while (Pixels-- > 0)
 			{

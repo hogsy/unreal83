@@ -112,7 +112,8 @@ void FGlobalRender::Init (void)
 	//
 	// Byte multiply table:
 	//
-	for (int i=0; i<256; i++) for (int j=0; j<256; j++) ByteMult[i][j]=(WORD)i*j;
+	int i;
+	for (i=0; i<256; i++) for (int j=0; j<256; j++) ByteMult[i][j]=(WORD)i*j;
 	//
 	void DrawNormalRaster		 (BYTE*,QWORD,QWORD,int);
 	void DrawMaskedRaster		 (BYTE*,QWORD,QWORD,int);
@@ -425,7 +426,8 @@ void FGlobalRender::ExitTransforms(void)
 	INDEX *T;
 	//
 	T = &VectorTransformList[0];
-	for (int i=0; i<NumVectorTransforms; i++)
+	int i;
+	for (i=0; i<NumVectorTransforms; i++)
 		{
 		VectorTransform[*T++].Align = FVA_Uncached;
 		};
@@ -688,7 +690,8 @@ int FGlobalRender::ClipTexPoints (ICamera *Camera, FTransTex *InPts, FTransTex *
 	DestPtr	 = &List0[0];
 	Outcode  = FVF_OutReject;
 	AllCodes = 0;
-	for (int i=0; i<Num0; i++)
+	int i;
+	for (i=0; i<Num0; i++)
 		{
 		*DestPtr     = &InPts[i];
 		Outcode		&= (*DestPtr)->Flags;
@@ -1075,7 +1078,8 @@ int FGlobalRender::OccludeBsp( ICamera *Camera, FSpanBuffer *Backdrop )
 
 	// Init first four units of the rasterization side setup cache so that they
 	// represent the setups for the four view frustrum clipping planes.
-	for ( int i=0; i<4; i++ ) SideCache[i]=(FRasterSideSetup *)GDynMem.GetFast(sizeof(FRasterSideSetup));
+	int i;
+	for ( i=0; i<4; i++ ) SideCache[i]=(FRasterSideSetup *)GDynMem.GetFast(sizeof(FRasterSideSetup));
 	SideCache[0]->P.X = 0;					SideCache[0]->DP.X = 0; // X min clipping plane
 	SideCache[1]->P.X = FIX(Camera->SXR);	SideCache[1]->DP.X = 0; // X max clipping plane
 	SideCache[2]->P.X = 0;					SideCache[2]->DP.X = 0; // Y min clipping plane
@@ -1511,7 +1515,7 @@ inline void LatticeSetupLoop( FTexLattice** LatticeBase,FTexLattice* TopLattice,
 		TopLattice->Loc.Z			= Z;
 		TopLattice->Loc.X			= Z * XRZ;
 		TopLattice->Loc.Y			= Z * LSL_YRZ;
-		TopLattice->Loc.D			= Z * LSL_MipMult;
+		TopLattice->Loc.W			= Z * LSL_MipMult;
 		*(FLOAT *)&TopLattice->U	= Z * URZ + LSL_BaseU;
 		*(FLOAT *)&TopLattice->V	= Z * VRZ + LSL_BaseV;
 		TopLattice->RoutineOfs		= 0;
@@ -1721,7 +1725,7 @@ void inline RectLoop(FTexLattice **LatticeBase,int Start, int End)
 		FTexLattice *B0		= LatticePtr[MAX_XR];
 		FTexLattice *B1		= LatticePtr[MAX_XR+1];
 		//
-		FMipTable *T = &TRL_MipTable[*(DWORD *)&T0->Loc.D >> 21];
+		FMipTable *T = &TRL_MipTable[*(DWORD *)&T0->Loc.W >> 21];
 		//
 		T0->RoutineOfs = T->RoutineOfs + TRL_RoutineOfsEffectBase;
 		//
@@ -1741,7 +1745,6 @@ void inline RectLoop(FTexLattice **LatticeBase,int Start, int End)
 		//
 		int B_IU,B_IUX,B_IUY,B_IUXY;
 		int B_IV,B_IVX,B_IVY,B_IVXY;
-		int B_IG,B_IGX,B_IGY,B_IGXY;
 		//
 		B_IU			= (T0->U + TRL_TexBaseU         ) >> GMU;
 		B_IUX			= (T1->U - T0->U                ) >> GMU;
@@ -1765,8 +1768,11 @@ void inline RectLoop(FTexLattice **LatticeBase,int Start, int End)
 		//
 		// Sublattice setup:
 		//
+#if 0 // todo: restore?
 		if (GRender.LightList.Index)
 			{
+			int B_IG, B_IGX, B_IGY, B_IGXY;
+
 			INT MeshBaseU	= GRender.LightList.Index->TextureUStart;
 			INT MeshBaseV	= GRender.LightList.Index->TextureVStart;
 			VMask			= (1 << GRender.LightList.MeshVBits) - 1;
@@ -1804,6 +1810,7 @@ void inline RectLoop(FTexLattice **LatticeBase,int Start, int End)
 			T0->SubHX		= (((B_IVX  >> (16+GP   )))&VMask     )+((B_IUX  << (16-GP   ))&NotVMask  );
 			T0->SubHXY		= (((B_IVXY >> (16+GP+GL)))&VMask     )+((B_IUXY << (16-GP-GL))&NotVMask  );
 			};
+#endif
 		LatticePtr++;
 		};
 	UNGUARD("RectLoop");
@@ -1861,7 +1868,7 @@ void DrawSoftwareTexturedBspSurf ( ICamera* Camera, FBspDrawList* Draw )
 		FLOAT RZGradSY		= OurAbs(LSL_RZGradSY);
 
 		// Shrink lattice vertically as necessary to mainain the illusion of perspective correctness.
-		static const FLOAT LineThresh[8] = { 0,1.80,1.50,1.00,0.60,0.36,0.20,0.08 };
+		static const FLOAT LineThresh[8] = { 0.0f,1.80f,1.50f,1.00f,0.60f,0.36f,0.20f,0.08f };
 		while ( GBlit.LatticeYBits>0 )
 		{
 			FLOAT Factor1   = Draw->MaxZ * RZGradSY;
@@ -1876,7 +1883,7 @@ void DrawSoftwareTexturedBspSurf ( ICamera* Camera, FBspDrawList* Draw )
 		}
 
 		// Shrink lattice horizontally as necessary to mainain the illusion of perspective correctness.
-		static const FLOAT PixelThresh[8]={0,0,0,1.5,0.80,0.45,0.28,0.06}; // 0.50
+		static const FLOAT PixelThresh[8]={0.0f,0.0f,0.0f,1.5f,0.80f,0.45f,0.28f,0.06f}; // 0.50
 		while ( GBlit.LatticeXBits>2 )
 		{
 			FLOAT Factor1      = Draw->MaxZ * RZGradSX;
@@ -2025,7 +2032,7 @@ void DrawSoftwareTexturedBspSurf ( ICamera* Camera, FBspDrawList* Draw )
 		);
 	//LSL_MipMult = 1.0/Camera->SXR; // To disable angular mip adjustment.
 	//if (Camera->SXR > 420) LSL_MipMult *= 1.4; // To adapt mipmapping to resolution
-	LSL_MipMult *= 1.4;
+	LSL_MipMult *= 1.4f;
 
 	if ( (PolyFlags & (PF_AutoUPan | PF_AutoVPan)) && (Camera->ShowFlags&SHOW_PlayerCtrl) )
 	{

@@ -318,8 +318,8 @@ public:
 	static INT				MultiplyTab[256+2+2];
 
 	// Arrays
-	static const FLocalEffectEntry FGlobalLightManager::Effects[LE_MAX];
-	static const LIGHT_TYPE_FUNC FGlobalLightManager::GLightTypeFuncs[LT_MAX];
+	static const FLocalEffectEntry Effects[LE_MAX];
+	static const LIGHT_TYPE_FUNC GLightTypeFuncs[LT_MAX];
 	static FLOAT RandomBases[N_RANDS], Randoms[N_RANDS], RandomDeltas[N_RANDS];
 };
 
@@ -448,7 +448,8 @@ void FGlobalLightManager::Init()
 
 	// Generate filter weights.
 	int FilterWeight[8][8];
-		for( int i=0; i<8; i++ ) for( int j=0; j<8; j++ )
+	int i;
+		for( i=0; i<8; i++ ) for( int j=0; j<8; j++ )
 		{
 #if SHADOW_SMOOTHING
 			FilterWeight[i][j]=((i>4)||(j>4))?0:FilterBase[OurAbs(i-2)][OurAbs(j-2)];
@@ -510,11 +511,12 @@ void FGlobalLightManager::Tick()
 		for( int i=0; i<N_RANDS; i++ )
 			Randoms[i] = (FLOAT)rand()/RAND_MAX;
 	}
-	for( int i=0; i<N_RANDS; i++ )
+	int i;
+	for( i=0; i<N_RANDS; i++ )
 		RandomBases[i] = (FLOAT)rand()/RAND_MAX;
 	if( (GServer.Ticks^LastTicks) & ~(GCycle-1) )
 	{
-		for( int i=0; i<N_RANDS; i++ )
+		for( i=0; i<N_RANDS; i++ )
 			RandomDeltas[i] = (RandomBases[i] - Randoms[i]) / GCycle;
 		LastTicks = GServer.Ticks & ~(GCycle-1);
 	}
@@ -704,7 +706,8 @@ void FGlobalLightManager::StaticLightingMapGen(FLOAT *Result)
 	int		Offset		= 0;
 
 	// Go through all lights and generate temporary shadow maps and illumination maps for the static ones:
-	for( FLightInfo *Info = FirstLight; Info < LastLight; Info++ )
+	FLightInfo* Info;
+	for( Info = FirstLight; Info < LastLight; Info++ )
 	{
 		EActorLightOptimization Opt = LightOptimization(Info->Actor);
 		if( Opt==LC_StaticLight ) // This light is static
@@ -1542,7 +1545,8 @@ void FGlobalLightManager::SetupForPoly(ICamera *ThisCamera, FVector &Normal, FVe
 		// Loop through the source mesh area:
 		FLOAT *Src = Static;
 		Key = iSurf;
-		for( int V=0; V<MeshVSize; V++ )
+		int V;
+		for( V=0; V<MeshVSize; V++ )
 		{
 			FLOAT *StartDest = Dest;
 
@@ -1586,7 +1590,8 @@ void FGlobalLightManager::SetupForPoly(ICamera *ThisCamera, FVector &Normal, FVe
 			{
 				// optimize: Convert to assembly.
 				FLOAT Right = Dest[-1];
-				for( int i=0; i<CopyRight; i++ ) *Dest++ = Right;
+				int i;
+				for( i=0; i<CopyRight; i++ ) *Dest++ = Right;
 
 				FLOAT Left = StartDest[0];
 				for ( i=0; i<CopyLeft; i++ ) *Dest++ = Left;
@@ -1721,7 +1726,8 @@ void FGlobalLightManager::UndoDynamicLighting( ILevel *Level )
 	GMem.Release(FGlobalLightManager::ActorBrightness);
 	if( !Level->ModelInfo.NumBspNodes ) return;
 	
-	for( int i=0; i<FGlobalLightManager::NumDynLightPolys; i++ )
+	int i;
+	for( i=0; i<FGlobalLightManager::NumDynLightPolys; i++ )
 	{
 		FLightMeshIndex	*Index	= FGlobalLightManager::GetLightMeshIndex(&Level->ModelInfo,FGlobalLightManager::DynLightPolys[i]);
 		Index->NumDynamicLights = 0;

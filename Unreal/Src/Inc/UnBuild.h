@@ -99,13 +99,8 @@ ASM                 To use inline assembly and MASM
 #define ENGINE_PARTIAL			"UnServer.exe"
 #define SYSTEM_PARTIAL			"System"
 
-#ifndef _DEBUG
-	#define GAME_DLL			"UnGame.dll"
-	#define MFC_HELP_PARTIAL	"UNSERVER.HLP" /* Must be all caps */
-#else
-	#define GAME_DLL			"dGame.dll"
-	#define MFC_HELP_PARTIAL	"DSERVER.HLP" /* Must be all caps */
-#endif
+#define GAME_DLL			"UnGame.dll"
+#define MFC_HELP_PARTIAL	"UNSERVER.HLP" /* Must be all caps */
 
 //
 // URL's
