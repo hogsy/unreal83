@@ -698,8 +698,6 @@ void FWindowsCameraManager::FindAvailableModes(UCamera *Camera)
 			AppendMenu(hSizes,MF_STRING,ID_WIN_512,"512x384");
 			AppendMenu(hSizes,MF_STRING,ID_WIN_640,"640x400");
 			//
-			OSVERSIONINFO Version; Version.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-			GetVersionEx(&Version);
 			if (ddNumModes>0) AppendMenu(hSizes,MF_SEPARATOR,0,NULL);
 			for (i=0; i<ddNumModes; i++)
 				{
@@ -2499,6 +2497,8 @@ LRESULT FWindowsCameraManager::CameraWndProc(HWND hWnd, UINT iMessage, WPARAM wP
 			return DefWindowProc (hWnd,iMessage,wParam,lParam);
 			UNGUARD("DefWindowProc");
 		};
+
+		return 0;
 	UNGUARD("FWindowsCameraManager::CameraWndProc");
 	};
 
