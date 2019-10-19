@@ -756,9 +756,9 @@ FGlobalAudio::SpecifySong(int iSong)
 	char	stmp[256];
 
 	/* Hack until songs are stored as resources. */
-	sprintf(stmp, "..\\Music\\Song%d.s3m", iSong);
+	sprintf(stmp, "..\\Music\\Song%d.s3m\n", iSong);
 	SoundEngMusicSpecifySong(stmp);
-	plog("Selecting music:");
+	plog("Selecting music:\n");
 	plog(stmp);
 
 	UNGUARD("FGlobalAudio::SpecifySong");

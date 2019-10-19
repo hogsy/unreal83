@@ -20,7 +20,7 @@
 void FMemPool::AllocatePool(int NewSize, const char *Name)
 	{
 	GUARD;
-	char Descr[80]; sprintf(Descr,"MemPool(%s)",Descr);
+	char Descr[80]; sprintf(Descr,"MemPool(%s)",Name);
 	Start = appMallocArray(NewSize,BYTE,Descr);
 	Size  = NewSize;
 	InitPool();

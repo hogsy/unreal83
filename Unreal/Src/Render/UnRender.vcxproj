@@ -79,7 +79,7 @@
       <Optimization>Disabled</Optimization>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>..\Inc\</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;COMPILING_RENDER;ASM;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_CRT_SECURE_NO_WARNINGS;_CRT_NONSTDC_NO_DEPRECATE;COMPILING_RENDER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -87,6 +87,7 @@
     <PostBuildEvent>
       <Command>xcopy "$(OutDir)$(TargetName)$(TargetExt)" "$(SolutionDir)..\System\" /F /Y</Command>
     </PostBuildEvent>
+    <MASM />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -148,8 +149,12 @@
     <ClCompile Include="UnTMapC.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="UnBlast.asm" />
-    <MASM Include="UnTMap.asm" />
+    <MASM Include="UnBlast.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
+    <MASM Include="UnTMap.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </MASM>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

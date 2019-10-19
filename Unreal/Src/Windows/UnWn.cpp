@@ -185,6 +185,7 @@ BOOL CUnrealWnApp::InitInstance()
 		}
 	else
 		{
+#if 0 // todo: retain this?
 		//
 		// Register all OLE classes:
 		//
@@ -213,6 +214,7 @@ BOOL CUnrealWnApp::InitInstance()
 			AfxMessageBox(Msg);
 			return FALSE;
 			};
+#endif
 		};
 	if (mystrstr(CmdLine,"/REGSERVER")||mystrstr(CmdLine,"-REGSERVER")) return FALSE; // Only register the server
 	if (!(mystrstr(CmdLine,"-LOG")||mystrstr(CmdLine,"-EDITOR"))) Platform.LaunchWithoutLog=1;

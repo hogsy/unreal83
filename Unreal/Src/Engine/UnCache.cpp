@@ -1210,10 +1210,13 @@ void FMemoryCache::TDictionary::Discard(TObjectId Id)
         {
             ReplacementId = 0;
         }
+
         while( Index <= Count && this->Id(Index) == Id )
         {
             this->Id(Index) = ReplacementId;
-            Fragment(Index) = ReplacementFragment;
+			if (ReplacementId > 0) {
+				Fragment(Index) = ReplacementFragment;
+			}
             Index++;
         }
         ObjectCount--;

@@ -233,7 +233,7 @@ class UNREAL_API UFont : public UDatabase
 	//
 	// Variables:
 	//
-	UTexture	*Texture{ nullptr };	// Texture containing font chars
+	UTexture	*Texture;	// Texture containing font chars
 	//
 	// Resource functions:
 	//

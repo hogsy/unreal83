@@ -34,8 +34,10 @@ typedef void (*TEX_INNER)(int SkipIn,FTexLattice *T);
 	Globals
 -----------------------------------------------------------------------------*/
 
+#ifdef ASM
 extern "C"
 	{
+#endif
 	//
 	// Globals this file:
 	//
@@ -71,8 +73,13 @@ extern "C"
 	ASMVAR	BYTE	*TMI_FinalDest;
 	ASMVAR	BYTE	*TMI_RectFinalDest;
 	//
+#ifdef ASM
 	ASMVAR	DWORD	TMI_ProcTable8P[],TMI_ProcTable16P[],TMI_ProcTable32P[];
 	ASMVAR	DWORD	TMI_ModTable8P[],TMI_ModTable16P[],TMI_ModTable32P[];
+#else
+	DWORD	*TMI_ProcTable8P, *TMI_ProcTable16P, *TMI_ProcTable32P;
+	DWORD	*TMI_ModTable8P, *TMI_ModTable16P, *TMI_ModTable32P;
+#endif
 	//
 	// Texture mapper outer loop:
 	//
@@ -94,7 +101,11 @@ extern "C"
 	ASMVAR  FTexLattice *TLI_TopLattice;
 	ASMVAR	DWORD	*TLI_Dest;
 	ASMVAR	DWORD	*TLI_DestEnd;
+#ifdef ASM
 	ASMVAR	DWORD	TLI_ProcTable[];
+#else
+	DWORD	*TLI_ProcTable;
+#endif
 	ASMVAR  DWORD	TLI_SkipIn;
 	//
 	ASMVAR	DWORD	*TLO_TopBase;
@@ -127,7 +138,9 @@ extern "C"
 	void __cdecl LightVInterpolate_8P_1(void);
 	void __cdecl LightVInterpolate_8P_2(void);
 	void __cdecl LightVInterpolate_8P_4(void);
+#ifdef ASM
 	};
+#endif
 
 #ifndef ASM
 	void (*GLightInnerProc)(void);
@@ -1603,6 +1616,36 @@ void rendDrawAcross
 	ALWAYS_ENDTIME(GStat.TextureMap);
 	UNGUARD("rendDrawAcross");
 	};
+
+#ifndef ASM
+	void __cdecl TLM_8P_Unlit(void)
+	{
+	}
+	void __cdecl TLM_8P_Lit(void)
+	{
+	}
+	void __cdecl TRO_Outer8P(void)
+	{
+	}
+	void __cdecl TRO_Outer16P(void)
+	{
+	}
+	void __cdecl TRO_Outer32P(void)
+	{
+	}
+	void __cdecl LightOuter(void)
+	{
+	}
+	void __cdecl LightVInterpolate_8P_1(void)
+	{
+	}
+	void __cdecl LightVInterpolate_8P_2(void)
+	{
+	}
+	void __cdecl LightVInterpolate_8P_4(void)
+	{
+	}
+#endif
 
 /*-----------------------------------------------------------------------------
 	The End

@@ -2053,6 +2053,7 @@ void DrawSoftwareTexturedBspSurf ( ICamera* Camera, FBspDrawList* Draw )
 	LSL_BaseU = (FLOAT)0xC0000000 - (LSL_TextureU | LSL_Base);
 	LSL_BaseV = (FLOAT)0xC0000000 - (LSL_TextureV | LSL_Base);
 
+#if 0
 #ifdef ASM_LATTICE
 	TRL_RoutineOfsEffectBase = 0;
 	if (GLightManager->Index)
@@ -2072,6 +2073,7 @@ void DrawSoftwareTexturedBspSurf ( ICamera* Camera, FBspDrawList* Draw )
 		mov dl,[GBlit]GBlit.InterYBits
 		call TRL_SelfModRect
 	}
+#endif
 #endif
 
 	// Interpolate affine values RZ, URZ, VRZ, XRZ, YRZ.
