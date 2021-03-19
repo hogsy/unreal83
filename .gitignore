@@ -4,3 +4,13 @@
 *.suo
 *.exp
 *.pdb
+
+*.dll
+*.exe
+*.ilk
+
+**/Debug/**
+
+# Unreal generated files
+Unreal/System/Unreal.gfx
+Unreal/System/Unreal.log
