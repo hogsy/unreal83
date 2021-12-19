@@ -87,7 +87,9 @@ Res ArrayAdd Type=Texture Name=b_liteOff Array=GfxTables
 ; Brushes
 ;
 Brush Import File=..\Graphics\Arrow.t3d Name=Arrow Merge=Off
+Brush Import File=..\Graphics\Roothull.t3d Name=RootHull Merge=Off
 Res ArrayAdd Type=Model Name=Arrow Array=GfxTables
+Res ArrayAdd Type=Model Name=RootHull Array=GfxTables
 
 ;
 ; Palettes
